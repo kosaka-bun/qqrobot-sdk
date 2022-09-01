@@ -1,0 +1,74 @@
+group 'de.honoka.sdk'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+
+    group rootProject.group
+    sourceCompatibility = '1.8'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        String lombok = 'org.projectlombok:lombok:1.18.16'
+        compileOnly lombok
+        annotationProcessor lombok
+        testCompileOnly lombok
+        testAnnotationProcessor lombok
+    }
+
+    tasks.withType(Test) {
+        useJUnitPlatform()
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier 'sources'
+        from sourceSets.main.allSource
+    }
+
+    publishing {
+        repositories {
+            mavenLocal()
+            if(project.hasProperty('remoteMavenRepositoryUrl')) {
+                maven {
+                    url remoteMavenRepositoryUrl
+                }
+            }
+        }
+    }
+
+    ext {
+        setupVersion = { String versionStr ->
+            version versionStr
+
+            publishing {
+                publications {
+                    maven(MavenPublication) {
+                        groupId project.group
+                        artifactId project.name
+                        version versionStr
+
+                        from components.java
+
+                        artifact sourcesJar
+                    }
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

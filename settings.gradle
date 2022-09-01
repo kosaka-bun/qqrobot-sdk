@@ -1,0 +1,3 @@
+rootProject.name = 'qqrobot-sdk'
+include 'qqrobot-framework'
+include 'qqrobot-spring-boot-starter'

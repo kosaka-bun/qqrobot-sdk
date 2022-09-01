@@ -1,0 +1,29 @@
+plugins {
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+setupVersion '1.0'
+
+ext {
+    miraiVersion = '2.8.2'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.boot:spring-boot-dependencies:2.5.10'
+    }
+}
+
+dependencies {
+    compileOnly 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.springframework.boot:spring-boot-configuration-processor'
+    Project honokaJsonApi = project(':qqrobot-framework')
+    implementation "net.mamoe:mirai-core-jvm:$miraiVersion"
+    String jcq = 'com.sobte.cqp:jcq:1.2.7'
+    String gson = 'com.google.code.gson:gson'
+    implementation 'com.github.houbb:opencc4j:1.6.0'
+    implementation 'gui.ava:html2image:2.0.1'
+    compileOnly 'org.hibernate.validator:hibernate-validator'
+    apiElements honokaJsonApi, jcq, gson
+    implementation honokaJsonApi, jcq, gson
+}
