@@ -10,12 +10,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.nio.file.Path;
-import java.util.UUID;
-
-import static com.sobte.cqp.jcq.event.JcqApp.CC;
 
 @Component
 public class RobotImageUtils {
@@ -26,16 +23,13 @@ public class RobotImageUtils {
 	private RobotBasicProperties basicProperties;
 	
 	@SneakyThrows
-	public File htmlToImage(String html, int width) {
+	public ByteArrayInputStream htmlToImage(String html, int width) {
 		ImageRenderer render = Html2Image.fromHtml(html).getImageRenderer()
 				.setWidth(width).setAutoHeight(true);
-		String path = Path.of(basicProperties.getMessageImagePath(),
-				UUID.randomUUID() + ".png").toString();
-		File file = new File(path);
-		FileUtils.checkOrTouch(file);
 		BufferedImage img = render.getBufferedImage();
-		ImageIO.write(img, "png", file);
-		return file;
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		ImageIO.write(img, "png", bytes);
+		return new ByteArrayInputStream(bytes.toByteArray());
 	}
 
 	@SneakyThrows
@@ -83,7 +77,7 @@ public class RobotImageUtils {
 	/**
 	 * 指定图片大小，不限制每行字符数
 	 */
-	public File textToImageFileBySize(String text, int imageSize) {
+	public ByteArrayInputStream textToImageBySize(String text, int imageSize) {
 		return htmlToImage(getTextImageHtml(text), imageSize);
 	}
 
@@ -91,24 +85,12 @@ public class RobotImageUtils {
 	 * 指定每行最大字符数，自动计算图片大小
 	 * 文本图片默认图片大小 imageSize = lineLength * 17
 	 */
-	public File textToImageFileByLength(String text, int lineLength) {
+	public ByteArrayInputStream textToImageByLength(String text, int lineLength) {
 		return htmlToImage(getTextImageHtml(forceWarp(text, lineLength)),
 				lineLength * 17);
 	}
 
-	public File textToImageFile(String text) {
-		return textToImageFileBySize(text, DEFAULT_IMAGE_WIDTH);
-	}
-
-	public String textToImageByLength(String text, int lineLength) {
-		return CC.image(textToImageFileByLength(text, lineLength).getAbsolutePath());
-	}
-
-	public String textToImageBySize(String text, int imageSize) {
-		return CC.image(textToImageFileBySize(text, imageSize).getAbsolutePath());
-	}
-
-	public String textToImage(String text) {
+	public ByteArrayInputStream textToImage(String text) {
 		return textToImageBySize(text, DEFAULT_IMAGE_WIDTH);
 	}
 }

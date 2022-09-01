@@ -1,14 +1,12 @@
 package de.honoka.qqrobot.spring.boot.starter.component;
 
-import de.honoka.qqrobot.framework.Robot;
+import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-/**
- * 机器人主类
- */
-public class DefaultRobotImpl implements Robot {
+public class DefaultFrameworkCallback implements FrameworkCallback {
 
     protected MessageExecutor messageExecutor;
 
@@ -17,8 +15,8 @@ public class DefaultRobotImpl implements Robot {
     private final ThreadPoolExecutor threadPoolExecutor =
             (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
-    public DefaultRobotImpl(MessageExecutor messageExecutor,
-                            RobotBeanHolder beanHolder) {
+    public DefaultFrameworkCallback(MessageExecutor messageExecutor,
+                                    RobotBeanHolder beanHolder) {
         this.messageExecutor = messageExecutor;
         this.beanHolder = beanHolder;
     }
@@ -27,10 +25,11 @@ public class DefaultRobotImpl implements Robot {
      * 收到私聊消息
      */
     @Override
-    public void onPrivateMsg(long qq, String msg) {
+    public void onPrivateMsg(long qq, RobotMultipartMessage msg) {
         threadPoolExecutor.submit(() -> {
             //回复信息
-            String reply = messageExecutor.executeMsg(null, qq, msg);
+            RobotMultipartMessage reply = messageExecutor.executeMsg(
+                    null, qq, msg);
             if(reply != null) {
                 beanHolder.getFramework().reply(null, qq, reply);
             }
@@ -41,12 +40,12 @@ public class DefaultRobotImpl implements Robot {
      * 收到群消息
      */
     @Override
-    public void onGroupMsg(Long group, long qq, String msg) {
+    public void onGroupMsg(Long group, long qq, RobotMultipartMessage msg) {
         //若机器人被禁言，则不响应此消息
         if(beanHolder.getFramework().isMuted(group)) return;
         threadPoolExecutor.submit(() -> {
             //回复信息
-            String reply = messageExecutor.executeMsg(group, qq, msg);
+            RobotMultipartMessage reply = messageExecutor.executeMsg(group, qq, msg);
             if(reply != null) {
                 beanHolder.getFramework().reply(group, qq, reply);
             }

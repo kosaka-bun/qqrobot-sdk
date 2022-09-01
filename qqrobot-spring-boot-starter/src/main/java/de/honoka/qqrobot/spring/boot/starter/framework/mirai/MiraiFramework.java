@@ -3,10 +3,11 @@ package de.honoka.qqrobot.spring.boot.starter.framework.mirai;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sobte.cqp.jcq.message.ActionCode;
-import com.sobte.cqp.jcq.message.CoolQCode;
 import de.honoka.qqrobot.framework.Framework;
-import de.honoka.qqrobot.framework.Robot;
+import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.framework.model.RobotMessage;
+import de.honoka.qqrobot.framework.model.RobotMessageType;
+import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.spring.boot.starter.framework.mirai.property.MiraiProperties;
 import de.honoka.qqrobot.spring.boot.starter.property.RobotBasicProperties;
 import de.honoka.sdk.util.file.FileUtils;
@@ -33,20 +34,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static com.sobte.cqp.jcq.event.JcqApp.CC;
-
 /**
  * 使用mirai框架中提供的接口实现基本框架
  */
-public class MiraiFramework extends Framework {
+public class MiraiFramework extends Framework<Object[]> {
 
     public RobotBasicProperties basicProperties;
 
     public MiraiProperties miraiProperties;
 
-    public MiraiFramework(Robot robot, RobotBasicProperties basicProperties,
+    public MiraiFramework(FrameworkCallback frameworkCallback,
+                          RobotBasicProperties basicProperties,
                           MiraiProperties miraiProperties) {
-        super(robot);
+        super(frameworkCallback);
         this.basicProperties = basicProperties;
         this.miraiProperties = miraiProperties;
         init();
@@ -141,13 +141,13 @@ public class MiraiFramework extends Framework {
         for(ListenerHost listener : listeners) {
             miraiApi.getEventChannel().registerListenerHost(listener);
         }
-        robot.onStartup();
+        frameworkCallback.onStartup();
     }
 
     @Override
     public void stop() {
         miraiApi.close(null);
-        robot.onShutdown();
+        frameworkCallback.onShutdown();
     }
 
     @Override
@@ -158,31 +158,23 @@ public class MiraiFramework extends Framework {
     /**
      * 返回值为数组，0号位为messageChain，1号位为要关闭的资源集合
      */
+    @SneakyThrows
     @Override
-    public Object transform(Long group, long qq, String str) {
+    public Object[] transform(Long group, long qq, RobotMultipartMessage message) {
         MessageChainBuilder builder = new MessageChainBuilder();
-        List<String> parts = splitMessage(str);
         List<ExternalResource> externalResources = new ArrayList<>();
-        for(String part : parts) {
-            //判断此部分消息是否是CQ码，若不是，则直接添加
-            if(!part.contains("[CQ:")) {
-                builder.add(part);
-                continue;
-            }
-            //识别CQ码，根据它的功能进行对应处理
-            CoolQCode cqCode = CC.analysis(part);
-            ActionCode actionCode = cqCode.get(0);
-            switch(actionCode.getAction()) {
-                case "at":
-                    if(group == null) break;
-                    long atQQ = Long.parseLong(actionCode.get("qq"));
-                    //builder.add("@");
-                    builder.add(new At(atQQ));
+        for(RobotMessage<?> part : message.messageList) {
+            switch(part.getType()) {
+                case TEXT:
+                    builder.add((String) part.getContent());
                     break;
-                case "image":
-                    File imgFile = new File(actionCode.get("file"));
-                    if(!imgFile.exists()) break;    //文件不存在，不予添加
-                    ExternalResource imgRes = ExternalResource.create(imgFile);
+                case AT:
+                    if(group == null) break;
+                    builder.add(new At((long) part.getContent()));
+                    break;
+                case IMAGE:
+                    InputStream imageBytes = (InputStream) part.getContent();
+                    ExternalResource imgRes = ExternalResource.create(imageBytes);
                     externalResources.add(imgRes);
                     //判断是否是私聊消息，以判断通过何种途径上传文件
                     Image img;
@@ -195,9 +187,18 @@ public class MiraiFramework extends Framework {
                     }
                     builder.add(img);
                     break;
-                default:
-                    //无法识别的CQ码，直接添加
-                    builder.add(part);
+                case FILE:
+                    InputStream fileBytes = (InputStream) part.getContent();
+                    //若群对象不存在，不予发送
+                    Group groupObj = miraiApi.getGroup(Objects.requireNonNull(group));
+                    if(groupObj == null) break;
+                    //机器人在该群被禁言，不予发送
+                    if(isMuted(group)) break;
+                    //发送消息
+                    String fileName = (String) part.getOthers().get("fileName");
+                    try(ExternalResource res = ExternalResource.create(fileBytes)) {
+                        groupObj.getFiles().uploadNewFile(fileName, res);
+                    }
                     break;
             }
         }
@@ -205,16 +206,16 @@ public class MiraiFramework extends Framework {
     }
 
     @Override
-    public String transform(Object multiPartMsg) {
-        MessageChain miraiMultiPartMsg = (MessageChain) multiPartMsg;
-        StringBuilder str = new StringBuilder();
+    public RobotMultipartMessage transform(Object[] message) {
+        MessageChain miraiMultiPartMsg = (MessageChain) message[0];
+        RobotMultipartMessage multipartMessage = new RobotMultipartMessage();
         for(SingleMessage sm : miraiMultiPartMsg) {
             if(sm.getClass().equals(At.class))
-                str.append(CC.at(((At) sm).getTarget()));
+                multipartMessage.add(RobotMessageType.AT, ((At) sm).getTarget());
             else
-                str.append(sm.contentToString());
+                multipartMessage.add(RobotMessageType.TEXT, sm.contentToString());
         }
-        return str.toString();
+        return multipartMessage;
     }
 
     @SuppressWarnings("unchecked")
@@ -258,50 +259,38 @@ public class MiraiFramework extends Framework {
     }
 
     @Override
-    public void sendPrivateMsg(long qq, String msg) {
+    public void sendPrivateMsg(long qq, RobotMultipartMessage message) {
         //查找此用户
         Contact contact = getPrivateContact(qq);
         //若不存在，不予发送
         if(contact == null) return;
         //发送消息
-        Object[] msgAndRes = (Object[]) transform(null, qq, msg);
+        Object[] msgAndRes = transform(null, qq, message);
         sendMessage(contact, msgAndRes);
     }
 
     @Override
-    public void sendGroupMsg(Long group, String msg) {
+    public void sendGroupMsg(Long group, RobotMultipartMessage message) {
         //若群对象不存在，不予发送
         Group groupObj = miraiApi.getGroup(group);
         if(groupObj == null) return;
         //机器人在该群被禁言，不予发送
         if(isMuted(group)) return;
         //发送消息
-        Object[] msgAndRes = (Object[]) transform(group, 0, msg);
+        Object[] msgAndRes = transform(group, 0, message);
         sendMessage(groupObj, msgAndRes);
     }
 
-    @SneakyThrows
     @Override
-    public void sendFileToGroup(Long group, String fileName,
-                                InputStream inputStream) {
-        //若群对象不存在，不予发送
-        Group groupObj = miraiApi.getGroup(group);
-        if(groupObj == null) return;
-        //机器人在该群被禁言，不予发送
-        if(isMuted(group)) return;
-        //发送消息
-        try(ExternalResource res = ExternalResource.create(inputStream)) {
-            groupObj.getFiles().uploadNewFile(fileName, res);
-        }
-    }
-
-    @Override
-    public void reply(Long group, long qq, String msg) {
+    public void reply(Long group, long qq, RobotMultipartMessage message) {
         if(group == null)
-            sendPrivateMsg(qq, msg);
+            sendPrivateMsg(qq, message);
         else {
-            msg = CC.at(qq) + "\n" + msg;
-            sendGroupMsg(group, msg);
+            message.messageList.add(0, new RobotMessage<>(
+                    RobotMessageType.AT, qq));
+            message.messageList.add(1, new RobotMessage<>(
+                    RobotMessageType.TEXT, "\n"));
+            sendGroupMsg(group, message);
         }
     }
 

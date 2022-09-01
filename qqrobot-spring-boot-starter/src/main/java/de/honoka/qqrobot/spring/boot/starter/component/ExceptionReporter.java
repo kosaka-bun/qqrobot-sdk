@@ -1,5 +1,7 @@
 package de.honoka.qqrobot.spring.boot.starter.component;
 
+import de.honoka.qqrobot.framework.model.RobotMessage;
+import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.spring.boot.starter.component.logger.RobotLogger;
 import de.honoka.qqrobot.spring.boot.starter.component.util.RobotImageUtils;
 import de.honoka.qqrobot.spring.boot.starter.property.RobotBasicProperties;
@@ -8,11 +10,9 @@ import de.honoka.sdk.util.text.ExceptionUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.sobte.cqp.jcq.event.JcqApp.CC;
 
 @Component
 public class ExceptionReporter {
@@ -65,17 +65,17 @@ public class ExceptionReporter {
 			//endregion
 			//报告
 			exceptionList.add(rows[0]);
-			String reply = "出现了问题，堆栈信息如下：\n";
-			reply += CC.image(getExceptionTextImg(exceptionText).getAbsolutePath());
+			RobotMultipartMessage reply = RobotMultipartMessage.of(
+					"出现了问题，堆栈信息如下：\n");
+			reply.add(RobotMessage.image(getExceptionTextImg(exceptionText)));
 			beanHolder.getFramework().sendGroupMsg(basicProperties
 					.getDevelopingGroup(), reply);
-		} catch (Exception ex) {
+		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	protected File getExceptionTextImg(String exceptionText) {
-		return robotImageUtils.textToImageFileBySize(exceptionText,
-				1200);
+	protected InputStream getExceptionTextImg(String exceptionText) {
+		return robotImageUtils.textToImageBySize(exceptionText, 1200);
 	}
 }

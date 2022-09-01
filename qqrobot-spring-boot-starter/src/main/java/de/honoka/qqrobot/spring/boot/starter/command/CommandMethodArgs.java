@@ -18,9 +18,9 @@ public class CommandMethodArgs {
 	/**
 	 * 为调用的命令提供的参数列表
 	 */
-	private final String[] args;
+	private final Object[] args;
 
-	public CommandMethodArgs(Long group, long qq, String[] args) {
+	public CommandMethodArgs(Long group, long qq, Object[] args) {
 		this.group = group;
 		this.qq = qq;
 		this.args = args;
@@ -38,31 +38,31 @@ public class CommandMethodArgs {
 	
 	public int getInt(int index) {
 		try {
-			return Integer.parseInt(args[index]);
+			return Integer.parseInt((String) args[index]);
 		} catch (NumberFormatException e) {
-			throw new WrongNumberParameterException(args[index]);
+			throw new WrongNumberParameterException((String) args[index]);
 		}
 	}
 	
 	public double getDouble(int index) {
 		try {
-			return Double.parseDouble(args[index]);
+			return Double.parseDouble((String) args[index]);
 		} catch (NumberFormatException e) {
-			throw new WrongNumberParameterException(args[index]);
+			throw new WrongNumberParameterException((String) args[index]);
 		}
 	}
 	
 	public long getLong(int index) {
 		try {
-			return Long.parseLong(args[index]);
+			return Long.parseLong((String) args[index]);
 		} catch (NumberFormatException e) {
-			throw new WrongNumberParameterException(args[index]);
+			throw new WrongNumberParameterException((String) args[index]);
 		}
 	}
 	
 	public String getString(int index) {
 		if(index < args.length)
-			return args[index];
+			return (String) args[index];
 		else
 			return null;
 	}

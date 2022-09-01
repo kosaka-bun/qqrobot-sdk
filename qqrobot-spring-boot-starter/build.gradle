@@ -21,13 +21,12 @@ dependencies {
     compileOnly springConfigurationProcessor
     annotationProcessor springConfigurationProcessor
     implementation 'de.honoka.sdk:honoka-utils:1.0'
-    Project honokaJsonApi = project(':qqrobot-framework')
+    Project framework = project(':qqrobot-framework')
     implementation "net.mamoe:mirai-core-jvm:$miraiVersion"
-    String jcq = 'com.sobte.cqp:jcq:1.2.7'
     String gson = 'com.google.code.gson:gson'
     implementation 'com.github.houbb:opencc4j:1.6.0'
     implementation 'gui.ava:html2image:2.0.1'
     compileOnly 'org.hibernate.validator:hibernate-validator'
-    apiElements honokaJsonApi, jcq, gson
-    implementation honokaJsonApi, jcq, gson
+    apiElements framework, gson
+    implementation framework, gson
 }

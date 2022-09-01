@@ -1,13 +1,11 @@
 package de.honoka.qqrobot.spring.boot.starter.property;
 
-import de.honoka.sdk.util.file.FileUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.nio.file.Path;
 
 @Validated
 @Getter
@@ -42,19 +40,7 @@ public class RobotBasicProperties {
     private String commandPrefix = "%";
 
     /**
-     * 生成的消息图片的保存目录
-     */
-    private String messageImagePath = Path.of(FileUtils.getClasspath(),
-            "/qqrobot/image").toString();
-
-    /**
      * 是否默认启用消息处理功能
      */
     private Boolean defaultEnabled = true;
-
-    //自动为输入的路径添加classpath路径，所以不需要手动填写classpath
-    public void setMessageImagePath(String messageImagePath) {
-        this.messageImagePath = Path.of(FileUtils.getClasspath(),
-                messageImagePath).toString();
-    }
 }

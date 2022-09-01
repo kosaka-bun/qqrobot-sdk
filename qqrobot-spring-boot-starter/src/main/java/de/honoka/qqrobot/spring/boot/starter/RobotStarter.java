@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.spring.boot.starter;
 
-import de.honoka.qqrobot.framework.Robot;
-import de.honoka.qqrobot.spring.boot.starter.component.DefaultRobotImpl;
+import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.spring.boot.starter.component.DefaultFrameworkCallback;
 import de.honoka.qqrobot.spring.boot.starter.component.MessageExecutor;
 import de.honoka.qqrobot.spring.boot.starter.component.RobotBeanHolder;
 import de.honoka.qqrobot.spring.boot.starter.component.logger.DefaultRobotLogger;
@@ -20,11 +20,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 public class RobotStarter {
 
-    @ConditionalOnMissingBean(Robot.class)
+    @ConditionalOnMissingBean(FrameworkCallback.class)
     @Bean
-    public Robot robot(MessageExecutor messageExecutor,
-                       RobotBeanHolder beanHolder) {
-        return new DefaultRobotImpl(messageExecutor, beanHolder);
+    public FrameworkCallback robot(MessageExecutor messageExecutor,
+                                   RobotBeanHolder beanHolder) {
+        return new DefaultFrameworkCallback(messageExecutor, beanHolder);
     }
 
     @ConditionalOnMissingBean(RobotLogger.class)

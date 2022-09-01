@@ -12,9 +12,10 @@ public class RobotBeanHolder {
     @Resource
     private ApplicationContext applicationContext;
 
-    private Framework framework;
+    private Framework<Object[]> framework;
 
-    public Framework getFramework() {
+    @SuppressWarnings("unchecked")
+    public Framework<Object[]> getFramework() {
         if(framework != null) return framework;
         synchronized(this) {
             if(framework != null) return framework;

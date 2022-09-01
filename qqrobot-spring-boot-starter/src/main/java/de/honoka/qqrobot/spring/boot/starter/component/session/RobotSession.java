@@ -1,7 +1,10 @@
 package de.honoka.qqrobot.spring.boot.starter.component.session;
 
+import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 会话类，用于记录处于会话状态的qq号和群号，以及这些号码在进入会话状态以后发送的信息
@@ -14,7 +17,7 @@ public class RobotSession implements AutoCloseable {
 
     private Long group;
 
-    private volatile String reply;
+    private volatile RobotMultipartMessage reply;
     
     /**
      * 所属的会话管理器
@@ -33,15 +36,15 @@ public class RobotSession implements AutoCloseable {
      * @param timeout 超时时间，单位为秒
      * @return  回复
      */
-    public String waitingForReply(int timeout) throws TimeoutException {
+    public RobotMultipartMessage waitingForReply(int timeout) throws TimeoutException {
         reply = null;  //等待回复前，先忽略已有的回复
         int i = 0;  //已等待秒数
         while(reply == null) {
             try {
-                Thread.sleep(1000);
+                TimeUnit.SECONDS.sleep(1);
                 i++;
                 if(i >= timeout) throw new TimeoutException();
-            } catch (Exception e) {
+            } catch(Exception e) {
                 throw new TimeoutException();
             }
         }
