@@ -1,4 +1,4 @@
-group 'de.honoka.sdk'
+group 'de.honoka.qqrobot'
 
 subprojects {
     apply plugin: 'java'
