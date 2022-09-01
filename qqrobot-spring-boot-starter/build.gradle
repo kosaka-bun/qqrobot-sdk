@@ -16,7 +16,11 @@ dependencyManagement {
 
 dependencies {
     compileOnly 'org.springframework.boot:spring-boot-starter'
-    compileOnly 'org.springframework.boot:spring-boot-configuration-processor'
+    String springConfigurationProcessor = 'org.springframework.boot:' +
+            'spring-boot-configuration-processor'
+    compileOnly springConfigurationProcessor
+    annotationProcessor springConfigurationProcessor
+    implementation 'de.honoka.sdk:honoka-utils:1.0'
     Project honokaJsonApi = project(':qqrobot-framework')
     implementation "net.mamoe:mirai-core-jvm:$miraiVersion"
     String jcq = 'com.sobte.cqp:jcq:1.2.7'
