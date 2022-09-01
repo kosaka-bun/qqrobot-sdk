@@ -2,6 +2,7 @@ package de.honoka.qqrobot.spring.boot.starter.framework.mirai;
 
 import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.spring.boot.starter.framework.mirai.model.MiraiMessage;
 import de.honoka.qqrobot.spring.boot.starter.framework.mirai.property.MiraiProperties;
 import de.honoka.qqrobot.spring.boot.starter.property.RobotBasicProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,7 +25,7 @@ public class MiraiConfiguration {
     private FrameworkCallback frameworkCallback;
 
     @Bean
-    public Framework<Object[]> miraiFramework() {
+    public Framework<MiraiMessage> miraiFramework() {
         return new MiraiFramework(frameworkCallback, basicProperties, miraiProperties);
     }
 }

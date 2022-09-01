@@ -148,6 +148,8 @@ public class MessageExecutor {
     public RobotMultipartMessage executeMsg(Long group, long qq,
                                             RobotMultipartMessage msg) {
         //起始操作，优化要处理的信息
+        //移除空串部分
+        msg.removeEmptyPart();
         //处理信息前先去掉信息左右两侧的空格
         if(msg.getFirst().getType().equals(RobotMessageType.TEXT)) {
             RobotMessage<String> part = (RobotMessage<String>) msg.getFirst();

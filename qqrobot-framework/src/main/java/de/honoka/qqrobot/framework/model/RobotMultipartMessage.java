@@ -1,6 +1,7 @@
 package de.honoka.qqrobot.framework.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class RobotMultipartMessage {
@@ -35,5 +36,26 @@ public class RobotMultipartMessage {
 
     public RobotMessage<?> getFirst() {
         return messageList.get(0);
+    }
+
+    /**
+     * 移除不必要的空串部分
+     */
+    public void removeEmptyPart() {
+        for(Iterator<RobotMessage<?>> iterator = messageList.iterator();
+            iterator.hasNext(); ) {
+            RobotMessage<?> part = iterator.next();
+            if(part.getContent() == null) {
+                iterator.remove();
+            } else if(part.getType().equals(RobotMessageType.TEXT)) {
+                if(part.getContent().equals("")) {
+                    iterator.remove();
+                }
+            }
+        }
+    }
+
+    public boolean isEmpty() {
+        return messageList.isEmpty();
     }
 }

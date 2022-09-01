@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.spring.boot.starter.framework.mirai;
 
+import de.honoka.qqrobot.spring.boot.starter.framework.mirai.model.MiraiMessage;
 import de.honoka.sdk.util.code.CodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.event.EventHandler;
@@ -73,14 +74,14 @@ public class MiraiEventListener extends SimpleListenerHost {
         miraiFramework.frameworkCallback.onGroupMsg(
                 e.getGroup().getId(),
                 e.getSender().getId(),
-                miraiFramework.transform(new Object[] { e.getMessage() })
+                miraiFramework.transform(new MiraiMessage(e.getMessage()))
         );
     }
 
     private void onUserMessage(UserMessageEvent e) {
         miraiFramework.frameworkCallback.onPrivateMsg(
                 e.getSender().getId(),
-                miraiFramework.transform(new Object[] { e.getMessage() })
+                miraiFramework.transform(new MiraiMessage(e.getMessage()))
         );
     }
 

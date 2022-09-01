@@ -8,6 +8,7 @@ import de.honoka.qqrobot.framework.FrameworkCallback;
 import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMessageType;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.spring.boot.starter.framework.mirai.model.MiraiMessage;
 import de.honoka.qqrobot.spring.boot.starter.framework.mirai.property.MiraiProperties;
 import de.honoka.qqrobot.spring.boot.starter.property.RobotBasicProperties;
 import de.honoka.sdk.util.file.FileUtils;
@@ -37,7 +38,7 @@ import java.util.Objects;
 /**
  * 使用mirai框架中提供的接口实现基本框架
  */
-public class MiraiFramework extends Framework<Object[]> {
+public class MiraiFramework extends Framework<MiraiMessage> {
 
     public RobotBasicProperties basicProperties;
 
@@ -155,17 +156,18 @@ public class MiraiFramework extends Framework<Object[]> {
         miraiApi.login();
     }
 
-    /**
-     * 返回值为数组，0号位为messageChain，1号位为要关闭的资源集合
-     */
     @SneakyThrows
     @Override
-    public Object[] transform(Long group, long qq, RobotMultipartMessage message) {
+    public MiraiMessage transform(Long group, long qq,
+                                  RobotMultipartMessage message) {
+        if(message == null || message.isEmpty()) return null;
         MessageChainBuilder builder = new MessageChainBuilder();
         List<ExternalResource> externalResources = new ArrayList<>();
         for(RobotMessage<?> part : message.messageList) {
             switch(part.getType()) {
                 case TEXT:
+                    if(part.getContent() == null || part.getContent().equals(""))
+                        continue;
                     builder.add((String) part.getContent());
                     break;
                 case AT:
@@ -202,12 +204,13 @@ public class MiraiFramework extends Framework<Object[]> {
                     break;
             }
         }
-        return new Object[] { builder.build(), externalResources };
+        return new MiraiMessage(builder.build())
+                .setExternalResources(externalResources);
     }
 
     @Override
-    public RobotMultipartMessage transform(Object[] message) {
-        MessageChain miraiMultiPartMsg = (MessageChain) message[0];
+    public RobotMultipartMessage transform(MiraiMessage message) {
+        MessageChain miraiMultiPartMsg = message.getMessageChain();
         RobotMultipartMessage multipartMessage = new RobotMultipartMessage();
         for(SingleMessage sm : miraiMultiPartMsg) {
             if(sm.getClass().equals(At.class))
@@ -218,11 +221,10 @@ public class MiraiFramework extends Framework<Object[]> {
         return multipartMessage;
     }
 
-    @SuppressWarnings("unchecked")
-    private void sendMessage(Contact contact, Object[] msgAndRes) {
-        MessageChain msg = (MessageChain) msgAndRes[0];
-        List<ExternalResource> externalResources =
-                (List<ExternalResource>) msgAndRes[1];
+    private void sendMessage(Contact contact, MiraiMessage msgAndRes) {
+        if(msgAndRes == null) return;
+        MessageChain msg = msgAndRes.getMessageChain();
+        List<ExternalResource> externalResources = msgAndRes.getExternalResources();
         DateFormat dateFormat = TextUtils.getSimpleDateFormat();
         //当消息未成功发送时多次尝试
         for(int tryTimes = 0; tryTimes < 3; tryTimes++) {
@@ -265,7 +267,7 @@ public class MiraiFramework extends Framework<Object[]> {
         //若不存在，不予发送
         if(contact == null) return;
         //发送消息
-        Object[] msgAndRes = transform(null, qq, message);
+        MiraiMessage msgAndRes = transform(null, qq, message);
         sendMessage(contact, msgAndRes);
     }
 
@@ -277,7 +279,7 @@ public class MiraiFramework extends Framework<Object[]> {
         //机器人在该群被禁言，不予发送
         if(isMuted(group)) return;
         //发送消息
-        Object[] msgAndRes = transform(group, 0, message);
+        MiraiMessage msgAndRes = transform(group, 0, message);
         sendMessage(groupObj, msgAndRes);
     }
 

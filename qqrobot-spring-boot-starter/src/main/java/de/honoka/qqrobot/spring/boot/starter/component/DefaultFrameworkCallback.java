@@ -31,6 +31,8 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
             RobotMultipartMessage reply = messageExecutor.executeMsg(
                     null, qq, msg);
             if(reply != null) {
+                reply.removeEmptyPart();
+                if(reply.isEmpty()) return;
                 beanHolder.getFramework().reply(null, qq, reply);
             }
         });
@@ -47,6 +49,8 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
             //回复信息
             RobotMultipartMessage reply = messageExecutor.executeMsg(group, qq, msg);
             if(reply != null) {
+                reply.removeEmptyPart();
+                if(reply.isEmpty()) return;
                 beanHolder.getFramework().reply(group, qq, reply);
             }
         });
