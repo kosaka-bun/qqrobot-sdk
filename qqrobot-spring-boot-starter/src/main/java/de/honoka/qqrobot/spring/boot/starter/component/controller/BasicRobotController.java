@@ -22,6 +22,6 @@ public class BasicRobotController {
     @Command("菜单")
     public RobotMessage<InputStream> menu() {
         return RobotMessage.image(robotImageUtils.textToImageByLength(
-                robotAttributes.menu, 25));
+                robotAttributes.menu, 30));
     }
 }
