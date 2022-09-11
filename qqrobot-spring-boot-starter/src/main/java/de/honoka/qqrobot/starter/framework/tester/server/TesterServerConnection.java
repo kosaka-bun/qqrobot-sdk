@@ -117,6 +117,7 @@ public class TesterServerConnection {
                     continue;
                 JsonObject notifyMsgData = new JsonObject();
                 notifyMsgData.addProperty("name", username);
+                notifyMsgData.add("data", data);
                 connection.sendMessage(new TesterMessage(null)
                         .setType(TesterMessageType.NEW_USER_LOGIN)
                         .setData(notifyMsgData)
@@ -131,7 +132,11 @@ public class TesterServerConnection {
         TesterMessage res = new TesterMessage(message.getId());
         JsonArray messageData = new JsonArray();
         for(TesterServerConnection connection : testerServer.getConnections()) {
-            messageData.add(connection.data.get("name").getAsString());
+            JsonObject item = new JsonObject();
+            item.addProperty("name", connection.data
+                    .get("name").getAsString());
+            item.add("data", connection.data);
+            messageData.add(item);
         }
         JsonObject resData = new JsonObject();
         resData.add("online", messageData);

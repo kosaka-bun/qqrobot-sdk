@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "element-plus": "^2.1.11",
+    "vue": "^3.2.33"
+  },
+  "devDependencies": {
+    "babel-loader": "^8.2.5",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.0",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.1",
+    "vue-loader": "^17.0.0",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server --node-env development",
+    "build:dev": "webpack --node-env development",
+    "prod": "webpack-dev-server --node-env production",
+    "build:prod": "webpack --node-env production"
+  }
+}
