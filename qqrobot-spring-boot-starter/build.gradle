@@ -15,18 +15,20 @@ dependencyManagement {
 }
 
 dependencies {
-    compileOnly 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
     String springConfigurationProcessor = 'org.springframework.boot:' +
             'spring-boot-configuration-processor'
-    compileOnly springConfigurationProcessor
+    implementation springConfigurationProcessor
     annotationProcessor springConfigurationProcessor
     implementation 'de.honoka.sdk:honoka-utils:1.0'
-    Project framework = project(':qqrobot-framework')
     implementation "net.mamoe:mirai-core-jvm:$miraiVersion"
-    String gson = 'com.google.code.gson:gson'
+    implementation 'com.google.code.gson:gson'
     implementation 'com.github.houbb:opencc4j:1.6.0'
     implementation 'gui.ava:html2image:2.0.1'
-    compileOnly 'org.hibernate.validator:hibernate-validator'
-    apiElements framework, gson
-    implementation framework, gson
+    implementation 'org.hibernate.validator:hibernate-validator'
+    Project framework = project(':qqrobot-framework')
+    apiElements framework
+    implementation framework
 }

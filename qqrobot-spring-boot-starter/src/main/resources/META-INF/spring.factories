@@ -1,4 +1,2 @@
-# 如果需要修改框架的实现，在这里修改即可
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  de.honoka.qqrobot.spring.boot.starter.RobotStarter,\
-  de.honoka.qqrobot.spring.boot.starter.framework.mirai.MiraiConfiguration
+  de.honoka.qqrobot.starter.RobotStarter

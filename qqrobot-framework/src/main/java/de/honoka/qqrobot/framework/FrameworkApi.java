@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.framework;
 
+import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMessageType;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 
@@ -55,7 +56,17 @@ public interface FrameworkApi<M> {
     /**
      * 向用户回复一条消息，根据群号与QQ号判断采用私聊回复还是群聊回复（加上at）
      */
-    void reply(Long group, long qq, RobotMultipartMessage message);
+    default void reply(Long group, long qq, RobotMultipartMessage message) {
+        if(group == null)
+            sendPrivateMsg(qq, message);
+        else {
+            message.messageList.add(0, new RobotMessage<>(
+                    RobotMessageType.AT, qq));
+            message.messageList.add(1, new RobotMessage<>(
+                    RobotMessageType.TEXT, "\n"));
+            sendGroupMsg(group, message);
+        }
+    }
 
     default void reply(Long group, long qq, String text) {
         reply(group, qq, RobotMultipartMessage.of(RobotMessageType.TEXT, text));
