@@ -85,7 +85,7 @@ export default {
     data() {
         return {
             form: {
-                qq: '12345',
+                qq: 12345,
                 name: 'abcde'
             },
             status: {

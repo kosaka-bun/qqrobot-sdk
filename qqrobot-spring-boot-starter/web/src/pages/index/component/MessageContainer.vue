@@ -8,19 +8,18 @@
                          class="message">
                         <my-message v-if="message.name === name"
                                     :name="message.name">
-                            <div v-html="messageContentToString(
-                                            message.content)"></div>
+                            <div v-html="messageContentToString(message.content)">
+                            </div>
                         </my-message>
-                        <opposite-message
-                            v-else-if="message.name != null &&
-                                       message.name !== ''"
-                            :name="message.name">
-                            <div v-html="messageContentToString(
-                                            message.content)"></div>
+                        <opposite-message v-else-if="message.name != null &&
+                                                     message.name !== ''"
+                                          :name="message.name">
+                            <div v-html="messageContentToString(message.content)">
+                            </div>
                         </opposite-message>
                         <system-info v-else>
-                            <div v-html="messageContentToString(
-                                            message.content)"></div>
+                            <div v-html="messageContentToString(message.content)">
+                            </div>
                         </system-info>
                     </div>
                 </div>
@@ -82,7 +81,16 @@ export default {
         messageContentToString(messageContent) {
             let str = '';
             for(let part of messageContent) {
-                str += part.content.replaceAll(/\n/g, '<br />');
+                console.log(part);
+                switch(part.type) {
+                    case 'image':
+                        str += `<img class="message-image" alt=""
+                                     src="${part.content}" />`;
+                        break;
+                    default:
+                        str += part.content.replaceAll(/\n/g, '<br />');
+                        break;
+                }
             }
             return str;
         },

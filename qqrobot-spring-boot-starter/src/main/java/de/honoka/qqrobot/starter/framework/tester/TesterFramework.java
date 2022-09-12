@@ -81,9 +81,10 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
                     break;
                 case AT:
                     if(group == null) break;
+                    long atQq = (Long) part.getContent();
                     TesterRobotMessage.Part at = new TesterRobotMessage.Part(
                             TesterRobotMessage.PartType.AT,
-                            "@" + getNickOrCard(group, qq) + " "
+                            "@" + getNickOrCard(group, atQq) + " "
                     );
                     at.setExtras(new JsonObject());
                     at.getExtras().addProperty("qq",

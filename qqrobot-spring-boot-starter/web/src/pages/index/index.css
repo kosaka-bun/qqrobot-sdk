@@ -83,3 +83,8 @@ textarea {
     display: inline-block;
     vertical-align: bottom;
 }
+
+.message-image {
+    max-width: 20em;
+    max-height: 15em;
+}
