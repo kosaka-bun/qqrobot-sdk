@@ -65,7 +65,7 @@ public class MiraiEventListener extends SimpleListenerHost {
     //群消息
     @EventHandler
     public void onGroupMessage(GroupMessageEvent e) {
-        miraiFramework.frameworkCallback.onGroupMsg(
+        miraiFramework.getFrameworkCallback().onGroupMsg(
                 e.getGroup().getId(),
                 e.getSender().getId(),
                 miraiFramework.transform(new MiraiMessage(e.getMessage()))
@@ -85,7 +85,7 @@ public class MiraiEventListener extends SimpleListenerHost {
     }
 
     private void onUserMessage(UserMessageEvent e) {
-        miraiFramework.frameworkCallback.onPrivateMsg(
+        miraiFramework.getFrameworkCallback().onPrivateMsg(
                 e.getSender().getId(),
                 miraiFramework.transform(new MiraiMessage(e.getMessage()))
         );

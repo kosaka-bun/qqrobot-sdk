@@ -150,7 +150,7 @@ public class TesterServerConnection {
                 "content");
         Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
                 testerServer.getBeanHolder().getFramework();
-        framework.frameworkCallback.onGroupMsg(
+        framework.getFrameworkCallback().onGroupMsg(
                 TesterFramework.GROUP_NUMBER,
                 data.get("qq").getAsLong(),
                 framework.transform(TesterRobotMessage.of(content))

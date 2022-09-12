@@ -134,7 +134,13 @@ export default {
             this.websocket.onclose = event => {
                 alertUtils.info('连接已断开');
                 this.websocket = null;
-                this.$refs['group-message-container'].messageListAppend({
+                this.status.connected = false;
+                this.status.connecting = false;
+                this.status.disconnecting = false;
+                this.online = reactive([]);
+                let groupContainer = this.$refs['group-message-container'];
+                let privateContainer = this.$refs['private-message-container'];
+                groupContainer.messageListAppend({
                     name: null,
                     content: [
                         {
@@ -143,10 +149,8 @@ export default {
                         }
                     ]
                 });
-                this.status.connected = false;
-                this.status.connecting = false;
-                this.status.disconnecting = false;
-                this.online = reactive([]);
+                groupContainer.sending = false;
+                privateContainer.sending = false;
             };
         },
         disconnect() {

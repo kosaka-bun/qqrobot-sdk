@@ -58,4 +58,31 @@ public class RobotMultipartMessage {
     public boolean isEmpty() {
         return messageList.isEmpty();
     }
+
+    public String contentToString() {
+        StringBuilder sb = new StringBuilder();
+        for(RobotMessage<?> message : messageList) {
+            switch(message.getType()) {
+                case TEXT:
+                    sb.append(message.getContent());
+                    break;
+                case IMAGE:
+                    sb.append("【图片】");
+                    break;
+                case AT:
+                    sb.append("@").append(message.getContent())
+                            .append(" ");
+                    break;
+                case FILE:
+                    sb.append("【文件】");
+                    break;
+            }
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return contentToString();
+    }
 }

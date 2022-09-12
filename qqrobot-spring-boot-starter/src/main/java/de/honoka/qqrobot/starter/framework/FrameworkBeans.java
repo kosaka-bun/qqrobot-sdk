@@ -4,6 +4,7 @@ import de.honoka.qqrobot.framework.FrameworkCallback;
 import de.honoka.qqrobot.starter.framework.mirai.MiraiFramework;
 import de.honoka.qqrobot.starter.framework.mirai.config.MiraiProperties;
 import de.honoka.qqrobot.starter.framework.tester.TesterFramework;
+import de.honoka.qqrobot.starter.framework.tester.component.RobotCallbackAspect;
 import de.honoka.qqrobot.starter.framework.tester.config.TesterProperties;
 import de.honoka.qqrobot.starter.property.RobotBasicProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -41,5 +42,12 @@ public class FrameworkBeans {
     public TesterFramework testerFramework() {
         return new TesterFramework(frameworkCallback, basicProperties,
                 testerProperties);
+    }
+
+    @ConditionalOnProperty(prefix = "honoka.qqrobot",
+            name = "framework", havingValue = "tester")
+    @Bean
+    public RobotCallbackAspect robotCallbackAspect() {
+        return new RobotCallbackAspect();
     }
 }
