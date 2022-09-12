@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,12 +24,15 @@ public class TesterServerWebApi {
 
     @SneakyThrows
     @RequestMapping("/image")
-    public void getImage(@RequestParam String name, HttpServletResponse response) {
+    public synchronized void getImage(@RequestParam String name,
+                                      HttpServletResponse response) {
         response.setContentType("image/png");
         OutputStream os = response.getOutputStream();
         String path = testerProperties.getImagePath() + File.separator +
                 name + ".png";
-        byte[] bytes = IOUtils.toByteArray(Files.newInputStream(Paths.get(path)));
-        os.write(bytes);
+        try(InputStream is = Files.newInputStream(Paths.get(path))) {
+            byte[] bytes = IOUtils.toByteArray(is);
+            os.write(bytes);
+        }
     }
 }

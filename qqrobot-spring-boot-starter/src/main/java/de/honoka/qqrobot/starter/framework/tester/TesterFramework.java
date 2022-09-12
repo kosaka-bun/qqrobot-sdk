@@ -26,6 +26,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -39,6 +41,8 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
     @Resource
     private TesterServer testerServer;
 
+    public static final long GROUP_NUMBER = 10000;
+
     public TesterFramework(FrameworkCallback frameworkCallback,
                            RobotBasicProperties basicProperties,
                            TesterProperties testerProperties) {
@@ -47,7 +51,8 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
         this.testerProperties = testerProperties;
     }
 
-    public static final long GROUP_NUMBER = 10000;
+    //key为图片数据流的hashCode，value为这个流对应的文件名
+    private final Map<Integer, String> imageNameMap = new HashMap<>();
 
     @SneakyThrows
     @Override
@@ -103,13 +108,17 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
                     break;
                 case IMAGE:
                     InputStream inputStream = (InputStream) part.getContent();
-                    byte[] bytes = IOUtils.toByteArray(inputStream);
-                    String name = UUID.randomUUID().toString();
-                    String path = Paths.get(testerProperties.getImagePath(),
-                            name + ".png").toString();
-                    FileUtils.touch(new File(path));
-                    try(OutputStream os = Files.newOutputStream(Paths.get(path))) {
-                        os.write(bytes);
+                    String name = imageNameMap.get(inputStream.hashCode());
+                    if(name == null) {
+                        name = UUID.randomUUID().toString();
+                        imageNameMap.put(inputStream.hashCode(), name);
+                        byte[] bytes = IOUtils.toByteArray(inputStream);
+                        String path = Paths.get(testerProperties.getImagePath(),
+                                name + ".png").toString();
+                        FileUtils.touch(new File(path));
+                        try(OutputStream os = Files.newOutputStream(Paths.get(path))) {
+                            os.write(bytes);
+                        }
                     }
                     testerRobotMessage.add(TesterRobotMessage.PartType.IMAGE, name);
                     break;

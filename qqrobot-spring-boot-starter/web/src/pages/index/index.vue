@@ -8,6 +8,7 @@
                       :clearable="true"
                       :formatter="numberFormatter"
                       :disabled="status.connected"
+                      @keydown.enter="connect"
                       maxlength="10" />
         </div>
         <div class="input-container">
@@ -16,13 +17,12 @@
                       v-model="form.name"
                       :clearable="true"
                       :disabled="status.connected"
+                      @keydown.enter="connect"
                       maxlength="10" />
         </div>
         <el-button @click="connect"
                    :loading="status.connecting"
-                   :disabled="status.connected ||
-                              form.name == null ||
-                              form.name === ''">
+                   :disabled="status.connected || !checkQqAndName()">
             连接
         </el-button>
         <el-button @click="disconnect"
@@ -113,6 +113,10 @@ export default {
     },
     methods: {
         connect() {
+            if(!this.checkQqAndName()) {
+                alertUtils.error('账号和用户名不能为空');
+                return;
+            }
             this.status.connecting = true;
             //打开一个websocket
             this.websocket = new WebSocket(this.serverUrl);
@@ -185,6 +189,16 @@ export default {
                 case TesterMessageType.NEW_USER_LOGIN:
                     if(message.data.name !== this.form.name) {
                         this.online.push(message.data);
+                        this.$refs['group-message-container'].messageListAppend({
+                            name: null,
+                            content: [
+                                {
+                                    type: 'text',
+                                    content: `${message.data.name}(${
+                                        message.data.qq})加入会话`
+                                }
+                            ]
+                        });
                     }
                     break;
                 case TesterMessageType.UESR_LOGOUT:
@@ -197,6 +211,16 @@ export default {
                         }
                     }
                     if(index !== -1) {
+                        let user = this.online[index];
+                        this.$refs['group-message-container'].messageListAppend({
+                            name: null,
+                            content: [
+                                {
+                                    type: 'text',
+                                    content: `${user.name}(${user.data.qq})已离开`
+                                }
+                            ]
+                        });
                         this.online.splice(index, 1);
                     }
                     break;
@@ -244,6 +268,13 @@ export default {
                 input += `@${name} `;
             }
             this.$refs['group-message-container'].input = input;
+        },
+        checkQqAndName() {
+            let arr = [ this.form.qq, this.form.name ];
+            for(let item of arr) {
+                if(item == null || item === '') return false;
+            }
+            return true;
         }
     }
 }

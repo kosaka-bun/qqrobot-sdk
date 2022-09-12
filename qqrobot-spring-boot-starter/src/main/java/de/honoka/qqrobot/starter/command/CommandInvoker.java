@@ -102,8 +102,11 @@ public class CommandInvoker {
                 //noinspection AssignmentToCatchBlockParameter
                 t = t.getCause();
             }
-            if(t instanceof CommandMethodArgs.WrongNumberParameterException)
+            if(t instanceof CommandMethodArgs.WrongNumberParameterException) {
                 return RobotMultipartMessage.of("你提供的参数有误，应当提供数字");
+            } else if(t instanceof CommandMethodArgs.WrongAtParameterException) {
+                return RobotMultipartMessage.of("你提供的参数有误，应当提供一个At");
+            }
             throw t;
         }
     }

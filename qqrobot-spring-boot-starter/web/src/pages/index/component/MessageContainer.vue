@@ -77,11 +77,12 @@ import OppositeMessage from '@/pages/index/component/OppositeMessage'
 import SystemInfo from '@/pages/index/component/SystemInfo'
 import RobotMessagePartType from '@/util/robot-message-part-type'
 import { reactive } from 'vue'
+import { Picture as IconPicture } from '@element-plus/icons-vue'
 
 export default {
     name: 'MessageContainer',
     components: {
-        MyMessage, OppositeMessage, SystemInfo
+        MyMessage, OppositeMessage, SystemInfo, IconPicture
     },
     props: {
         label: null,
@@ -168,7 +169,7 @@ export default {
         },
         translateToHtml(str) {
             return str.replaceAll(/ /g, '&nbsp;')
-                .replaceAll(/\n/g, '<br />');
+            .replaceAll(/\n/g, '<br />');
         },
         getImagePath(name) {
             return process.env.baseUrl + '/image?name=' + name;

@@ -82,7 +82,7 @@ public class TesterServerConnection {
         res.setType(TesterMessageType.LOGIN);
         //提取并检查消息中的成员
         JsonObject msgData = message.getData();
-        long userId = msgData.get("qq").getAsLong();
+        long qq = msgData.get("qq").getAsLong();
         String username = msgData.get("name").getAsString();
         JsonObject resData = res.getData();
         if(StringUtils.equalsIgnoreCase(username, "robot")) {
@@ -91,14 +91,14 @@ public class TesterServerConnection {
                     "不能使用Robot作为用户名");
             return res;
         }
-        if(ObjectUtils.anyNull(userId, username)) {
+        if(ObjectUtils.anyNull(qq, username)) {
             resData.addProperty("status", false);
             resData.addProperty("message", "账号和用户名不能为空");
             return res;
         }
         //遍历现有连接，检查是否已登录
         for(TesterServerConnection connection : testerServer.getConnections()) {
-            if(connection.data.get("qq").getAsLong() == userId) {
+            if(connection.data.get("qq").getAsLong() == qq) {
                 resData.addProperty("status", false);
                 resData.addProperty("message", "该账号已登录");
                 return res;
@@ -119,6 +119,7 @@ public class TesterServerConnection {
                     continue;
                 JsonObject notifyMsgData = new JsonObject();
                 notifyMsgData.addProperty("name", username);
+                notifyMsgData.addProperty("qq", qq);
                 notifyMsgData.add("data", data);
                 connection.sendMessage(new TesterMessage(null)
                         .setType(TesterMessageType.NEW_USER_LOGIN)
