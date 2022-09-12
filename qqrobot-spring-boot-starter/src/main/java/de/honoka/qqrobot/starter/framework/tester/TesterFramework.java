@@ -17,11 +17,16 @@ import de.honoka.qqrobot.starter.framework.tester.server.TesterServerConnection;
 import de.honoka.qqrobot.starter.property.RobotBasicProperties;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.springframework.util.Base64Utils;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @Getter
 @ConditionalComponent(FrameworkBeans.class)
@@ -94,11 +99,18 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
                 case IMAGE:
                     InputStream inputStream = (InputStream) part.getContent();
                     byte[] bytes = IOUtils.toByteArray(inputStream);
-                    String base64 = Base64Utils.encodeToString(bytes);
-                    base64 = "data:image/png;base64," + base64;
-                    testerRobotMessage.add(TesterRobotMessage.PartType.IMAGE, base64);
+                    String name = UUID.randomUUID().toString();
+                    String path = Paths.get(testerProperties.getImagePath(),
+                            name + ".png").toString();
+                    FileUtils.touch(new File(path));
+                    try(OutputStream os = Files.newOutputStream(Paths.get(path))) {
+                        os.write(bytes);
+                    }
+                    testerRobotMessage.add(TesterRobotMessage.PartType.IMAGE, name);
                     break;
                 case FILE:
+                    testerRobotMessage.add(TesterRobotMessage.PartType.TEXT,
+                            "【文件】");
                     break;
             }
         }

@@ -134,7 +134,7 @@ export default {
             this.websocket.onclose = event => {
                 alertUtils.info('连接已断开');
                 this.websocket = null;
-                this.groupMessageListAppend({
+                this.$refs['group-message-container'].messageListAppend({
                     name: null,
                     content: [
                         {

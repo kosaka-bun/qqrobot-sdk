@@ -8,18 +8,35 @@
                          class="message">
                         <my-message v-if="message.name === name"
                                     :name="message.name">
-                            <div v-html="messageContentToString(message.content)">
-                            </div>
+                            <span v-for="part in message.content">
+                                <el-image v-if="part.type === 'image'"
+                                          :src="getImagePath(part.content)"
+                                          :preview-src-list="[
+                                              getImagePath(part.content)
+                                          ]"
+                                          fit="scale-down" />
+                                <span v-else v-html="translateLineBreak(part.content)">
+                                </span>
+                            </span>
                         </my-message>
                         <opposite-message v-else-if="message.name != null &&
                                                      message.name !== ''"
                                           :name="message.name">
-                            <div v-html="messageContentToString(message.content)">
-                            </div>
+                            <span v-for="part in message.content">
+                                <el-image v-if="part.type === 'image'"
+                                          :src="getImagePath(part.content)"
+                                          :preview-src-list="[
+                                              getImagePath(part.content)
+                                          ]"
+                                          fit="scale-down" />
+                                <span v-else v-html="translateLineBreak(part.content)">
+                                </span>
+                            </span>
                         </opposite-message>
                         <system-info v-else>
-                            <div v-html="messageContentToString(message.content)">
-                            </div>
+                            <span v-for="part in message.content"
+                                  v-html="translateLineBreak(part.content)">
+                            </span>
                         </system-info>
                     </div>
                 </div>
@@ -78,22 +95,6 @@ export default {
         }
     },
     methods: {
-        messageContentToString(messageContent) {
-            let str = '';
-            for(let part of messageContent) {
-                console.log(part);
-                switch(part.type) {
-                    case 'image':
-                        str += `<img class="message-image" alt=""
-                                     src="${part.content}" />`;
-                        break;
-                    default:
-                        str += part.content.replaceAll(/\n/g, '<br />');
-                        break;
-                }
-            }
-            return str;
-        },
         scrollToEnd() {
             setTimeout(() => {
                 let scroll = this.$refs['message-list'];
@@ -133,6 +134,12 @@ export default {
         messageListAppend(message) {
             this.messageList.push(message);
             this.scrollToEnd();
+        },
+        translateLineBreak(str) {
+            return str.replaceAll(/\n/g, '<br />');
+        },
+        getImagePath(name) {
+            return process.env.baseUrl + '/image?name=' + name;
         }
     }
 }
