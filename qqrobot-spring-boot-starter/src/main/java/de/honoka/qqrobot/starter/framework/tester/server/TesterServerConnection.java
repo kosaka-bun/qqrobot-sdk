@@ -149,7 +149,7 @@ public class TesterServerConnection {
         JsonArray content = message.getData().getAsJsonArray(
                 "content");
         Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
-                testerServer.getRobotBeanHolder().getFramework();
+                testerServer.getBeanHolder().getFramework();
         framework.frameworkCallback.onGroupMsg(
                 TesterFramework.GROUP_NUMBER,
                 data.get("qq").getAsLong(),

@@ -6,6 +6,8 @@ import de.honoka.qqrobot.framework.FrameworkCallback;
 import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMessageType;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
+import de.honoka.qqrobot.starter.framework.FrameworkBeans;
 import de.honoka.qqrobot.starter.framework.tester.config.TesterProperties;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessage;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessageType;
@@ -16,17 +18,13 @@ import de.honoka.qqrobot.starter.property.RobotBasicProperties;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
 
 @Getter
-@ConditionalOnProperty(prefix = "honoka.qqrobot",
-        name = "framework", havingValue = "tester")
-@Component
+@ConditionalComponent(FrameworkBeans.class)
 public class TesterFramework extends Framework<TesterRobotMessage> {
 
     private final RobotBasicProperties basicProperties;

@@ -33,78 +33,24 @@
         <div class="margin-top">
             <el-row :gutter="12">
                 <el-col :span="12">
-                    <span class="label">群聊消息：</span>
-                    <div class="message-container">
-                        <el-scrollbar class="message-list"
-                                      ref="group-message-list">
-                            <div class="message-list-content"
-                                 ref="group-message-list-content">
-                                <div v-for="message in messageList"
-                                     class="message">
-                                    <my-message v-if="message.name === form.name"
-                                                :name="message.name">
-                                        {{ messageContentToString(message.content) }}
-                                    </my-message>
-                                    <opposite-message
-                                        v-else-if="message.name != null &&
-                                                   message.name !== ''"
-                                        :name="message.name">
-                                        {{ messageContentToString(message.content) }}
-                                    </opposite-message>
-                                    <system-info v-else>
-                                        {{ messageContentToString(message.content) }}
-                                    </system-info>
-                                </div>
-                            </div>
-                        </el-scrollbar>
-                        <el-scrollbar class="message-input">
-                            <el-input type="textarea"
-                                      v-model="input.group"
-                                      placeholder="回复"
-                                      :autosize="{ minRows: 7 }"
-                                      :rows="5"
-                                      :formatter="noEndWrapFormatter"
-                                      @keydown.enter="sendGroupMessage()"
-                                      resize="none" />
-                        </el-scrollbar>
-                        <div class="message-footer">
-                            <el-button @click="sendGroupMessage"
-                                       :disabled="!status.connected ||
-                                                  input.group == null ||
-                                                  input.group === ''"
-                                       :loading="status.group.sending">
-                                发送
-                            </el-button>
-                        </div>
-                    </div>
+                    <message-container
+                        ref="group-message-container"
+                        label="群聊消息："
+                        :message-type="messageType.group"
+                        :name="form.name"
+                        :websocket="websocket"
+                        :connected="status.connected"
+                        :send-web-socket-message="sendWebSocketMessage" />
                 </el-col>
                 <el-col :span="12">
-                    <span class="label">私聊消息：</span>
-                    <div class="message-container">
-                        <el-scrollbar class="message-list">
-                            <div class="message-list-content">
-                                <opposite-message name="abcdef"
-                                                  content="abcdef" />
-                            </div>
-                        </el-scrollbar>
-                        <el-scrollbar class="message-input">
-                            <el-input type="textarea"
-                                      v-model="input.private"
-                                      placeholder="回复"
-                                      :autosize="{ minRows: 7 }"
-                                      :rows="5"
-                                      resize="none" />
-                        </el-scrollbar>
-                        <div class="message-footer">
-                            <el-button @click="sendPrivateMessage"
-                                       :disabled="!status.connected ||
-                                                  input.private == null ||
-                                                  input.private === ''"
-                                       :loading="status.private.sending">
-                                发送
-                            </el-button>
-                        </div>
-                    </div>
+                    <message-container
+                        ref="private-message-container"
+                        label="私聊消息："
+                        :message-type="messageType.private"
+                        :name="form.name"
+                        :websocket="websocket"
+                        :connected="status.connected"
+                        :send-web-socket-message="sendWebSocketMessage" />
                 </el-col>
             </el-row>
         </div>
@@ -129,43 +75,35 @@ import alertUtils from '@/util/alert-utils'
 import SystemInfo from './component/SystemInfo'
 import { reactive } from 'vue'
 import TesterMessageType from '@/util/tester-message-type'
-import RobotMessagePartType from '@/util/robot-message-part-type'
+import MessageContainer from '@/pages/index/component/MessageContainer'
 
 export default {
     name: 'index',
-    components: { SystemInfo, OppositeMessage, MyMessage },
+    components: {
+        MessageContainer, SystemInfo, OppositeMessage, MyMessage
+    },
     data() {
         return {
             form: {
-                qq: null,
-                name: null
+                qq: '12345',
+                name: 'abcde'
             },
             status: {
                 connected: false,
                 connecting: false,
-                disconnecting: false,
-                group: {
-                    sending: false
-                },
-                private: {
-                    sending: false
-                }
+                disconnecting: false
+            },
+            messageType: {
+                group: TesterMessageType.GROUP_MESSAGE,
+                private: TesterMessageType.PRIVATE_MESSAGE
             },
             numberFormatter: value => {
                 return value.replaceAll(/\D/g, '');
             },
-            noEndWrapFormatter: value => {
-                return value.replaceAll(/\n$/g, '');
-            },
-            input: {
-                group: null,
-                private: null
-            },
-            serverUrl: `${process.env.baseWebsocketUrl}/tester-framework/server`,
+            serverUrl: `${process.env.baseWebsocketUrl}/server`,
             websocket: null,
             websocketMessageCallback: {},
             online: reactive([]),
-            messageList: reactive([])
         }
     },
     methods: {
@@ -254,7 +192,8 @@ export default {
                     }
                     break;
                 case TesterMessageType.GROUP_MESSAGE:
-                    this.groupMessageListAppend(message.data);
+                    this.$refs['group-message-container']
+                        .messageListAppend(message.data);
                     break;
             }
         },
@@ -277,60 +216,12 @@ export default {
                 this.status.connecting = false;
             });
         },
-        sendGroupMessage() {
-            let input = this.input.group;
-            if(input == null || input === '') return;
-            if(this.websocket == null) return;
-            this.status.group.sending = true;
-            let content = [
-                {
-                    type: RobotMessagePartType.TEXT,
-                    content: input
-                }
-            ];
-            this.sendWebSocketMessage({
-                type: TesterMessageType.GROUP_MESSAGE,
-                data: {
-                    content
-                }
-            }, res => {
-                if(res.data.status === true) {
-                    this.status.group.sending = false;
-                    this.input.group = '';
-                    this.groupMessageListAppend({
-                        name: this.form.name,
-                        content
-                    });
-                }
-            }, () => {
-                this.status.group.sending = false;
-            });
-        },
-        sendPrivateMessage() {},
         queryOnline() {
             this.sendWebSocketMessage({
                 type: TesterMessageType.QUERY_ONLINE
             }, res => {
                 this.online = reactive(res.data.online);
             });
-        },
-        messageContentToString(messageContent) {
-            let str = '';
-            for(let part of messageContent) {
-                str += part.content;
-            }
-            return str;
-        },
-        groupMessageListAppend(message) {
-            this.messageList.push(message);
-            this.scrollToEnd('group');
-        },
-        scrollToEnd(containerName) {
-            setTimeout(() => {
-                let scroll = this.$refs[`${containerName}-message-list`];
-                let contentBox = this.$refs[`${containerName}-message-list-content`];
-                scroll.setScrollTop(contentBox.scrollHeight);
-            }, 100);
         }
     }
 }

@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.starter.component;
+package de.honoka.qqrobot.starter.common;
 
 import de.honoka.qqrobot.framework.Framework;
 import org.springframework.context.ApplicationContext;
@@ -6,8 +6,11 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+/**
+ * 解决循环依赖
+ */
 @Component
-public class RobotBeanHolder {
+public class BeanHolder {
 
     @Resource
     private ApplicationContext applicationContext;

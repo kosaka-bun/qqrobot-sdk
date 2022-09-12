@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.starter.annotation;
+package de.honoka.qqrobot.starter.common.annotation;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

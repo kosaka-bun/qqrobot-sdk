@@ -1,11 +1,10 @@
 package de.honoka.qqrobot.starter.component.logger;
 
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Component;
+import de.honoka.qqrobot.starter.common.ConditionalBeans;
+import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 
-@ConditionalOnMissingBean(RobotLogger.class)
-@Component
+@ConditionalComponent(ConditionalBeans.class)
 public class DefaultRobotLogger implements RobotLogger {
 
     @Override

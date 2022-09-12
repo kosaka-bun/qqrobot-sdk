@@ -5,18 +5,14 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotNull;
-
 @Validated
 @Getter
 @Setter
 @ConfigurationProperties("honoka.qqrobot")
 public class RobotBasicProperties {
 
-    @NotNull(message = "要登录的qq号不能为空")
     private Long qq;
 
-    @NotNull(message = "要登录的qq密码不能为空")
     private String password;
 
     /**

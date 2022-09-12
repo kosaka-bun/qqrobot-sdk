@@ -2,25 +2,25 @@ package de.honoka.qqrobot.starter.component;
 
 import de.honoka.qqrobot.framework.FrameworkCallback;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Component;
+import de.honoka.qqrobot.starter.common.BeanHolder;
+import de.honoka.qqrobot.starter.common.ConditionalBeans;
+import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-@ConditionalOnMissingBean(FrameworkCallback.class)
-@Component
+@ConditionalComponent(ConditionalBeans.class)
 public class DefaultFrameworkCallback implements FrameworkCallback {
 
     protected MessageExecutor messageExecutor;
 
-    protected RobotBeanHolder beanHolder;
+    protected BeanHolder beanHolder;
 
     private final ThreadPoolExecutor threadPoolExecutor =
             (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     public DefaultFrameworkCallback(MessageExecutor messageExecutor,
-                                    RobotBeanHolder beanHolder) {
+                                    BeanHolder beanHolder) {
         this.messageExecutor = messageExecutor;
         this.beanHolder = beanHolder;
     }

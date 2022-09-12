@@ -2,6 +2,7 @@ package de.honoka.qqrobot.starter.component;
 
 import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.starter.common.BeanHolder;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
 import de.honoka.qqrobot.starter.component.util.RobotImageUtils;
 import de.honoka.qqrobot.starter.property.RobotBasicProperties;
@@ -24,7 +25,7 @@ public class ExceptionReporter {
 	private RobotLogger robotLogger;
 
 	@Resource
-	private RobotBeanHolder beanHolder;
+	private BeanHolder beanHolder;
 
 	@Resource
 	private RobotImageUtils robotImageUtils;

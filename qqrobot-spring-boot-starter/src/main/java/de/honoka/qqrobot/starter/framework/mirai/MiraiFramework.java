@@ -8,6 +8,8 @@ import de.honoka.qqrobot.framework.FrameworkCallback;
 import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMessageType;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
+import de.honoka.qqrobot.starter.framework.FrameworkBeans;
 import de.honoka.qqrobot.starter.framework.mirai.config.MiraiProperties;
 import de.honoka.qqrobot.starter.framework.mirai.model.MiraiMessage;
 import de.honoka.qqrobot.starter.property.RobotBasicProperties;
@@ -24,9 +26,8 @@ import net.mamoe.mirai.message.MessageReceipt;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.BotConfiguration;
 import net.mamoe.mirai.utils.ExternalResource;
+import org.apache.commons.lang3.ObjectUtils;
 import org.jsoup.Jsoup;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.InputStream;
@@ -42,9 +43,7 @@ import java.util.Objects;
  * 使用mirai框架中提供的接口实现基本框架
  */
 @Getter
-@ConditionalOnProperty(prefix = "honoka.qqrobot",
-        name = "framework", havingValue = "mirai")
-@Component
+@ConditionalComponent(FrameworkBeans.class)
 public class MiraiFramework extends Framework<MiraiMessage> {
 
     private final RobotBasicProperties basicProperties;
@@ -78,8 +77,11 @@ public class MiraiFramework extends Framework<MiraiMessage> {
      * 获取配置对象中的信息，构建框架
      */
     public void init() {
-        long qq = basicProperties.getQq();
+        Long qq = basicProperties.getQq();
         String password = basicProperties.getPassword();
+        if(ObjectUtils.anyNull(qq, password)) {
+            throw new RuntimeException("QQ号或密码不能为空");
+        }
         boolean redirectLogs = miraiProperties.getRedirectLogs();
         //修改配置
         BotConfiguration conf = BotConfiguration.getDefault();
