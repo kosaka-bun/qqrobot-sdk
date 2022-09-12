@@ -49,8 +49,13 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
 
     public static final long GROUP_NUMBER = 10000;
 
+    @SneakyThrows
     @Override
     public void boot() {
+        File imagePath = new File(testerProperties.getImagePath());
+        if(imagePath.exists()) {
+            FileUtils.forceDelete(imagePath);
+        }
         frameworkCallback.onStartup();
     }
 

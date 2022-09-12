@@ -2,7 +2,7 @@ package de.honoka.qqrobot.starter.component;
 
 import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
-import de.honoka.qqrobot.starter.common.BeanHolder;
+import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
 import de.honoka.qqrobot.starter.component.util.RobotImageUtils;
 import de.honoka.qqrobot.starter.property.RobotBasicProperties;
@@ -25,7 +25,7 @@ public class ExceptionReporter {
 	private RobotLogger robotLogger;
 
 	@Resource
-	private BeanHolder beanHolder;
+	private RobotBeanHolder robotBeanHolder;
 
 	@Resource
 	private RobotImageUtils robotImageUtils;
@@ -69,7 +69,7 @@ public class ExceptionReporter {
 			RobotMultipartMessage reply = RobotMultipartMessage.of(
 					"出现了问题，堆栈信息如下：\n");
 			reply.add(RobotMessage.image(getExceptionTextImg(exceptionText)));
-			beanHolder.getFramework().sendGroupMsg(basicProperties
+			robotBeanHolder.getFramework().sendGroupMsg(basicProperties
 					.getDevelopingGroup(), reply);
 		} catch(Exception ex) {
 			ex.printStackTrace();

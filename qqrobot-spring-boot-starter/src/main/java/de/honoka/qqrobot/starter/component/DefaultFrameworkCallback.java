@@ -2,8 +2,8 @@ package de.honoka.qqrobot.starter.component;
 
 import de.honoka.qqrobot.framework.FrameworkCallback;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
-import de.honoka.qqrobot.starter.common.BeanHolder;
 import de.honoka.qqrobot.starter.common.ConditionalBeans;
+import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 
 import java.util.concurrent.Executors;
@@ -14,15 +14,15 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
 
     protected MessageExecutor messageExecutor;
 
-    protected BeanHolder beanHolder;
+    protected RobotBeanHolder robotBeanHolder;
 
     private final ThreadPoolExecutor threadPoolExecutor =
             (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     public DefaultFrameworkCallback(MessageExecutor messageExecutor,
-                                    BeanHolder beanHolder) {
+                                    RobotBeanHolder robotBeanHolder) {
         this.messageExecutor = messageExecutor;
-        this.beanHolder = beanHolder;
+        this.robotBeanHolder = robotBeanHolder;
     }
 
     /**
@@ -37,7 +37,7 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
             if(reply != null) {
                 reply.removeEmptyPart();
                 if(reply.isEmpty()) return;
-                beanHolder.getFramework().reply(null, qq, reply);
+                robotBeanHolder.getFramework().reply(null, qq, reply);
             }
         });
     }
@@ -48,14 +48,14 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
     @Override
     public void onGroupMsg(Long group, long qq, RobotMultipartMessage msg) {
         //若机器人被禁言，则不响应此消息
-        if(beanHolder.getFramework().isMuted(group)) return;
+        if(robotBeanHolder.getFramework().isMuted(group)) return;
         threadPoolExecutor.submit(() -> {
             //回复信息
             RobotMultipartMessage reply = messageExecutor.executeMsg(group, qq, msg);
             if(reply != null) {
                 reply.removeEmptyPart();
                 if(reply.isEmpty()) return;
-                beanHolder.getFramework().reply(group, qq, reply);
+                robotBeanHolder.getFramework().reply(group, qq, reply);
             }
         });
     }

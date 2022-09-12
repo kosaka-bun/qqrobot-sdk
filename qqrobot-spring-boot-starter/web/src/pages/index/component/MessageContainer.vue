@@ -6,36 +6,43 @@
                 <div class="message-list-content" ref="message-list-content">
                     <div v-for="message in messageList"
                          class="message">
-                        <my-message v-if="message.name === name"
+                        <my-message v-if="message.isMine === true"
                                     :name="message.name">
                             <span v-for="part in message.content">
-                                <el-image v-if="part.type === 'image'"
-                                          :src="getImagePath(part.content)"
-                                          :preview-src-list="[
-                                              getImagePath(part.content)
-                                          ]"
-                                          fit="scale-down" />
-                                <span v-else v-html="translateLineBreak(part.content)">
-                                </span>
+                                <div v-if="part.content !== '\n'" class="message-part">
+                                    <el-image v-if="part.type === 'image'"
+                                              :src="getImagePath(part.content)"
+                                              :preview-src-list="[
+                                                  getImagePath(part.content)
+                                              ]"
+                                              fit="scale-down" />
+                                    <span v-else v-html="translateToHtml(
+                                        part.content)">
+                                    </span>
+                                </div>
+                                <br v-else />
                             </span>
                         </my-message>
-                        <opposite-message v-else-if="message.name != null &&
-                                                     message.name !== ''"
+                        <opposite-message v-else-if="message.isMine === false"
                                           :name="message.name">
                             <span v-for="part in message.content">
-                                <el-image v-if="part.type === 'image'"
-                                          :src="getImagePath(part.content)"
-                                          :preview-src-list="[
-                                              getImagePath(part.content)
-                                          ]"
-                                          fit="scale-down" />
-                                <span v-else v-html="translateLineBreak(part.content)">
-                                </span>
+                                <div v-if="part.content !== '\n'" class="message-part">
+                                    <el-image v-if="part.type === 'image'"
+                                              :src="getImagePath(part.content)"
+                                              :preview-src-list="[
+                                                  getImagePath(part.content)
+                                              ]"
+                                              fit="scale-down" />
+                                    <span v-else v-html="translateToHtml(
+                                        part.content)">
+                                    </span>
+                                </div>
+                                <br v-else />
                             </span>
                         </opposite-message>
                         <system-info v-else>
                             <span v-for="part in message.content"
-                                  v-html="translateLineBreak(part.content)">
+                                  v-html="translateToHtml(part.content)">
                             </span>
                         </system-info>
                     </div>
@@ -48,11 +55,11 @@
                           :autosize="{ minRows: 7 }"
                           :rows="5"
                           :formatter="noEndWrapFormatter"
-                          @keydown.enter="onEnterKey()"
+                          @keydown.enter="sendMessage()"
                           resize="none" />
             </el-scrollbar>
             <div class="message-footer">
-                <el-button @click="onEnterKey()"
+                <el-button @click="sendMessage()"
                            :disabled="!connected ||
                                       input == null ||
                                       input === ''"
@@ -82,7 +89,8 @@ export default {
         name: null,
         websocket: null,
         connected: false,
-        sendWebSocketMessage: null
+        sendWebSocketMessage: null,
+        online: null
     },
     data() {
         return {
@@ -99,20 +107,38 @@ export default {
             setTimeout(() => {
                 let scroll = this.$refs['message-list'];
                 let contentBox = this.$refs['message-list-content'];
-                scroll.setScrollTop(contentBox.scrollHeight);
+                scroll.setScrollTop(contentBox.scrollHeight + 100);
             }, 100);
         },
-        onEnterKey() {
+        sendMessage() {
             let input = this.input;
             if(input == null || input === '') return;
             if(this.websocket == null) return;
             this.sending = true;
-            let content = [
-                {
-                    type: RobotMessagePartType.TEXT,
-                    content: input
+            let content = [];
+            let pattern = /@[^@\s]+\s/g;
+            let texts = input.split(pattern);
+            let ats = input.match(pattern);
+            for(let i = 0; i < texts.length; i++) {
+                if(texts[i] != null && texts[i] !== '') {
+                    content.push({
+                        type: RobotMessagePartType.TEXT,
+                        content: texts[i]
+                    });
                 }
-            ];
+                if(ats != null && i < ats.length) {
+                    let aOnline = this.findInOnline(ats[i].substring(
+                        1, ats[i].length - 1));
+                    let qq = aOnline.data.qq;
+                    content.push({
+                        type: RobotMessagePartType.AT,
+                        content: ats[i],
+                        extras: {
+                            qq
+                        }
+                    });
+                }
+            }
             this.sendWebSocketMessage({
                 type: this.messageType,
                 data: {
@@ -132,14 +158,26 @@ export default {
             });
         },
         messageListAppend(message) {
+            if(message.name === this.name) {
+                message.isMine = true;
+            } else if(message.name != null) {
+                message.isMine = false;
+            }
             this.messageList.push(message);
             this.scrollToEnd();
         },
-        translateLineBreak(str) {
-            return str.replaceAll(/\n/g, '<br />');
+        translateToHtml(str) {
+            return str.replaceAll(/ /g, '&nbsp;')
+                .replaceAll(/\n/g, '<br />');
         },
         getImagePath(name) {
             return process.env.baseUrl + '/image?name=' + name;
+        },
+        findInOnline(name) {
+            for(let aOnline of this.online) {
+                if(aOnline.name === name) return aOnline;
+            }
+            return null;
         }
     }
 }

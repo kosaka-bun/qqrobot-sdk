@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.starter.command;
 
+import de.honoka.qqrobot.framework.model.RobotMessage;
 import lombok.Getter;
 
 /**
@@ -63,6 +64,14 @@ public class CommandMethodArgs {
 	public String getString(int index) {
 		if(index < args.length)
 			return (String) args[index];
+		else
+			return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public RobotMessage<Long> getAt(int index) {
+		if(index < args.length)
+			return (RobotMessage<Long>) args[index];
 		else
 			return null;
 	}

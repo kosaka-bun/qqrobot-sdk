@@ -2,7 +2,7 @@ package de.honoka.qqrobot.starter.framework.tester.server;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import de.honoka.qqrobot.starter.common.BeanHolder;
+import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ public class TesterServer {
             .create();
 
     @Resource
-    private BeanHolder beanHolder;
+    private RobotBeanHolder robotBeanHolder;
 
     public TesterServer() {
         resetConnections();

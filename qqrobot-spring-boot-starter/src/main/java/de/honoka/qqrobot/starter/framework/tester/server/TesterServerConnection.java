@@ -61,6 +61,9 @@ public class TesterServerConnection {
             case TesterMessageType.GROUP_MESSAGE:
                 onGroupMessage(message);
                 break;
+            case TesterMessageType.PRIVATE_MESSAGE:
+                onPrivateMessage(message);
+                break;
         }
     }
 
@@ -82,6 +85,12 @@ public class TesterServerConnection {
         long userId = msgData.get("qq").getAsLong();
         String username = msgData.get("name").getAsString();
         JsonObject resData = res.getData();
+        if(StringUtils.equalsIgnoreCase(username, "robot")) {
+            resData.addProperty("status", false);
+            resData.addProperty("message",
+                    "不能使用Robot作为用户名");
+            return res;
+        }
         if(ObjectUtils.anyNull(userId, username)) {
             resData.addProperty("status", false);
             resData.addProperty("message", "账号和用户名不能为空");
@@ -98,13 +107,6 @@ public class TesterServerConnection {
                     .getAsString(), username)) {
                 resData.addProperty("status", false);
                 resData.addProperty("message", "该用户名已存在");
-                return res;
-            }
-            if(StringUtils.equalsIgnoreCase(connection.data
-                    .get("name").getAsString(), "robot")) {
-                resData.addProperty("status", false);
-                resData.addProperty("message",
-                        "不能使用Robot作为用户名");
                 return res;
             }
         }
@@ -146,21 +148,16 @@ public class TesterServerConnection {
 
     @SuppressWarnings("unchecked")
     private void onGroupMessage(TesterMessage message) {
-        JsonArray content = message.getData().getAsJsonArray(
-                "content");
-        Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
-                testerServer.getBeanHolder().getFramework();
-        framework.getFrameworkCallback().onGroupMsg(
-                TesterFramework.GROUP_NUMBER,
-                data.get("qq").getAsLong(),
-                framework.transform(TesterRobotMessage.of(content))
-        );
+        //收到消息，发送回执
         JsonObject resData = new JsonObject();
         resData.addProperty("status", true);
         sendMessage(new TesterMessage(message.getId())
                 .setType(TesterMessageType.GROUP_MESSAGE_RESPONSE)
                 .setData(resData)
         );
+        //提醒其他用户
+        JsonArray content = message.getData().getAsJsonArray(
+                "content");
         testerServer.getExecutor().execute(() -> {
             for(TesterServerConnection connection : testerServer.getConnections()) {
                 if(connection.data.get("name").getAsString().equals(
@@ -176,5 +173,33 @@ public class TesterServerConnection {
                 );
             }
         });
+        //处理消息
+        Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
+                testerServer.getRobotBeanHolder().getFramework();
+        framework.getFrameworkCallback().onGroupMsg(
+                TesterFramework.GROUP_NUMBER,
+                data.get("qq").getAsLong(),
+                framework.transform(TesterRobotMessage.of(content))
+        );
+    }
+
+    @SuppressWarnings("unchecked")
+    private void onPrivateMessage(TesterMessage message) {
+        //收到消息，发送回执
+        JsonObject resData = new JsonObject();
+        resData.addProperty("status", true);
+        sendMessage(new TesterMessage(message.getId())
+                .setType(TesterMessageType.PRIVATE_MESSAGE_RESPONSE)
+                .setData(resData)
+        );
+        //处理消息
+        JsonArray content = message.getData().getAsJsonArray(
+                "content");
+        Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
+                testerServer.getRobotBeanHolder().getFramework();
+        framework.getFrameworkCallback().onPrivateMsg(
+                data.get("qq").getAsLong(),
+                framework.transform(TesterRobotMessage.of(content))
+        );
     }
 }

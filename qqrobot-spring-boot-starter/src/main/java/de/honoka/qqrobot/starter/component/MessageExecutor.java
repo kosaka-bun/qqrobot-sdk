@@ -73,6 +73,7 @@ public class MessageExecutor {
         boolean foundCommand = false;	//是否找到了对应的命令
         try {
             //判断是否由起始字符开始，由起始字符开始，则去除起始字符
+            //noPrefix：这个命令是否是不含起始字符的命令
             boolean noPrefix = true;
             if(msg.getFirst().getType().equals(RobotMessageType.TEXT)) {
                 RobotMessage<String> part = (RobotMessage<String>) msg.getFirst();
@@ -81,6 +82,9 @@ public class MessageExecutor {
                             .getCommandPrefix().length()));
                     noPrefix = false;
                 }
+            } else {
+                //消息的首个部分不是TEXT类型的，说明不是命令
+                return null;
             }
             //获取并检查命令名
             List<Object> parts = new ArrayList<>();

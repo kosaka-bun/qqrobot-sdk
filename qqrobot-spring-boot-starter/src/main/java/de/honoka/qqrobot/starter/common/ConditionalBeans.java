@@ -18,7 +18,7 @@ public class ConditionalBeans {
     private MessageExecutor messageExecutor;
 
     @Resource
-    private BeanHolder beanHolder;
+    private RobotBeanHolder robotBeanHolder;
 
     @ConditionalOnMissingBean(RobotLogger.class)
     @Bean
@@ -29,6 +29,6 @@ public class ConditionalBeans {
     @ConditionalOnMissingBean(FrameworkCallback.class)
     @Bean
     public DefaultFrameworkCallback defaultFrameworkCallback() {
-        return new DefaultFrameworkCallback(messageExecutor, beanHolder);
+        return new DefaultFrameworkCallback(messageExecutor, robotBeanHolder);
     }
 }

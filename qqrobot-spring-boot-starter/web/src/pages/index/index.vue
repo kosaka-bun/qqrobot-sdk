@@ -40,6 +40,7 @@
                         :name="form.name"
                         :websocket="websocket"
                         :connected="status.connected"
+                        :online="online"
                         :send-web-socket-message="sendWebSocketMessage" />
                 </el-col>
                 <el-col :span="12">
@@ -50,6 +51,7 @@
                         :name="form.name"
                         :websocket="websocket"
                         :connected="status.connected"
+                        :online="online"
                         :send-web-socket-message="sendWebSocketMessage" />
                 </el-col>
             </el-row>
@@ -59,8 +61,11 @@
             <div v-if="online.length <= 0" class="label">无</div>
             <el-scrollbar v-else class="online-container">
                 <div style="display: flex;">
-                    <span v-for="item in online" class="label">
-                        {{ item.name }}&emsp;
+                    <span v-for="item in online" class="label online-user">
+                        <el-link type="primary" @click="appendAt(item.name)">
+                            {{ `${item.name}(${item.data.qq})` }}
+                        </el-link>
+                        &nbsp;
                     </span>
                 </div>
             </el-scrollbar>
@@ -199,6 +204,10 @@ export default {
                     this.$refs['group-message-container']
                         .messageListAppend(message.data);
                     break;
+                case TesterMessageType.PRIVATE_MESSAGE:
+                    this.$refs['private-message-container']
+                        .messageListAppend(message.data);
+                    break;
             }
         },
         login() {
@@ -226,6 +235,15 @@ export default {
             }, res => {
                 this.online = reactive(res.data.online);
             });
+        },
+        appendAt(name) {
+            let input = this.$refs['group-message-container'].input;
+            if(input == null) {
+                input = `@${name} `;
+            } else {
+                input += `@${name} `;
+            }
+            this.$refs['group-message-container'].input = input;
         }
     }
 }

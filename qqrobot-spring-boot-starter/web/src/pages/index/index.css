@@ -88,3 +88,14 @@ textarea {
     max-width: 20em;
     max-height: 15em;
 }
+
+.message-part {
+    display: inline-block;
+    text-align: left;
+    word-break: break-word;
+}
+
+.online-user {
+    position: relative;
+    bottom: 0.07em;
+}

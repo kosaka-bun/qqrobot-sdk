@@ -10,7 +10,7 @@ import javax.annotation.Resource;
  * 解决循环依赖
  */
 @Component
-public class BeanHolder {
+public class RobotBeanHolder {
 
     @Resource
     private ApplicationContext applicationContext;
