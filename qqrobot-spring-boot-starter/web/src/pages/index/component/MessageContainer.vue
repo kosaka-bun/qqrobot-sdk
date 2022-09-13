@@ -169,7 +169,10 @@ export default {
             this.scrollToEnd();
         },
         translateToHtml(str) {
-            return str.replace(/ /g, '&nbsp;')
+            return str.replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/ /g, '&nbsp;')
                 .replace(/\n/g, '<br />');
         },
         getImagePath(name) {

@@ -9,7 +9,9 @@ subprojects {
 
     repositories {
         mavenCentral()
-        mavenLocal()
+        maven {
+            url 'https://www.honoka.de/maven-repo/'
+        }
     }
 
     dependencies {

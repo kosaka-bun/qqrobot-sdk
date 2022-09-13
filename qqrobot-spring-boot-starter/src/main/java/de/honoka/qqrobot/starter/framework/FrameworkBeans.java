@@ -11,27 +11,16 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Resource;
-
 @Configuration
 public class FrameworkBeans {
-
-    @Resource
-    private FrameworkCallback frameworkCallback;
-
-    @Resource
-    private RobotBasicProperties basicProperties;
-
-    @Resource
-    private MiraiProperties miraiProperties;
-
-    @Resource
-    private TesterProperties testerProperties;
 
     @ConditionalOnProperty(prefix = "honoka.qqrobot",
             name = "framework", havingValue = "mirai")
     @Bean
-    public MiraiFramework miraiFramework() {
+    public MiraiFramework miraiFramework(
+            FrameworkCallback frameworkCallback,
+            RobotBasicProperties basicProperties,
+            MiraiProperties miraiProperties) {
         return new MiraiFramework(frameworkCallback, basicProperties,
                 miraiProperties);
     }
@@ -39,7 +28,10 @@ public class FrameworkBeans {
     @ConditionalOnProperty(prefix = "honoka.qqrobot", name = "framework",
             havingValue = "tester", matchIfMissing = true)
     @Bean
-    public TesterFramework testerFramework() {
+    public TesterFramework testerFramework(
+            FrameworkCallback frameworkCallback,
+            RobotBasicProperties basicProperties,
+            TesterProperties testerProperties) {
         return new TesterFramework(frameworkCallback, basicProperties,
                 testerProperties);
     }
