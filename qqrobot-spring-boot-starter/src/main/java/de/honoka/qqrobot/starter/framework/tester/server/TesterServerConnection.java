@@ -8,7 +8,6 @@ import de.honoka.qqrobot.starter.framework.tester.model.TesterMessage;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessageType;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterRobotMessage;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,10 +35,13 @@ public class TesterServerConnection {
         testerServer = server;
     }
 
-    @SneakyThrows
     public void sendMessage(TesterMessage message) {
-        this.session.getBasicRemote().sendText(TesterServer
-                .gson.toJson(message));
+        try {
+            this.session.getBasicRemote().sendText(TesterServer
+                    .gson.toJson(message));
+        } catch(Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     @OnOpen
@@ -91,7 +93,7 @@ public class TesterServerConnection {
                     "不能使用Robot作为用户名");
             return res;
         }
-        if(ObjectUtils.anyNull(qq, username)) {
+        if(ObjectUtils.anyNull(qq, username) || username.isEmpty()) {
             resData.addProperty("status", false);
             resData.addProperty("message", "账号和用户名不能为空");
             return res;

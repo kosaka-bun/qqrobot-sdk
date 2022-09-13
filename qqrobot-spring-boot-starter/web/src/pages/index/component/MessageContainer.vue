@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <template>
     <div>
         <span class="label">{{ label }}</span>
@@ -15,7 +16,7 @@
                                               :preview-src-list="[
                                                   getImagePath(part.content)
                                               ]"
-                                              fit="scale-down" />
+                                              :fit="'scale-down'" />
                                     <span v-else v-html="translateToHtml(
                                         part.content)">
                                     </span>
@@ -32,7 +33,7 @@
                                               :preview-src-list="[
                                                   getImagePath(part.content)
                                               ]"
-                                              fit="scale-down" />
+                                              :fit="'scale-down'" />
                                     <span v-else v-html="translateToHtml(
                                         part.content)">
                                     </span>
@@ -99,7 +100,7 @@ export default {
             sending: false,
             messageList: reactive([]),
             noEndWrapFormatter: value => {
-                return value.replaceAll(/\n$/g, '');
+                return value.replace(/\n$/g, '');
             }
         }
     },
@@ -168,8 +169,8 @@ export default {
             this.scrollToEnd();
         },
         translateToHtml(str) {
-            return str.replaceAll(/ /g, '&nbsp;')
-            .replaceAll(/\n/g, '<br />');
+            return str.replace(/ /g, '&nbsp;')
+                .replace(/\n/g, '<br />');
         },
         getImagePath(name) {
             return process.env.baseUrl + '/image?name=' + name;

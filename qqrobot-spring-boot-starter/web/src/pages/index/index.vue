@@ -81,6 +81,7 @@ import SystemInfo from './component/SystemInfo'
 import { reactive } from 'vue'
 import TesterMessageType from '@/util/tester-message-type'
 import MessageContainer from '@/pages/index/component/MessageContainer'
+import codeUtils from '@/util/code-utils'
 
 export default {
     name: 'index',
@@ -103,7 +104,7 @@ export default {
                 private: TesterMessageType.PRIVATE_MESSAGE
             },
             numberFormatter: value => {
-                return value.replaceAll(/\D/g, '');
+                return value.replace(/\D/g, '');
             },
             serverUrl: `${process.env.baseWebsocketUrl}/server`,
             websocket: null,
@@ -118,8 +119,22 @@ export default {
                 return;
             }
             this.status.connecting = true;
+            try {
+                this.createWebsoket();
+            } catch(e) {
+                this.status.connecting = false;
+                alertUtils.error('连接失败');
+                console.error(e);
+            }
+        },
+        disconnect() {
+            this.status.disconnecting = true;
+            this.websocket.close();
+        },
+        createWebsoket() {
+            let url = codeUtils.getWebsocketAbsoluteUrl(this.serverUrl);
             //打开一个websocket
-            this.websocket = new WebSocket(this.serverUrl);
+            this.websocket = new WebSocket(url);
             //建立连接
             this.websocket.onopen = () => {
                 this.login();
@@ -161,10 +176,6 @@ export default {
                 groupContainer.sending = false;
                 privateContainer.sending = false;
             };
-        },
-        disconnect() {
-            this.status.disconnecting = true;
-            this.websocket.close();
         },
         sendWebSocketMessage(message, callback, onSendFailed) {
             message.id = crypto.randomUUID();

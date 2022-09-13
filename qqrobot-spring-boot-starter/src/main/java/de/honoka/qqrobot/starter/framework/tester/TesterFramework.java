@@ -8,6 +8,7 @@ import de.honoka.qqrobot.framework.model.RobotMessageType;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import de.honoka.qqrobot.starter.framework.FrameworkBeans;
+import de.honoka.qqrobot.starter.framework.tester.config.TesterConfig;
 import de.honoka.qqrobot.starter.framework.tester.config.TesterProperties;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessage;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessageType;
@@ -17,6 +18,7 @@ import de.honoka.qqrobot.starter.framework.tester.server.TesterServerConnection;
 import de.honoka.qqrobot.starter.property.RobotBasicProperties;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -30,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @Getter
 @ConditionalComponent(FrameworkBeans.class)
 public class TesterFramework extends Framework<TesterRobotMessage> {
@@ -37,6 +40,9 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
     private final RobotBasicProperties basicProperties;
 
     private final TesterProperties testerProperties;
+
+    @Resource
+    private TesterConfig testerConfig;
 
     @Resource
     private TesterServer testerServer;
@@ -62,6 +68,8 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
             FileUtils.forceDelete(imagePath);
         }
         frameworkCallback.onStartup();
+        log.info("\nTester框架启动完成\n请访问 " + testerConfig
+                .getTesterUrl() + " 进行测试");
     }
 
     @SneakyThrows

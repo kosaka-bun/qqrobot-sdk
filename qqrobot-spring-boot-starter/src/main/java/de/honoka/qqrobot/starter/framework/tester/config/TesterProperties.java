@@ -14,4 +14,6 @@ public class TesterProperties {
 
     private String imagePath = Paths.get(FileUtils.getClasspath(),
             "tester-framework", "image").toString();
+
+    private String webPrefix = "/tester-framework";
 }

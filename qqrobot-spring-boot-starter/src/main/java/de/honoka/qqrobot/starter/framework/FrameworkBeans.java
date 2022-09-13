@@ -36,16 +36,16 @@ public class FrameworkBeans {
                 miraiProperties);
     }
 
-    @ConditionalOnProperty(prefix = "honoka.qqrobot",
-            name = "framework", havingValue = "tester")
+    @ConditionalOnProperty(prefix = "honoka.qqrobot", name = "framework",
+            havingValue = "tester", matchIfMissing = true)
     @Bean
     public TesterFramework testerFramework() {
         return new TesterFramework(frameworkCallback, basicProperties,
                 testerProperties);
     }
 
-    @ConditionalOnProperty(prefix = "honoka.qqrobot",
-            name = "framework", havingValue = "tester")
+    @ConditionalOnProperty(prefix = "honoka.qqrobot", name = "framework",
+            havingValue = "tester", matchIfMissing = true)
     @Bean
     public RobotCallbackAspect robotCallbackAspect() {
         return new RobotCallbackAspect();
