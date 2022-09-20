@@ -7,6 +7,7 @@ import lombok.Getter;
 /**
  * 命令方法参数类型，被@Command注解的类必须采用此参数类型
  */
+@SuppressWarnings("unused")
 @Getter
 public class CommandMethodArgs {
 

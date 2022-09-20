@@ -79,7 +79,7 @@ public class MiraiFramework extends Framework<MiraiMessage> {
     public void init() {
         Long qq = basicProperties.getQq();
         String password = basicProperties.getPassword();
-        if(ObjectUtils.anyNull(qq, password)) {
+        if(!ObjectUtils.allNotNull(qq, password)) {
             throw new RuntimeException("QQ号或密码不能为空");
         }
         boolean redirectLogs = miraiProperties.getRedirectLogs();
@@ -87,10 +87,16 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         BotConfiguration conf = BotConfiguration.getDefault();
         //转移日志存放目录，设置设备信息
         //定义设备信息文件路径，与存放日志的目录路径
-        String deviceInfoPath = FileSystems.getDefault().getPath(FileUtils.getClasspath(),
-                miraiProperties.getWorkDirectory(), "deviceInfo.json").toString();
-        String logBase = FileSystems.getDefault().getPath(FileUtils.getClasspath(),
-                miraiProperties.getWorkDirectory(), "log") + File.separator;
+        String deviceInfoPath = FileSystems.getDefault().getPath(
+                FileUtils.getClasspath(),
+                miraiProperties.getWorkDirectory(),
+                "deviceInfo.json"
+        ).toString();
+        String logBase = FileSystems.getDefault().getPath(
+                FileUtils.getClasspath(),
+                miraiProperties.getWorkDirectory(),
+                "log"
+        ) + File.separator;
         File botLogDir = new File(logBase + "bot");
         File networkLogDir = new File(logBase + "network");
         //检查文件与目录是否存在，不存在则创建

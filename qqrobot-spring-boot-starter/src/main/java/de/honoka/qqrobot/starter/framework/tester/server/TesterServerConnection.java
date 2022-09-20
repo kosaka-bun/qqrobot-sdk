@@ -93,7 +93,7 @@ public class TesterServerConnection {
                     "不能使用Robot作为用户名");
             return res;
         }
-        if(ObjectUtils.anyNull(qq, username) || username.isEmpty()) {
+        if(!ObjectUtils.allNotNull(qq, username) || username.isEmpty()) {
             resData.addProperty("status", false);
             resData.addProperty("message", "账号和用户名不能为空");
             return res;
