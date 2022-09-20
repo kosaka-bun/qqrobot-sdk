@@ -1,12 +1,12 @@
 package de.honoka.qqrobot.starter.framework;
 
 import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.framework.mirai.MiraiFramework;
 import de.honoka.qqrobot.starter.framework.mirai.config.MiraiProperties;
 import de.honoka.qqrobot.starter.framework.tester.TesterFramework;
 import de.honoka.qqrobot.starter.framework.tester.component.RobotCallbackAspect;
 import de.honoka.qqrobot.starter.framework.tester.config.TesterProperties;
-import de.honoka.qqrobot.starter.property.RobotBasicProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

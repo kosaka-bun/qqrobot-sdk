@@ -3,6 +3,7 @@ package de.honoka.qqrobot.starter.framework.tester.server;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.Framework;
+import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import de.honoka.qqrobot.starter.framework.tester.TesterFramework;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessage;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessageType;
@@ -37,7 +38,7 @@ public class TesterServerConnection {
 
     public void sendMessage(TesterMessage message) {
         try {
-            this.session.getBasicRemote().sendText(TesterServer
+            this.session.getBasicRemote().sendText(RobotBeanHolder
                     .gson.toJson(message));
         } catch(Throwable t) {
             t.printStackTrace();
@@ -51,7 +52,7 @@ public class TesterServerConnection {
 
     @OnMessage
     public void onMessage(String messageStr) {
-        TesterMessage message = TesterServer.gson.fromJson(messageStr,
+        TesterMessage message = RobotBeanHolder.gson.fromJson(messageStr,
                 TesterMessage.class);
         switch(message.getType()) {
             case TesterMessageType.LOGIN:

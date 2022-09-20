@@ -31,7 +31,7 @@ public class TesterServerConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
         registry.addResourceHandler(testerProperties
-                        .getWebPrefix() + "/**")
-                .addResourceLocations("classpath:/framework/tester/web/");
+                .getWebPrefix() + "/**"
+        ).addResourceLocations("classpath:/web/tester-framework/");
     }
 }

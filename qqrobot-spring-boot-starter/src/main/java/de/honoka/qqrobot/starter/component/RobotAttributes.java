@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component;
 
-import de.honoka.qqrobot.starter.property.RobotBasicProperties;
+import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.sdk.util.system.gui.ConsoleWindow;
 import org.springframework.stereotype.Component;
 

@@ -3,7 +3,7 @@ package de.honoka.qqrobot.starter.framework.tester.model;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import de.honoka.qqrobot.starter.framework.tester.server.TesterServer;
+import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -47,7 +47,7 @@ public class TesterRobotMessage {
     public static TesterRobotMessage of(JsonArray content) {
         TesterRobotMessage message = new TesterRobotMessage();
         for(JsonElement partJson : content) {
-            Part part = TesterServer.gson.fromJson(partJson, Part.class);
+            Part part = RobotBeanHolder.gson.fromJson(partJson, Part.class);
             message.parts.add(part);
         }
         return message;
@@ -64,6 +64,6 @@ public class TesterRobotMessage {
     }
 
     public JsonArray toJsonArray() {
-        return TesterServer.gson.toJsonTree(parts).getAsJsonArray();
+        return RobotBeanHolder.gson.toJsonTree(parts).getAsJsonArray();
     }
 }
