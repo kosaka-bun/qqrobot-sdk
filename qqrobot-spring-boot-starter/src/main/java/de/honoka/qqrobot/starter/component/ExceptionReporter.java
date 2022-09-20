@@ -4,10 +4,10 @@ import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
-import de.honoka.qqrobot.starter.component.util.RobotImageUtils;
 import de.honoka.qqrobot.starter.property.RobotBasicProperties;
 import de.honoka.sdk.util.code.ActionUtils;
 import de.honoka.sdk.util.text.ExceptionUtils;
+import de.honoka.sdk.util.various.ImageUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -26,9 +26,6 @@ public class ExceptionReporter {
 
 	@Resource
 	private RobotBeanHolder robotBeanHolder;
-
-	@Resource
-	private RobotImageUtils robotImageUtils;
 
 	/**
 	 * 异常信息记录表，只记录第一行
@@ -77,6 +74,6 @@ public class ExceptionReporter {
 	}
 
 	protected InputStream getExceptionTextImg(String exceptionText) {
-		return robotImageUtils.textToImageBySize(exceptionText, 1200);
+		return ImageUtils.textToImageBySize(exceptionText, 1200);
 	}
 }
