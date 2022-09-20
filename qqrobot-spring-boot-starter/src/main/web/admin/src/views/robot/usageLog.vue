@@ -26,7 +26,7 @@
 import { getUsageLogApi } from '@/api/robot/usageLog'
 
 export default {
-  name: "usageLog",
+  name: 'usageLog',
   data() {
     return {
       usageLog: [],
@@ -42,9 +42,9 @@ export default {
       this.currentPage = page;
       this.emptyText = '加载中……';
       getUsageLogApi(page).then(response => {
-        this.pageSize = response.PAGE_SIZE;
-        this.maxPage = response.maxPage;
-        let list = response.list;
+        this.pageSize = response.data.PAGE_SIZE;
+        this.maxPage = response.data.maxPage;
+        let list = response.data.list;
         list.forEach((item, index) => {
           item.index = index + 1 + (page - 1) * this.pageSize;
         });

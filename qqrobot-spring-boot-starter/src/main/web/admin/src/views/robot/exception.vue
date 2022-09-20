@@ -1,16 +1,17 @@
 <template>
   <div class="exception">
     <p>显示最近10条异常记录：</p>
-    <p :style="`display: ${loading ? 'block' : 'none'};`">加载中……</p>
+    <p v-if="loading">加载中……</p>
+    <p v-if="!loading && exceptionList.length <= 0">没有结果</p>
     <div class="content">
       <el-card class="card" v-for="(item, index) in exceptionList">
         <template #header>
           <div style="line-height: 1.5em">
-            <span>ID：{{item.id}}</span><br />
-            <span>{{item.datetime}}</span>
+            <span>ID：{{ item.id }}</span><br />
+            <span>{{ item.datetime }}</span>
           </div>
         </template>
-        <div class="exception-item" v-html="item.exceptionText"></div>
+        <pre class="exception-item" v-html="item.exceptionText"></pre>
       </el-card>
     </div>
   </div>
@@ -31,14 +32,10 @@ export default {
     refreshExceptions() {
       this.loading = true;
       getExceptionApi().then(response => {
-        response.list.forEach((item, index) => {
-          item.exceptionText = item.exceptionText.replace(/\</g, "&lt;")
-              .replace(/\>/g, "&gt;").replace(/\n/g, "<br>");
-        });
-        this.exceptionList = response.list;
+        this.exceptionList = response.data;
       }).finally(() => {
         this.loading = false;
-      })
+      });
     }
   },
   mounted() {
@@ -62,6 +59,7 @@ p {
   font-family: Consolas, serif;
   line-height: 1.25em;
   word-break: break-word;
+  margin: 0;
 }
 
 .card {

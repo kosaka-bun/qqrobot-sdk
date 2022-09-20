@@ -42,4 +42,14 @@ public class RobotBasicProperties {
      * 使用哪个框架作为实现（默认为tester）
      */
     private String framework = "tester";
+
+    /**
+     * 消息发送失败时是否重发消息
+     */
+    private Boolean resendOnSendFailed = false;
+
+    /**
+     * 重新登录时是否发送测试消息
+     */
+    private Boolean sendTestMessageOnRelogin = false;
 }

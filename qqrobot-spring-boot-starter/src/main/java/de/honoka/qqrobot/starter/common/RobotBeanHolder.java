@@ -19,6 +19,7 @@ public class RobotBeanHolder {
 
     public static final Gson gson = new GsonBuilder()
             .serializeNulls()
+            .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
 
     private Framework<?> framework;

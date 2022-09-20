@@ -16,7 +16,7 @@ export function switchSendTestMessageOnReloginApi() {
 
 export function switchResendOnSendFailedApi() {
   return request({
-    url: '/switch/resend_on_fail',
+    url: '/switch/resend_on_failed',
     method: 'post'
   });
 }
@@ -30,7 +30,7 @@ export function reloginApi() {
 
 export function sendTestMessageApi() {
   return request({
-    url: '/action/sendTestMessage',
+    url: '/action/send_test_message',
     method: 'post'
   });
 }

@@ -254,7 +254,7 @@ public class MiraiFramework extends Framework<MiraiMessage> {
                 System.err.println("要发送的内容：\n" + msg.contentToString());
                 e.printStackTrace();
                 //是否需要重发
-                if(!miraiProperties.getResendOnSendFailed()) break;
+                if(!basicProperties.getResendOnSendFailed()) break;
                 continue;
             }
             //发送成功，不再继续尝试

@@ -22,16 +22,6 @@ public class MiraiProperties {
     private Boolean redirectLogs = false;
 
     /**
-     * 消息发送失败时是否重发消息
-     */
-    private Boolean resendOnSendFailed = false;
-
-    /**
-     * 重新登录时是否发送测试消息
-     */
-    private Boolean sendTestMessageOnRelogin = false;
-
-    /**
      * 采用的登录协议
      * @see MiraiFramework#setProtocol(BotConfiguration, String)
      */
