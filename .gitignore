@@ -4,4 +4,3 @@ build/
 .idea/
 *.iml
 .gradle/
-/qqrobot-spring-boot-starter/src/main/resources/framework/tester/
