@@ -115,8 +115,8 @@ public class CommandInvoker {
      * 提供包含命令方法的类，提取所有合格的命令方法，组装为调用器，返回调用器列表
      */
     @SneakyThrows
-    public static List<CommandInvoker> getInvokers(
-            List<Object> controllers, RobotBasicProperties basicProperties) {
+    public static List<CommandInvoker> getInvokers(List<Object> controllers,
+            RobotBasicProperties basicProperties) {
         List<CommandInvoker> invokers = new ArrayList<>();
         //遍历每个命令控制器类
         for(Object controller : controllers) {

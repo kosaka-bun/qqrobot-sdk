@@ -73,28 +73,20 @@ public class CommandMethodArgs {
     }
 
     public String getString(int index) {
-        if(index < args.length) {
-            Object arg = args[index];
-            if(arg instanceof String) return (String) arg;
-            else return arg.toString();
-        } else {
-            return null;
-        }
+        Object arg = args[index];
+        if(arg instanceof String) return (String) arg;
+        else return arg.toString();
     }
 
     @SuppressWarnings("unchecked")
     public RobotMessage<Long> getAt(int index) {
-        if(index < args.length) {
-            Object arg = args[index];
-            if(arg instanceof RobotMessage) {
-                RobotMessage<?> message = (RobotMessage<?>) arg;
-                if(message.getType().equals(RobotMessageType.AT)) {
-                    return (RobotMessage<Long>) message;
-                }
+        Object arg = args[index];
+        if(arg instanceof RobotMessage) {
+            RobotMessage<?> message = (RobotMessage<?>) arg;
+            if(message.getType().equals(RobotMessageType.AT)) {
+                return (RobotMessage<Long>) message;
             }
-            throw new WrongAtParameterException();
-        } else {
-            return null;
         }
+        throw new WrongAtParameterException();
     }
 }
