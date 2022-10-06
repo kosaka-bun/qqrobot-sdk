@@ -1,0 +1,4 @@
+server:
+  # port必须显式设置
+  # de.honoka.qqrobot.starter.framework.tester.config.TesterConfig引用了它
+  port: 8081
