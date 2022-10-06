@@ -79,8 +79,6 @@ export default {
     if(savedPassword == null) savedPassword = '';
     return {
       loginForm: {
-        //username: 'admin',
-        //password: '111111'
         username: savedUsername,
         password: savedPassword
       },

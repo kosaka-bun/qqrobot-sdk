@@ -4,8 +4,10 @@ import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.sdk.util.system.gui.ConsoleWindow;
 import de.honoka.sdk.util.text.TextUtils;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 
@@ -14,30 +16,35 @@ import java.util.Date;
 import java.util.function.Consumer;
 
 @Getter
+@Setter
+@Accessors(chain = true)
 public class RobotConsoleWindow {
 
     @Getter
+    @Setter(AccessLevel.NONE)
     private static ConsoleWindow console;
 
-    private final String name;
+    private String name;
 
-    @Setter
     private URL iconPath;
 
-    private final double screenZoomScale;
+    private double screenZoomScale;
 
-    @Setter
-    private Consumer<ApplicationContext> onExit = context -> {};
+    private Class<?> springBootMainClass;
 
-    private ApplicationContext context;
-
-    private final Class<?> springBootMainClass;
-
-    @Setter
     private String[] applicationArgs = new String[0];
 
-    @Setter
+    private Consumer<ApplicationContext> onExit = context -> {};
+
     private boolean showOnCreate = true;
+
+    @Setter(AccessLevel.NONE)
+    private ApplicationContext context;
+
+    public RobotConsoleWindow(String name, Class<?> springBootMainClass) {
+        this.name = name;
+        this.springBootMainClass = springBootMainClass;
+    }
 
     public RobotConsoleWindow(String name, double screenZoomScale,
                               Class<?> springBootMainClass) {
