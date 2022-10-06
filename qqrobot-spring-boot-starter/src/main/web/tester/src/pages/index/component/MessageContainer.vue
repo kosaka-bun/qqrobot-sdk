@@ -131,14 +131,21 @@ export default {
                 if(ats != null && i < ats.length) {
                     let aOnline = this.findInOnline(ats[i].substring(
                         1, ats[i].length - 1));
-                    let qq = aOnline.data.qq;
-                    content.push({
-                        type: RobotMessagePartType.AT,
-                        content: ats[i],
-                        extras: {
-                            qq
-                        }
-                    });
+                    if(aOnline != null) {
+                        let qq = aOnline.data.qq;
+                        content.push({
+                            type: RobotMessagePartType.AT,
+                            content: ats[i],
+                            extras: {
+                                qq
+                            }
+                        });
+                    } else {
+                        content.push({
+                            type: RobotMessagePartType.TEXT,
+                            content: ats[i]
+                        });
+                    }
                 }
             }
             this.sendWebSocketMessage({
