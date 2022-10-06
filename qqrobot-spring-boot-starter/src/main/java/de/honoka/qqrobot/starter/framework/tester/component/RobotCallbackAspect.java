@@ -4,6 +4,7 @@ import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import de.honoka.qqrobot.starter.framework.FrameworkBeans;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -13,6 +14,9 @@ import org.aspectj.lang.annotation.Before;
 @Aspect
 public class RobotCallbackAspect {
 
+    private static final String SEPERATOR = StringUtils.repeat(
+            "-----", 7);
+
     @Before("execution(* de.honoka.qqrobot.starter.component." +
             "DefaultFrameworkCallback.onGroupMsg(..))")
     public void logGroupMessage(JoinPoint joinPoint) {
@@ -21,8 +25,9 @@ public class RobotCallbackAspect {
         RobotMultipartMessage msg = (RobotMultipartMessage) joinPoint.getArgs()[2];
         log.info(String.format(
                 "\nTester收到群消息：\n" +
-                "群号：%d，QQ：%d\n%s",
-                group, qq, msg.contentToString()
+                "群号：%d，QQ：%d\n" +
+                "%s\n%s\n%s",
+                group, qq, SEPERATOR, msg.contentToString(), SEPERATOR
         ));
     }
 
@@ -33,8 +38,9 @@ public class RobotCallbackAspect {
         RobotMultipartMessage msg = (RobotMultipartMessage) joinPoint.getArgs()[1];
         log.info(String.format(
                 "\nTester收到私聊消息：\n" +
-                "QQ：%d\n%s",
-                qq, msg.contentToString()
+                "QQ：%d\n" +
+                "%s\n%s\n%s",
+                qq, SEPERATOR, msg.contentToString(), SEPERATOR
         ));
     }
 
@@ -45,8 +51,9 @@ public class RobotCallbackAspect {
         Object msg = joinPoint.getArgs()[1];
         log.info(String.format(
                 "\nTester发送群消息：\n" +
-                "群号：%d\n%s",
-                group, msg
+                "群号：%d\n" +
+                "%s\n%s\n%s",
+                group, SEPERATOR, msg, SEPERATOR
         ));
     }
 
@@ -57,8 +64,9 @@ public class RobotCallbackAspect {
         Object msg = joinPoint.getArgs()[1];
         log.info(String.format(
                 "\nTester发送私聊消息：\n" +
-                "QQ：%d\n%s",
-                qq, msg
+                "QQ：%d\n" +
+                "%s\n%s\n%s",
+                qq, SEPERATOR, msg, SEPERATOR
         ));
     }
 
@@ -70,8 +78,9 @@ public class RobotCallbackAspect {
         Object msg = joinPoint.getArgs()[2];
         log.info(String.format(
                 "\nTester发送群回复：\n" +
-                "群号：%d，QQ：%d\n%s",
-                group, qq, msg
+                "群号：%d，QQ：%d\n" +
+                "%s\n%s\n%s",
+                group, qq, SEPERATOR, msg, SEPERATOR
         ));
     }
 }

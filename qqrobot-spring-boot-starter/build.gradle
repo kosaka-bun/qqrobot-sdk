@@ -23,13 +23,14 @@ dependencies {
             'spring-boot-configuration-processor'
     implementation springConfigurationProcessor
     annotationProcessor springConfigurationProcessor
-    implementation 'de.honoka.sdk:honoka-utils:1.0.1'
+    implementation 'de.honoka.sdk:honoka-utils:1.0.4-dev'
+    implementation 'de.honoka.sdk:honoka-framework-utils:1.0.0'
     implementation "net.mamoe:mirai-core-jvm:$miraiVersion"
     implementation 'com.google.code.gson:gson'
     implementation 'com.github.houbb:opencc4j:1.6.0'
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'com.h2database:h2:2.1.214'
-    Project framework = project(':qqrobot-framework')
+    String framework = 'de.honoka.qqrobot:qqrobot-framework:1.0.1'
     apiElements framework
     implementation framework
 }

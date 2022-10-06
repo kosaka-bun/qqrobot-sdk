@@ -1,8 +1,10 @@
 package de.honoka.qqrobot.starter.component.session;
 
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.sdk.util.code.ThrowsConsumer;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,18 +13,31 @@ import java.util.concurrent.TimeUnit;
  */
 @Getter
 @Setter
-public class RobotSession implements AutoCloseable {
-
-    private long qq;
+@Accessors(chain = true)
+public class RobotSession {
 
     private Long group;
 
+    private long qq;
+
     private volatile RobotMultipartMessage reply;
+
+    /**
+     * 会话过程中要执行的操作
+     */
+    private ThrowsConsumer<RobotSession> action;
+
+    /**
+     * 超时操作
+     */
+    private ThrowsConsumer<RobotSession> onTimeout;
 
     /**
      * 所属的会话管理器
      */
     private final SessionManager sessionManager;
+
+    public static class TimeoutException extends Exception {}
 
     //package-private
     RobotSession(Long group, long qq, SessionManager sessionManager) {
@@ -52,9 +67,33 @@ public class RobotSession implements AutoCloseable {
         return reply;
     }
 
-    public static class TimeoutException extends Exception {}
+    public void reply(RobotMultipartMessage message) {
+        sessionManager.getFramework().reply(group, qq, message);
+    }
 
-    @Override
+    public void reply(String message) {
+        sessionManager.getFramework().reply(group, qq, message);
+    }
+
+    //package-private
+    public void run() {
+        sessionManager.openSession(this);
+        try {
+            action.accept(this);
+        } catch(Throwable t) {
+            //noinspection ConstantConditions
+            if(!(t instanceof TimeoutException)) throw t;
+            if(onTimeout != null) {
+                onTimeout.accept(this);
+            } else {
+                sessionManager.getFramework().reply(group, qq,
+                        "会话已超时关闭");
+            }
+        } finally {
+            close();
+        }
+    }
+
     public void close() {
         sessionManager.closeSession(this);
     }
