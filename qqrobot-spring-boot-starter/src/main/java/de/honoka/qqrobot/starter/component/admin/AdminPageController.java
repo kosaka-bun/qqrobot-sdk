@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AdminPageController {
 
-    @RequestMapping("/admin/")
+    @RequestMapping(AdminProperties.WEB_PREFIX + "/")
     public String main() {
         return "forward:/admin/index.html";
     }

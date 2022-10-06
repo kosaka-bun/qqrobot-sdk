@@ -5,6 +5,7 @@ import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.common.ConstantMessage;
 import de.honoka.qqrobot.starter.common.annotation.Command;
+import de.honoka.qqrobot.starter.component.session.RobotSession;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -107,6 +108,8 @@ public class CommandInvoker {
                 return RobotMultipartMessage.of("你提供的参数有误，应当提供数字");
             } else if(t instanceof CommandMethodArgs.WrongAtParameterException) {
                 return RobotMultipartMessage.of("你提供的参数有误，应当提供一个At");
+            } else if(t instanceof RobotSession.TimeoutException) {
+                return RobotMultipartMessage.of("会话已超时关闭");
             }
             throw t;
         }

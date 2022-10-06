@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@RequestMapping("/tester-framework")
+@RequestMapping(TesterProperties.WEB_PREFIX)
 @RestController
 public class TesterServerWebApi {
 

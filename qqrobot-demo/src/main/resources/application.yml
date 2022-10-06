@@ -1,0 +1,30 @@
+server:
+  # port必须显式设置
+  # de.honoka.qqrobot.starter.framework.tester.config.TesterConfig引用了它
+  port: 8081
+  servlet:
+    context-path: /qqrobot-demo
+
+spring:
+  profiles:
+    active: dev
+
+# 基本配置，可以被环境配置文件覆盖
+honoka:
+  qqrobot:
+    # 执行命令出现异常时，是否在开发群报告异常堆栈信息（不设置默认为true）
+    report-exception: true
+    # 命令需要附带的前缀（不设置默认为“%”，不包含引号）
+    command-prefix: "%"
+    # 是否在框架启动完成后，就开启机器人的命令处理功能（不设置默认为true）
+    default-enabled: true
+    # 使用哪个框架作为实现（不设置默认为tester）
+    framework: tester
+    # 消息发送失败时，是否重新发送（不设置默认为false）
+    resend-on-send-failed: true
+    # 框架掉线重连后，是否向开发群发送一条测试消息，以判断登录状态（不设置默认为false）
+    send-test-message-on-relogin: false
+    # 后台管理界面相关配置
+    admin:
+      # 后台管理界面的登录密码，最少6位（不设置默认为123456）
+      password: 123456

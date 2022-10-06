@@ -1,0 +1,16 @@
+honoka:
+  qqrobot:
+    # 指定一个机器人框架的实现
+    framework: mirai
+    # 机器人要使用的QQ账号及其密码
+    qq: 123456789
+    password: abcdefg
+    # mirai相关配置
+    mirai:
+      # 使用哪个登录协议（不设置默认为android_pad）
+      protocol: android_pad
+      # 日志、临时文件和设备信息文件的存放目录
+      # 默认为：/qqrobot/mirai，请填写相对路径
+      work-directory: /qqrobot/mirai
+      # 是否将框架的日志信息转移到文件中输出（不设置默认为false）
+      redirect-logs: true

@@ -2,6 +2,7 @@ package de.honoka.qqrobot.starter.component.admin;
 
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,9 +14,12 @@ import java.util.Locale;
 import java.util.Map;
 
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class AdminLoginInterceptor implements HandlerInterceptor {
 
     private final Map<String, String> tokenMap = new HashMap<>();
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
 
     public void putToken(String username, String token) {
         tokenMap.put(username, token);
@@ -31,8 +35,14 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(@NotNull HttpServletRequest request,
                              @NotNull HttpServletResponse response,
                              @NotNull Object handler) {
-        if(request.getMethod().toLowerCase(Locale.ROOT).equals("options"))
+        //只拦截admin所部署的路径下的请求
+        if(!request.getRequestURI().startsWith(contextPath +
+                AdminProperties.WEB_PREFIX)) {
             return true;
+        }
+        if(request.getMethod().toLowerCase(Locale.ROOT).equals("options")) {
+            return true;
+        }
         String token = request.getHeader("X-Token");
         if(!tokenMap.containsValue(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
