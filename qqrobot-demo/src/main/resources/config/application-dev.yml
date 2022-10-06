@@ -1,0 +1,26 @@
+# 使用Tester框架时，不需要指定机器人要使用的QQ账号及其密码
+honoka:
+  qqrobot:
+    # 可以调用管理员命令的用户的QQ号
+    admin-qq: 12345
+    # 开发群群号，机器人的消息通知、私密信息及异常堆栈信息要发送到的群
+    #
+    # Tester框架收到的群聊消息都视为来自于群号为10000的群
+    # 发送群聊消息时，也视为将消息发送到了群号为10000的群
+    # 此处的配置，是将群号为10000的群设为开发群
+    # 并非是指定Tester框架收到的群聊消息所来自的群号
+    developing-group: 10000
+    # Tester框架相关配置
+    tester:
+      # region image-path
+      # 框架发送出去的图片所存储到的位置
+      # 不设置默认为classpath:/tester-framework/image
+      # 需要注意的是，这里填写的路径必须是物理路径，而非是像上面一样是逻辑路径
+      # 格式必须类似于：C:\Projects\qqrobot-demo\tester-framework\image
+      #
+      # image-path: xxxxxxxxx
+      # endregion
+      # Tester框架在收到群聊消息时，要将此消息视为来自于哪个群号的群
+      # Tester框架在发送群消息时，要将消息发送到哪个群号的群
+      # 默认为10000
+      group-number: 10000

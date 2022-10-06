@@ -2,6 +2,7 @@ buildscript {
     ext {
         springBootVersion = '2.3.5.RELEASE'
         kotlinVersion = '1.6.21'
+        qqrobotStarterVersion = '1.1.2-dev'
     }
 }
 
@@ -29,12 +30,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     //机器人框架
-    implementation 'de.honoka.qqrobot:qqrobot-spring-boot-starter:1.1.0'
+    implementation "de.honoka.qqrobot:qqrobot-spring-boot-starter:$qqrobotStarterVersion"
     //一些杂项
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
-    implementation 'de.honoka.sdk:honoka-utils:1.0.1'
+    implementation 'de.honoka.sdk:honoka-utils:1.0.4-dev'
     String lombok = 'org.projectlombok:lombok:1.18.16'
     String springBootConfigurationProcessor = 'org.springframework.boot:' +
             'spring-boot-configuration-processor'
