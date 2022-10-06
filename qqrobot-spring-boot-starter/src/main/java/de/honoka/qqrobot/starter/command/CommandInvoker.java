@@ -3,8 +3,8 @@ package de.honoka.qqrobot.starter.command;
 import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
+import de.honoka.qqrobot.starter.common.ConstantMessage;
 import de.honoka.qqrobot.starter.common.annotation.Command;
-import de.honoka.qqrobot.starter.component.RobotAttributes;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -75,8 +75,9 @@ public class CommandInvoker {
         //判断是否是管理员命令，且已配置管理员QQ号
         if(mustInvokeByAdmin && adminQq != null) {
             //鉴权，判断调用者是否是管理员
-            if(qq != adminQq)
-                return RobotMultipartMessage.of(RobotAttributes.noAuthorizationMsg);
+            if(qq != adminQq) {
+                return RobotMultipartMessage.of(ConstantMessage.NO_AUTHORIZATION);
+            }
         }
         //构造调用Command方法的参数
         CommandMethodArgs argsObject = new CommandMethodArgs(group, qq, args);

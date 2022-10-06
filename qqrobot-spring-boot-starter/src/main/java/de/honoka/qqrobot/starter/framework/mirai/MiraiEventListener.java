@@ -41,7 +41,7 @@ public class MiraiEventListener extends SimpleListenerHost {
         //未发送成功，重新登录
         log.error("测试消息发送失败，准备再次重新登录");
         CodeUtils.threadSleep(3000);
-        miraiFramework.miraiApi.login();
+        miraiFramework.getMiraiApi().login();
     }
 
     //服务器主动要求更换另一个服务器

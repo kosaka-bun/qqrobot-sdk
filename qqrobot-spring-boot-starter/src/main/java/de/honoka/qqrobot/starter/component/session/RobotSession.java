@@ -36,7 +36,8 @@ public class RobotSession implements AutoCloseable {
      * @param timeout 超时时间，单位为秒
      * @return  回复
      */
-    public RobotMultipartMessage waitingForReply(int timeout) throws TimeoutException {
+    public RobotMultipartMessage waitingForReply(int timeout)
+            throws TimeoutException {
         reply = null;  //等待回复前，先忽略已有的回复
         int i = 0;  //已等待秒数
         while(reply == null) {

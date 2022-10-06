@@ -3,7 +3,6 @@ package de.honoka.qqrobot.starter.component.logger;
 import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.common.ConditionalBeans;
-import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
@@ -11,6 +10,7 @@ import de.honoka.qqrobot.starter.component.logger.entity.ExceptionRecord;
 import de.honoka.qqrobot.starter.component.logger.entity.UsageLog;
 import de.honoka.sdk.util.text.ExceptionUtils;
 import de.honoka.sdk.util.various.Retrier;
+import org.springframework.context.annotation.Lazy;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -21,8 +21,9 @@ public class DefaultRobotLogger implements RobotLogger {
     @Resource
     private UsageLogDao usageLogDao;
 
+    @Lazy
     @Resource
-    private RobotBeanHolder robotBeanHolder;
+    private Framework<?> framework;
 
     @Resource
     private ExceptionRecordDao exceptionRecordDao;
@@ -43,7 +44,6 @@ public class DefaultRobotLogger implements RobotLogger {
                                 RobotMultipartMessage msg,
                                 RobotMultipartMessage reply) {
         new Retrier().tryCode(() -> {
-            Framework<?> framework = robotBeanHolder.getFramework();
             usageLogDao.insert(new UsageLog()
                     .setGroupName(framework.getGroupName(group))
                     .setQq(qq).setDatetime(new Date())

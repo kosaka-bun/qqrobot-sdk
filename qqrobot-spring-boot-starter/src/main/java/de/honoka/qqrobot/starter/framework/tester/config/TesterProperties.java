@@ -16,4 +16,6 @@ public class TesterProperties {
             "tester-framework", "image").toString();
 
     private String webPrefix = "/tester-framework";
+
+    private Long groupNumber = 10000L;
 }

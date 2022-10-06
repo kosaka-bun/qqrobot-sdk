@@ -1,7 +1,9 @@
 package de.honoka.qqrobot.starter.framework.tester.server;
 
-import de.honoka.qqrobot.starter.common.RobotBeanHolder;
+import de.honoka.qqrobot.framework.Framework;
+import de.honoka.qqrobot.starter.framework.tester.config.TesterProperties;
 import lombok.Getter;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,8 +22,12 @@ public class TesterServer {
     private final ThreadPoolExecutor executor = (ThreadPoolExecutor)
             Executors.newCachedThreadPool();
 
+    @Lazy
     @Resource
-    private RobotBeanHolder robotBeanHolder;
+    private Framework<?> framework;
+
+    @Resource
+    private TesterProperties testerProperties;
 
     public TesterServer() {
         resetConnections();

@@ -35,6 +35,7 @@ public class RobotBasicProperties {
 
     /**
      * 是否默认启用消息处理功能
+     * @see de.honoka.qqrobot.starter.component.RobotStatus#isEnabled()
      */
     private Boolean defaultEnabled = true;
 

@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.starter.common.RobotBeanHolder;
-import de.honoka.qqrobot.starter.framework.tester.TesterFramework;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessage;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessageType;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterRobotMessage;
@@ -179,9 +178,9 @@ public class TesterServerConnection {
         });
         //处理消息
         Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
-                testerServer.getRobotBeanHolder().getFramework();
+                testerServer.getFramework();
         framework.getFrameworkCallback().onGroupMsg(
-                TesterFramework.GROUP_NUMBER,
+                testerServer.getTesterProperties().getGroupNumber(),
                 data.get("qq").getAsLong(),
                 framework.transform(TesterRobotMessage.of(content))
         );
@@ -200,7 +199,7 @@ public class TesterServerConnection {
         JsonArray content = message.getData().getAsJsonArray(
                 "content");
         Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
-                testerServer.getRobotBeanHolder().getFramework();
+                testerServer.getFramework();
         framework.getFrameworkCallback().onPrivateMsg(
                 data.get("qq").getAsLong(),
                 framework.transform(TesterRobotMessage.of(content))

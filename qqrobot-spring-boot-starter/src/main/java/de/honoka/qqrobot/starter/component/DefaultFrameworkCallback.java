@@ -1,29 +1,28 @@
 package de.honoka.qqrobot.starter.component;
 
+import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.framework.FrameworkCallback;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.common.ConditionalBeans;
-import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
+import org.springframework.context.annotation.Lazy;
 
+import javax.annotation.Resource;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @ConditionalComponent(ConditionalBeans.class)
 public class DefaultFrameworkCallback implements FrameworkCallback {
 
-    protected MessageExecutor messageExecutor;
+    @Resource
+    private MessageExecutor messageExecutor;
 
-    protected RobotBeanHolder robotBeanHolder;
+    @Lazy
+    @Resource
+    private Framework<?> framework;
 
     private final ThreadPoolExecutor threadPoolExecutor =
             (ThreadPoolExecutor) Executors.newCachedThreadPool();
-
-    public DefaultFrameworkCallback(MessageExecutor messageExecutor,
-                                    RobotBeanHolder robotBeanHolder) {
-        this.messageExecutor = messageExecutor;
-        this.robotBeanHolder = robotBeanHolder;
-    }
 
     /**
      * 收到私聊消息
@@ -37,7 +36,7 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
             if(reply != null) {
                 reply.removeEmptyPart();
                 if(reply.isEmpty()) return;
-                robotBeanHolder.getFramework().reply(null, qq, reply);
+                framework.reply(null, qq, reply);
             }
         });
     }
@@ -48,14 +47,14 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
     @Override
     public void onGroupMsg(Long group, long qq, RobotMultipartMessage msg) {
         //若机器人被禁言，则不响应此消息
-        if(robotBeanHolder.getFramework().isMuted(group)) return;
+        if(framework.isMuted(group)) return;
         threadPoolExecutor.submit(() -> {
             //回复信息
             RobotMultipartMessage reply = messageExecutor.executeMsg(group, qq, msg);
             if(reply != null) {
                 reply.removeEmptyPart();
                 if(reply.isEmpty()) return;
-                robotBeanHolder.getFramework().reply(group, qq, reply);
+                framework.reply(group, qq, reply);
             }
         });
     }

@@ -1,9 +1,10 @@
 package de.honoka.qqrobot.starter.component.admin;
 
 import com.google.gson.JsonObject;
+import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.common.RobotBeanHolder;
-import de.honoka.qqrobot.starter.component.RobotAttributes;
+import de.honoka.qqrobot.starter.component.RobotStatus;
 import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
 import de.honoka.qqrobot.starter.component.logger.entity.ExceptionRecord;
@@ -14,6 +15,7 @@ import de.honoka.sdk.util.system.gui.ConsoleWindow;
 import de.honoka.sdk.util.text.TextUtils;
 import de.honoka.sdk.util.web.ApiResponse;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -47,13 +49,14 @@ public class AdminApiController {
     private ExceptionRecordDao exceptionRecordDao;
 
     @Resource
-    private RobotAttributes attributes;
+    private RobotStatus robotStatus;
 
     @Resource
     private RobotBasicProperties basicProperties;
 
+    @Lazy
     @Resource
-    private RobotBeanHolder robotBeanHolder;
+    private Framework<?> framework;
 
     //endregion
 
@@ -152,7 +155,7 @@ public class AdminApiController {
 
     @RequestMapping("/console")
     public String getConsole() {
-        ConsoleWindow window = attributes.consoleWindow;
+        ConsoleWindow window = robotStatus.getConsoleWindow();
         String content;
         if(window != null) {
             content = window.getText();
@@ -169,7 +172,7 @@ public class AdminApiController {
     @RequestMapping("/action/send_test_message")
     public ApiResponse<?> sendTestMessage() {
         ActionUtils.doAction("发送测试消息", () -> {
-            robotBeanHolder.getFramework().sendGroupMsg(
+            framework.sendGroupMsg(
                     basicProperties.getDevelopingGroup(),
                     TextUtils.getSimpleDateFormat().format(new Date()) +
                             "\n测试消息"
@@ -180,8 +183,7 @@ public class AdminApiController {
 
     @RequestMapping("/action/relogin")
     public ApiResponse<?> relogin() {
-        ActionUtils.doAction("重新登录", robotBeanHolder.getFramework()
-                ::reboot);
+        ActionUtils.doAction("重新登录", framework::reboot);
         return ApiResponse.success(null, null);
     }
 }

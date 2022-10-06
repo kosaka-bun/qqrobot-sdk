@@ -2,7 +2,6 @@ package de.honoka.qqrobot.starter.common;
 
 import de.honoka.qqrobot.framework.FrameworkCallback;
 import de.honoka.qqrobot.starter.component.DefaultFrameworkCallback;
-import de.honoka.qqrobot.starter.component.MessageExecutor;
 import de.honoka.qqrobot.starter.component.logger.DefaultRobotLogger;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,9 +19,7 @@ public class ConditionalBeans {
 
     @ConditionalOnMissingBean(FrameworkCallback.class)
     @Bean
-    public DefaultFrameworkCallback defaultFrameworkCallback(
-            MessageExecutor messageExecutor,
-            RobotBeanHolder robotBeanHolder) {
-        return new DefaultFrameworkCallback(messageExecutor, robotBeanHolder);
+    public DefaultFrameworkCallback defaultFrameworkCallback() {
+        return new DefaultFrameworkCallback();
     }
 }

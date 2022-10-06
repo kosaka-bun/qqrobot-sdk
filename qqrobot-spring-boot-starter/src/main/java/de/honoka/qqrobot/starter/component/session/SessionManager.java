@@ -2,9 +2,10 @@ package de.honoka.qqrobot.starter.component.session;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Vector;
 
 /**
  * 系统会话列表的管理器
@@ -15,7 +16,8 @@ public class SessionManager {
 	/**
 	 * 当前会话列表
 	 */
-	private final List<RobotSession> sessionList = new Vector<>();
+	private final List<RobotSession> sessionList = Collections
+			.synchronizedList(new LinkedList<>());
 
 	/**
 	 * 获取一个会话

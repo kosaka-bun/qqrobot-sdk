@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.InputStream;
@@ -37,9 +38,11 @@ import java.util.UUID;
 @ConditionalComponent(FrameworkBeans.class)
 public class TesterFramework extends Framework<TesterRobotMessage> {
 
-    private final RobotBasicProperties basicProperties;
+    @Resource
+    private RobotBasicProperties basicProperties;
 
-    private final TesterProperties testerProperties;
+    @Resource
+    private TesterProperties testerProperties;
 
     @Resource
     private TesterConfig testerConfig;
@@ -47,18 +50,16 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
     @Resource
     private TesterServer testerServer;
 
-    public static final long GROUP_NUMBER = 10000;
-
-    public TesterFramework(FrameworkCallback frameworkCallback,
-                           RobotBasicProperties basicProperties,
-                           TesterProperties testerProperties) {
-        super(frameworkCallback);
-        this.basicProperties = basicProperties;
-        this.testerProperties = testerProperties;
-    }
+    @Resource
+    private FrameworkCallback frameworkCallback;
 
     //key为图片数据流的hashCode，value为这个流对应的文件名
     private final Map<Integer, String> imageNameMap = new HashMap<>();
+
+    @PostConstruct
+    public void init() {
+        setFrameworkCallback(frameworkCallback);
+    }
 
     @SneakyThrows
     @Override

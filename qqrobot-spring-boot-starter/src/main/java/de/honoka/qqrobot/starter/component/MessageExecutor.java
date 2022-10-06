@@ -6,14 +6,17 @@ import de.honoka.qqrobot.framework.model.RobotMessageType;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.command.CommandInvoker;
+import de.honoka.qqrobot.starter.common.ConstantMessage;
 import de.honoka.qqrobot.starter.common.annotation.RobotController;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
 import de.honoka.qqrobot.starter.component.session.RobotSession;
 import de.honoka.qqrobot.starter.component.session.SessionManager;
 import de.honoka.sdk.util.code.ActionUtils;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,43 +30,68 @@ import java.util.concurrent.Executors;
 @Component
 public class MessageExecutor {
 
+    //region components
+
+    @Resource
+    private RobotBasicProperties basicProperties;
+
+    @Resource
+    private RobotStatus attributes;
+
+    @Resource
+    private RobotLogger robotLogger;
+
+    @Resource
+    private SessionManager sessionManager;
+
+    @Resource
+    private ExceptionReporter reporter;
+
+    //List指的是将Spring容器中，所有的此类的实例，组装为List提供到此方法
+    @RobotController
+    @Resource
+    private List<Object> controllers;
+
+    //endregion
+
     private final ExecutorService executorService =
             Executors.newCachedThreadPool();
 
     /**
      * 命令调用器
      */
-    private final List<CommandInvoker> invokers;
+    private List<CommandInvoker> invokers;
 
-    /**
-     * 利用命令调用器列表加载菜单文本
-     */
-    private void loadMenu() {
-        StringBuilder menu = new StringBuilder("目前可以完成的功能有：\n");
-        for(CommandInvoker invoker : invokers) {
-            for(String name : invoker.getCommandName()) {
-                if(invoker.isMustInvokeByAdmin())
-                    name = "*" + name;
-                menu.append(name).append("、");
-            }
-        }
-        attributes.menu = menu.substring(0, menu.length() - 1);
-    }
+    @Getter
+    private String menu = "菜单尚未初始化";
 
-    //参数中的List指的是将Spring容器中，所有的此类的实例，组装为List提供到此方法
-    //如果某个要注入的成员在构造方法时就要使用，必须将其作为构造方法的参数
-    public MessageExecutor(@RobotController List<Object> controllers,
-                           RobotAttributes attributes,
-                           RobotBasicProperties basicProperties) {
-        this.attributes = attributes;
-        this.basicProperties = basicProperties;
+    @Getter
+    private String wrongCommandMsg = "指令有误，请检查输入\n请发送“%s菜单”查看指令";
+
+    @PostConstruct
+    public void init() {
         //加载命令调用器
         invokers = CommandInvoker.getInvokers(controllers, basicProperties);
         //加载菜单
         loadMenu();
         //加载错误指令的提示信息
-        attributes.wrongCommandMsg = String.format(attributes.wrongCommandMsg,
-                basicProperties.getCommandPrefix());
+        wrongCommandMsg = String.format(wrongCommandMsg, basicProperties
+                .getCommandPrefix());
+    }
+
+    /**
+     * 利用命令调用器列表加载菜单文本
+     */
+    private void loadMenu() {
+        StringBuilder menuBuilder = new StringBuilder("目前可以完成的功能有：\n");
+        for(CommandInvoker invoker : invokers) {
+            for(String name : invoker.getCommandName()) {
+                if(invoker.isMustInvokeByAdmin())
+                    name = "*" + name;
+                menuBuilder.append(name).append("、");
+            }
+        }
+        menu = menuBuilder.substring(0, menuBuilder.length() - 1);
     }
 
     @SuppressWarnings("unchecked")
@@ -114,8 +142,8 @@ public class MessageExecutor {
                 //包含，则可确认此消息是需要响应的命令，将调用此命令调用器，并跳出
                 foundCommand = true;
                 //响应命令前先检查总开关状态，若未开启，则回复提示信息，不响应命令
-                if(!attributes.isEnabled)
-                    return RobotMultipartMessage.of(RobotAttributes.offMsg);
+                if(!attributes.isEnabled())
+                    return RobotMultipartMessage.of(ConstantMessage.OFF);
                 //优化参数列表
                 List<Object> argsList = new ArrayList<>(parts.subList(
                         1, parts.size()));
@@ -126,8 +154,8 @@ public class MessageExecutor {
                 }
                 //检查参数个数是否足够
                 if(argsList.size() < invoker.getArgsNum()) {
-                    return RobotMultipartMessage.of(RobotAttributes
-                            .parameterNotEnoughMsg);
+                    return RobotMultipartMessage.of(ConstantMessage
+                            .PARAMETER_NOT_ENOUGH);
                 }
                 Object[] args = argsList.toArray(new Object[0]);
                 //调用
@@ -136,11 +164,11 @@ public class MessageExecutor {
             }
             //判断是否指令有误（有前缀但没有找到命令）
             if(!noPrefix && !foundCommand)
-                reply = RobotMultipartMessage.of(attributes.wrongCommandMsg);
+                reply = RobotMultipartMessage.of(wrongCommandMsg);
         } catch(Throwable t) {
             reporter.sendExceptionToDevelopingGroup(t);
             //找到了命令但没有正确处理
-            if(foundCommand) reply = RobotMultipartMessage.of(RobotAttributes.errMsg);
+            if(foundCommand) reply = RobotMultipartMessage.of(ConstantMessage.ERROR);
         }
         return reply;
     }
@@ -180,7 +208,7 @@ public class MessageExecutor {
         //如果发送此消息的qq在会话列表内，则此qq发送的任何信息都需要被处理
         if(session != null) {
             //检查总开关状态，若未开启，则不将信息传递给会话
-            if(!attributes.isEnabled) return null;
+            if(!attributes.isEnabled()) return null;
             /* reply是驱动会话进行的动力，waitingForReply方法会时刻监听reply的内容，
              * 直到reply不为null时返回 */
             session.setReply(msg);  //记录此消息，传递给会话线程
@@ -199,17 +227,4 @@ public class MessageExecutor {
         }));
         return reply;
     }
-
-    private final RobotBasicProperties basicProperties;
-
-    private final RobotAttributes attributes;
-
-    @Resource
-    private RobotLogger robotLogger;
-
-    @Resource
-    private SessionManager sessionManager;
-
-    @Resource
-    private ExceptionReporter reporter;
 }

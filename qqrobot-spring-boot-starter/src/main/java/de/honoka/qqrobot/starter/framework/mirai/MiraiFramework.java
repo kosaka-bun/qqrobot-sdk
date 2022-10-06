@@ -29,6 +29,8 @@ import net.mamoe.mirai.utils.ExternalResource;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jsoup.Jsoup;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
@@ -46,37 +48,31 @@ import java.util.Objects;
 @ConditionalComponent(FrameworkBeans.class)
 public class MiraiFramework extends Framework<MiraiMessage> {
 
-    private final RobotBasicProperties basicProperties;
+    @Resource
+    private RobotBasicProperties basicProperties;
 
-    private final MiraiProperties miraiProperties;
+    @Resource
+    private MiraiProperties miraiProperties;
 
-    public MiraiFramework(FrameworkCallback frameworkCallback,
-                          RobotBasicProperties basicProperties,
-                          MiraiProperties miraiProperties) {
-        super(frameworkCallback);
-        this.basicProperties = basicProperties;
-        this.miraiProperties = miraiProperties;
-        init();
-    }
+    @Resource
+    private FrameworkCallback frameworkCallback;
 
     /**
      * 提供登录账号，获取信息，发送信息等服务的对象
      */
-    public Bot miraiApi;
+    private Bot miraiApi;
 
     /**
      * 事件监听器
      */
-    protected List<ListenerHost> listeners = new ArrayList<>();
-
-    public void addListener(ListenerHost listener) {
-        listeners.add(listener);
-    }
+    private final List<ListenerHost> listeners = new ArrayList<>();
 
     /**
      * 获取配置对象中的信息，构建框架
      */
+    @PostConstruct
     public void init() {
+        setFrameworkCallback(frameworkCallback);
         Long qq = basicProperties.getQq();
         String password = basicProperties.getPassword();
         if(!ObjectUtils.allNotNull(qq, password)) {
@@ -114,6 +110,10 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         //conf.setHeartbeatPeriodMillis(20 * 1000);
         //构建框架
         miraiApi = BotFactory.INSTANCE.newBot(qq, password, conf);
+    }
+
+    public void addListener(ListenerHost listener) {
+        listeners.add(listener);
     }
 
     /**
