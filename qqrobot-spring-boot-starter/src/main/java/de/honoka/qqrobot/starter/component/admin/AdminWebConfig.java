@@ -13,28 +13,25 @@ import java.util.Arrays;
 public class AdminWebConfig implements WebMvcConfigurer {
 
     @Resource
-    private LoginInterceptor loginInterceptor;
-
-    @Resource
-    private AdminProperties adminProperties;
+    private AdminLoginInterceptor adminLoginInterceptor;
 
     @Override
     public void addInterceptors(@NotNull InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor)
-                .addPathPatterns(adminProperties.getWebPrefix() + "/**")
+        String prefix = AdminProperties.WEB_PREFIX;
+        registry.addInterceptor(adminLoginInterceptor)
+                .addPathPatterns(prefix + "/**")
                 .excludePathPatterns(Arrays.asList(
-                        "/admin/static/**",
-                        "/admin/api/login",
-                        "/admin/favicon.ico",
-                        "/admin/index.html",
-                        "/admin/"
+                        prefix + "/static/**",
+                        prefix + "/api/login",
+                        prefix + "/favicon.ico",
+                        prefix + "/index.html",
+                        prefix + "/"
                 ));
     }
 
     @Override
     public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(adminProperties
-                .getWebPrefix() + "/**"
-        ).addResourceLocations("classpath:/web/admin/");
+        registry.addResourceHandler(AdminProperties.WEB_PREFIX + "/**")
+                .addResourceLocations("classpath:/web/admin/");
     }
 }

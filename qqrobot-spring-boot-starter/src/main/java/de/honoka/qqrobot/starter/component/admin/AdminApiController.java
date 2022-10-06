@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.common.RobotBeanHolder;
-import de.honoka.qqrobot.starter.component.RobotStatus;
+import de.honoka.qqrobot.starter.component.RobotConsoleWindow;
 import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
 import de.honoka.qqrobot.starter.component.logger.entity.ExceptionRecord;
@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @CrossOrigin
-@RequestMapping("/admin/api")
+@RequestMapping(AdminProperties.WEB_PREFIX + "/api")
 @RestController
 public class AdminApiController {
 
@@ -40,16 +40,13 @@ public class AdminApiController {
     private AdminProperties adminProperties;
 
     @Resource
-    private LoginInterceptor loginInterceptor;
+    private AdminLoginInterceptor adminLoginInterceptor;
 
     @Resource
     private UsageLogDao usageLogDao;
 
     @Resource
     private ExceptionRecordDao exceptionRecordDao;
-
-    @Resource
-    private RobotStatus robotStatus;
 
     @Resource
     private RobotBasicProperties basicProperties;
@@ -74,7 +71,7 @@ public class AdminApiController {
         //回应是否已登录，以及密码是否正确
         if(checkPassed) {
             String token = UUID.randomUUID().toString();
-            loginInterceptor.putToken(username, token);
+            adminLoginInterceptor.putToken(username, token);
             Map<String, Object> res = new HashMap<>();
             res.put("token", token);
             return ApiResponse.success(res);
@@ -155,13 +152,14 @@ public class AdminApiController {
 
     @RequestMapping("/console")
     public String getConsole() {
-        ConsoleWindow window = robotStatus.getConsoleWindow();
+        ConsoleWindow window = RobotConsoleWindow.getConsole();
         String content;
         if(window != null) {
             content = window.getText();
         } else {
-            content = "<div style=\"color: white;\">";
-            content += "应用未开启控制台窗口</div>";
+            content = "<div style=\"color: white;\">" +
+                    "应用未开启控制台窗口" +
+                    "</div>";
         }
         JsonObject result = new JsonObject();
         result.addProperty("status", true);

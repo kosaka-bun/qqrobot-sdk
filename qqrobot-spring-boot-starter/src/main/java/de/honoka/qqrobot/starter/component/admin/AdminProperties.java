@@ -9,7 +9,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("honoka.qqrobot.admin")
 public class AdminProperties {
 
-    private String password = "123456";
+    public static final String WEB_PREFIX = "/admin";
 
-    private String webPrefix = "/admin";
+    /**
+     * 后台管理界面的登录密码
+     */
+    private String password = "123456";
 }
