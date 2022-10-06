@@ -1,5 +1,14 @@
 # 更新日志
 
+## 1.2.0
+#### qqrobot-spring-boot-starter 1.2.0
+- TesterProperties的webPrefix转为静态常量。
+- 修复Tester Web界面的at功能bug。
+- 为Robot封装通用的ConsoleWindow。
+- 解决AdminLoginInterceptor潜在的错误拦截问题。
+- 优化使用记录界面的表格列宽度。
+- 使用函数式接口更新会话创建方式。
+
 ## 1.1.1
 #### qqrobot-spring-boot-starter 1.1.1
 - 所有Component不再从`RobotBeanHolder`中获取`Framework`实例。

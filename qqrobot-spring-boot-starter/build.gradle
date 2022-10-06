@@ -2,7 +2,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
-setupVersion '1.1.2-dev'
+setupVersion '1.2.0'
 
 ext {
     miraiVersion = '2.8.2'
@@ -23,7 +23,7 @@ dependencies {
             'spring-boot-configuration-processor'
     implementation springConfigurationProcessor
     annotationProcessor springConfigurationProcessor
-    implementation 'de.honoka.sdk:honoka-utils:1.0.4-dev'
+    implementation 'de.honoka.sdk:honoka-utils:1.0.4'
     implementation 'de.honoka.sdk:honoka-framework-utils:1.0.0'
     implementation "net.mamoe:mirai-core-jvm:$miraiVersion"
     implementation 'com.google.code.gson:gson'
