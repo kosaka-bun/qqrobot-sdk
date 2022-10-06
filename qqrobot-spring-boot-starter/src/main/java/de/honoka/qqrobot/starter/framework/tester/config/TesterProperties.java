@@ -12,10 +12,10 @@ import java.nio.file.Paths;
 @ConfigurationProperties("honoka.qqrobot.tester")
 public class TesterProperties {
 
+    public static final String WEB_PREFIX = "/tester-framework";
+
     private String imagePath = Paths.get(FileUtils.getClasspath(),
             "tester-framework", "image").toString();
-
-    private String webPrefix = "/tester-framework";
 
     private Long groupNumber = 10000L;
 }

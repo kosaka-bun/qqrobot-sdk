@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.starter.common.RobotBeanHolder;
+import de.honoka.qqrobot.starter.framework.tester.config.TesterProperties;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessage;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterMessageType;
 import de.honoka.qqrobot.starter.framework.tester.model.TesterRobotMessage;
@@ -18,7 +19,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.util.Objects;
 
-@ServerEndpoint("/tester-framework/server")
+@ServerEndpoint(TesterProperties.WEB_PREFIX + "/server")
 @Getter
 public class TesterServerConnection {
 
