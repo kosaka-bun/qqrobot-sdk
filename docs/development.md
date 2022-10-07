@@ -111,7 +111,7 @@ starter在加载时，会读取应用中所有被`@RobotController`注解的类�
 
 该类中有数个get方法，可以直接通过下标索引获取想要的类型的参数，下标索引从0开始。也可通过此类获取命令调用来源的群号和调用者的QQ号。若为私聊方式调用，则群号为`null`。
 
-#### [RobotMessage<C>](../qqrobot-framework/src/main/java/de/honoka/qqrobot/framework/model/RobotMessage.java)
+#### [RobotMessage&lt;C&gt;](../qqrobot-framework/src/main/java/de/honoka/qqrobot/framework/model/RobotMessage.java)
 富文本消息被拆分后，其中一个部分即被封装在此类中。泛型C表示这个消息部分的数据类型。
 
 #### [RobotMultipartMessage](../qqrobot-framework/src/main/java/de/honoka/qqrobot/framework/model/RobotMultipartMessage.java)
