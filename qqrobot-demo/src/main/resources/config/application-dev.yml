@@ -20,6 +20,7 @@ honoka:
       #
       # image-path: xxxxxxxxx
       # endregion
+      #
       # Tester框架在收到群聊消息时，要将此消息视为来自于哪个群号的群
       # Tester框架在发送群消息时，要将消息发送到哪个群号的群
       # 默认为10000

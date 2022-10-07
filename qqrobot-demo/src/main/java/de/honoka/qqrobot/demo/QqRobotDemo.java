@@ -11,6 +11,6 @@ public class QqRobotDemo {
                 1.25, QqRobotDemo.class);
         demo.setOnExit(context -> {
             context.getBean(DemoSystemService.class).exit();
-        }).setShowOnCreate(false).create();
+        }).create();
     }
 }

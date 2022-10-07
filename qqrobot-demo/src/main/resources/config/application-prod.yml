@@ -5,6 +5,8 @@ honoka:
     # 机器人要使用的QQ账号及其密码
     qq: 123456789
     password: abcdefg
+    admin-qq: 12345
+    developing-group: 10000
     # mirai相关配置
     mirai:
       # 使用哪个登录协议（不设置默认为android_pad）

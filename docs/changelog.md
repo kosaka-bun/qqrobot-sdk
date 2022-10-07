@@ -2,7 +2,7 @@
 
 ## 1.2.0
 #### qqrobot-spring-boot-starter 1.2.0
-- `TesterProperties`的webPrefix转为静态常量。
+- `TesterProperties`的`webPrefix`转为静态常量。
 - 修复Tester Web界面的at功能bug。
 - 为Robot封装通用的`ConsoleWindow`。
 - 解决`AdminLoginInterceptor`潜在的错误拦截问题。
