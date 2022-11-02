@@ -12,7 +12,6 @@ import de.honoka.qqrobot.starter.component.logger.entity.UsageLog;
 import de.honoka.sdk.util.code.ActionUtils;
 import de.honoka.sdk.util.framework.web.ApiResponse;
 import de.honoka.sdk.util.system.SystemInfoBean;
-import de.honoka.sdk.util.system.gui.ConsoleWindow;
 import de.honoka.sdk.util.text.TextUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.context.annotation.Lazy;
@@ -152,11 +151,8 @@ public class AdminApiController {
 
     @RequestMapping("/console")
     public String getConsole() {
-        ConsoleWindow window = RobotConsoleWindow.getConsole();
-        String content;
-        if(window != null) {
-            content = window.getText();
-        } else {
+        String content = RobotConsoleWindow.getConsoleText();
+        if(content == null) {
             content = "<div style=\"color: white;\">" +
                     "应用未开启控制台窗口" +
                     "</div>";

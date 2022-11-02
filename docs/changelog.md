@@ -1,5 +1,11 @@
 # 更新日志
 
+## 1.2.1
+#### qqrobot-spring-boot-starter 1.2.1
+- 增加`RobotConsole`以接管`System.out`与`System.err`，缓存这些输出流所输出的内容。
+- 增强`RobotConsoleWindow`以支持`RobotConsole`。
+- 修改`AdminApiController`以支持`RobotConsoleWindow`。
+
 ## 1.2.0
 #### qqrobot-spring-boot-starter 1.2.0
 - `TesterProperties`的`webPrefix`转为静态常量。
