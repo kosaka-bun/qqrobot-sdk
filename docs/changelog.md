@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.2.2
+#### qqrobot-spring-boot-starter 1.2.2
+- 解决潜在的`Logger`的JDBC URL路径错误问题。
+
 ## 1.2.1
 #### qqrobot-spring-boot-starter 1.2.1
 - 增加`RobotConsole`以接管`System.out`与`System.err`，缓存这些输出流所输出的内容。
