@@ -14,6 +14,7 @@ import de.honoka.qqrobot.starter.component.session.SessionManager;
 import de.honoka.sdk.util.code.ActionUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -44,6 +45,7 @@ public class MessageExecutor {
     @Resource
     private SessionManager sessionManager;
 
+    @Lazy
     @Resource
     private ExceptionReporter reporter;
 

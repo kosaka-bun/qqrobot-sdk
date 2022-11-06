@@ -1,11 +1,12 @@
 plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.7.20'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
-setupVersion '1.2.2'
+setupVersion '1.2.3-dev'
 
 ext {
-    miraiVersion = '2.8.2'
+    miraiVersion = '2.12.3'
 }
 
 dependencyManagement {
