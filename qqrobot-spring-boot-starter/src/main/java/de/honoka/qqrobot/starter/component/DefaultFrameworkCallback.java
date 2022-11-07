@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @ConditionalComponent(ConditionalBeans.class)
 public class DefaultFrameworkCallback implements FrameworkCallback {
 
+    @Lazy
     @Resource
     private MessageExecutor messageExecutor;
 
