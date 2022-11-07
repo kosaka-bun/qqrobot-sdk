@@ -95,6 +95,7 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         ) + File.separator;
         File botLogDir = new File(logBase + "bot");
         File networkLogDir = new File(logBase + "network");
+        File cacheDir = new File(logBase + "cache");
         //检查文件与目录是否存在，不存在则创建
         //FileUtils.checkFiles(deviceInfo);
         FileUtils.checkOrMkdirs(botLogDir, networkLogDir);
@@ -105,6 +106,7 @@ public class MiraiFramework extends Framework<MiraiMessage> {
             conf.redirectBotLogToDirectory(botLogDir);
             conf.redirectNetworkLogToDirectory(networkLogDir);
         }
+        conf.setCacheDir(cacheDir);
         //网络设置
         setProtocol(conf, miraiProperties.getProtocol());
         //conf.setHeartbeatPeriodMillis(20 * 1000);
