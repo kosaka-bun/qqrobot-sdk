@@ -6,7 +6,7 @@ plugins {
 setupVersion '1.2.3-dev'
 
 ext {
-    miraiVersion = '2.13.0-RC'
+    miraiVersion = '2.13.0-RC2'
 }
 
 dependencyManagement {

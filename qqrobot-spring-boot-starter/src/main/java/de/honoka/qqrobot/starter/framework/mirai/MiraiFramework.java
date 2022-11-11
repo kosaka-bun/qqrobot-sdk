@@ -93,9 +93,14 @@ public class MiraiFramework extends Framework<MiraiMessage> {
                 miraiProperties.getWorkDirectory(),
                 "log"
         ) + File.separator;
+        String cacheDirPath = FileSystems.getDefault().getPath(
+                FileUtils.getClasspath(),
+                miraiProperties.getWorkDirectory(),
+                "cache"
+        ).toString();
         File botLogDir = new File(logBase + "bot");
         File networkLogDir = new File(logBase + "network");
-        File cacheDir = new File(logBase + "cache");
+        File cacheDir = new File(cacheDirPath);
         //检查文件与目录是否存在，不存在则创建
         //FileUtils.checkFiles(deviceInfo);
         FileUtils.checkOrMkdirs(botLogDir, networkLogDir);
