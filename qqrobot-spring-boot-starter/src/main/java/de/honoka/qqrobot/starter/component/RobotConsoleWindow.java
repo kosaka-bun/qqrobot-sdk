@@ -78,6 +78,10 @@ public class RobotConsoleWindow {
     }
 
     public void create() {
+        //优先使用VM选项中的配置，其次使用代码中指定的配置
+        String forceNoGuiInVmOptions = System.getProperty("honoka.gui.force-no-gui");
+        boolean forceNoGui = forceNoGuiInVmOptions == null ? this.forceNoGui :
+                Boolean.getBoolean(forceNoGuiInVmOptions);
         if(forceNoGui) {
             console = new RobotConsole();
             startApplication();
