@@ -7,6 +7,7 @@ setupVersion '1.2.3-dev'
 
 ext {
     miraiVersion = '2.13.0-RC2'
+    frameworkApiVersion = '1.0.2-dev'
 }
 
 dependencyManagement {
@@ -31,7 +32,7 @@ dependencies {
     implementation 'com.github.houbb:opencc4j:1.6.0'
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'com.h2database:h2:2.1.214'
-    String framework = 'de.honoka.qqrobot:qqrobot-framework:1.0.1'
+    String framework = "de.honoka.qqrobot:qqrobot-framework-api:$frameworkApiVersion"
     apiElements framework
     implementation framework
 }
