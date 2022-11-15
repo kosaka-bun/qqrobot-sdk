@@ -3,12 +3,12 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
-setupVersion '1.2.3-dev'
+setupVersion '1.3.0'
 
 ext {
     springBootVersion = '2.7.5'
     miraiVersion = '2.13.0-RC2'
-    frameworkApiVersion = '1.0.2-dev'
+    frameworkApiVersion = '1.0.2'
 }
 
 dependencyManagement {

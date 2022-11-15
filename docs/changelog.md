@@ -1,5 +1,16 @@
 # 更新日志
 
+## 1.3.0
+#### qqrobot-framework-api 1.0.2
+- qqrobot-framework更名为qqrobot-framework-api。
+- 为`RobotMultipartMessage`实现`clone()`方法。
+
+#### qqrobot-spring-boot-starter 1.3.0
+- 重构代码目录结构，将framework目录移出starter目录。
+- framework目录不再被配置类所扫描，而是扫描framework/config，通过其中的配置类决定扫描哪个框架的实现所在的包。
+- 优化mirai框架在重新登录时的逻辑，当`MiraiFramework`中的`Bot`被close时，可重新构建`Bot`。
+- 修改`MessageExecutor`记录日志的逻辑，记录时使用`RobotMultipartMessage reply`的拷贝，而不是`reply`本身。因为`reply`对象可能会在被**异步**记录到日志中之前被再次修改，使得部分不重要的内容被记录到日志中。
+
 ## 1.2.2
 #### qqrobot-spring-boot-starter 1.2.2
 - 解决潜在的`Logger`的JDBC URL路径错误问题。
