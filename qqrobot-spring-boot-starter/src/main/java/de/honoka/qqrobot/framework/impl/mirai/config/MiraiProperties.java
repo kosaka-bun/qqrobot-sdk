@@ -1,6 +1,6 @@
-package de.honoka.qqrobot.starter.framework.mirai.config;
+package de.honoka.qqrobot.framework.impl.mirai.config;
 
-import de.honoka.qqrobot.starter.framework.mirai.MiraiFramework;
+import de.honoka.qqrobot.framework.impl.mirai.MiraiFramework;
 import lombok.Getter;
 import lombok.Setter;
 import net.mamoe.mirai.utils.BotConfiguration;

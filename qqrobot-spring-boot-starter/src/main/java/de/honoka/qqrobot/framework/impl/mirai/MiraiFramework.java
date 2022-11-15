@@ -1,22 +1,22 @@
-package de.honoka.qqrobot.starter.framework.mirai;
+package de.honoka.qqrobot.framework.impl.mirai;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.framework.impl.mirai.config.MiraiProperties;
+import de.honoka.qqrobot.framework.impl.mirai.model.MiraiMessage;
 import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMessageType;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
-import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
-import de.honoka.qqrobot.starter.framework.FrameworkBeans;
-import de.honoka.qqrobot.starter.framework.mirai.config.MiraiProperties;
-import de.honoka.qqrobot.starter.framework.mirai.model.MiraiMessage;
 import de.honoka.sdk.util.file.FileUtils;
 import de.honoka.sdk.util.text.TextUtils;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.contact.Contact;
@@ -28,6 +28,7 @@ import net.mamoe.mirai.utils.BotConfiguration;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jsoup.Jsoup;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -44,8 +45,9 @@ import java.util.Objects;
 /**
  * 使用mirai框架中提供的接口实现基本框架
  */
+@Slf4j
 @Getter
-@ConditionalComponent(FrameworkBeans.class)
+@Component
 public class MiraiFramework extends Framework<MiraiMessage> {
 
     @Resource
@@ -53,9 +55,6 @@ public class MiraiFramework extends Framework<MiraiMessage> {
 
     @Resource
     private MiraiProperties miraiProperties;
-
-    @Resource
-    private FrameworkCallback frameworkCallback;
 
     /**
      * 提供登录账号，获取信息，发送信息等服务的对象
@@ -67,12 +66,29 @@ public class MiraiFramework extends Framework<MiraiMessage> {
      */
     private final List<ListenerHost> listeners = new ArrayList<>();
 
+    private BotInitProperties botInitProperties;
+
+    @AllArgsConstructor
+    private static class BotInitProperties {
+
+        private Long qq;
+
+        private String password;
+
+        private BotConfiguration conf;
+    }
+
+    @Resource
+    @Override
+    protected void setFrameworkCallback(FrameworkCallback frameworkCallback) {
+        super.setFrameworkCallback(frameworkCallback);
+    }
+
     /**
      * 获取配置对象中的信息，构建框架
      */
     @PostConstruct
     public void init() {
-        setFrameworkCallback(frameworkCallback);
         Long qq = basicProperties.getQq();
         String password = basicProperties.getPassword();
         if(!ObjectUtils.allNotNull(qq, password)) {
@@ -102,10 +118,8 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         File networkLogDir = new File(logBase + "network");
         File cacheDir = new File(cacheDirPath);
         //检查文件与目录是否存在，不存在则创建
-        //FileUtils.checkFiles(deviceInfo);
         FileUtils.checkOrMkdirs(botLogDir, networkLogDir);
         //利用这些文件和目录修改配置
-        //conf.loadDeviceInfoJson(FileUtils.textFileToStr(deviceInfo));
         conf.fileBasedDeviceInfo(deviceInfoPath);
         if(redirectLogs) {
             conf.redirectBotLogToDirectory(botLogDir);
@@ -114,8 +128,8 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         conf.setCacheDir(cacheDir);
         //网络设置
         setProtocol(conf, miraiProperties.getProtocol());
-        //conf.setHeartbeatPeriodMillis(20 * 1000);
         //构建框架
+        botInitProperties = new BotInitProperties(qq, password, conf);
         miraiApi = BotFactory.INSTANCE.newBot(qq, password, conf);
     }
 
@@ -175,7 +189,21 @@ public class MiraiFramework extends Framework<MiraiMessage> {
 
     @Override
     public void reboot() {
-        miraiApi.login();
+        try {
+            miraiApi.login();
+        } catch(Throwable t) {
+            log.warn("\nMirai Bot直接重连失败，异常堆栈信息如下：", t);
+            log.info("\n重新构造Mirai Bot");
+            miraiApi = BotFactory.INSTANCE.newBot(
+                    botInitProperties.qq,
+                    botInitProperties.password,
+                    botInitProperties.conf
+            );
+            miraiApi.login();
+            for(ListenerHost listener : listeners) {
+                miraiApi.getEventChannel().registerListenerHost(listener);
+            }
+        }
     }
 
     @SneakyThrows

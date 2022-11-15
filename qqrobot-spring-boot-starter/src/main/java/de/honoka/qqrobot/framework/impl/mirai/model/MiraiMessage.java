@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.starter.framework.mirai.model;
+package de.honoka.qqrobot.framework.impl.mirai.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

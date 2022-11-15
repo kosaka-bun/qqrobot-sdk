@@ -1,6 +1,6 @@
-package de.honoka.qqrobot.starter.framework.mirai;
+package de.honoka.qqrobot.framework.impl.mirai;
 
-import de.honoka.qqrobot.starter.framework.mirai.model.MiraiMessage;
+import de.honoka.qqrobot.framework.impl.mirai.model.MiraiMessage;
 import de.honoka.sdk.util.code.CodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.event.EventHandler;

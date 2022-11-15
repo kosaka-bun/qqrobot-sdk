@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  de.honoka.qqrobot.starter.RobotStarter
+  de.honoka.qqrobot.RobotStarter

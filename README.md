@@ -1,6 +1,6 @@
 # QQ Robot SDK
 ![Java](./docs/img/Java-8-brightgreen.svg)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.3.5.RELEASE-brightgreen?logo=Spring)<br />
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.5-brightgreen?logo=Spring)<br />
 [![License](https://img.shields.io/github/license/kosaka-bun/qqrobot-sdk?label=License&color=blue&logo=GitHub)](./LICENSE)
 ![GitHub Stars](https://img.shields.io/github/stars/kosaka-bun/qqrobot-sdk?label=Stars&logo=GitHub)
 [![Release](https://img.shields.io/github/release/kosaka-bun/qqrobot-sdk?label=Release&logo=GitHub)](../../releases)

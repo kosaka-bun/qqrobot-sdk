@@ -1,13 +1,19 @@
-package de.honoka.qqrobot.starter.framework.tester.config;
+package de.honoka.qqrobot.framework.config;
 
+import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-@Data
 @EnableConfigurationProperties(TesterProperties.class)
+@ComponentScan("de.honoka.qqrobot.framework.impl.tester")
+@ConditionalOnProperty(prefix = "honoka.qqrobot", name = "framework",
+        havingValue = "tester", matchIfMissing = true)
 @Configuration
+@Data
 public class TesterConfig {
 
     @Value("${server.port}")

@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -224,8 +225,10 @@ public class MessageExecutor {
         final RobotMultipartMessage msgCopy = msg;
         //在新线程中，忽略异常地进行结束操作
         executorService.submit(() -> ActionUtils.doIgnoreException(() -> {
+            RobotMultipartMessage replyCopy = (RobotMultipartMessage) Objects
+                    .requireNonNull(reply).clone();
             //记录消息处理的相关信息
-            robotLogger.logMsgExecution(group, qq, msgCopy, reply);
+            robotLogger.logMsgExecution(group, qq, msgCopy, replyCopy);
         }));
         return reply;
     }

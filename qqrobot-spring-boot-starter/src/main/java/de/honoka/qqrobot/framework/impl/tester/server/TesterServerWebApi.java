@@ -1,6 +1,6 @@
-package de.honoka.qqrobot.starter.framework.tester.server;
+package de.honoka.qqrobot.framework.impl.tester.server;
 
-import de.honoka.qqrobot.starter.framework.tester.config.TesterProperties;
+import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.annotation.RequestMapping;

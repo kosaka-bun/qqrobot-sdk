@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Accessors(chain = true)
-public class RobotMultipartMessage {
+public class RobotMultipartMessage implements Cloneable {
 
     @Getter
     @Setter
@@ -95,7 +95,7 @@ public class RobotMultipartMessage {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         RobotMultipartMessage clone = (RobotMultipartMessage) super.clone();
         Object listCopy = ((ArrayList<?>) messageList).clone();
         return clone.setMessageList((List<RobotMessage<?>>) listCopy);

@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.starter.framework.tester.model;
+package de.honoka.qqrobot.framework.impl.tester.model;
 
 public interface TesterMessageType {
 

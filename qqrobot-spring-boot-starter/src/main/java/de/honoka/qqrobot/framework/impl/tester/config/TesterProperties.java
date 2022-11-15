@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.starter.framework.tester.config;
+package de.honoka.qqrobot.framework.impl.tester.config;
 
 import de.honoka.sdk.util.file.FileUtils;
 import lombok.Getter;

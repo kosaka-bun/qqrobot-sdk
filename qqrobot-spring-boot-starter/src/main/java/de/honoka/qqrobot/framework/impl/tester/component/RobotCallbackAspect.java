@@ -1,17 +1,16 @@
-package de.honoka.qqrobot.starter.framework.tester.component;
+package de.honoka.qqrobot.framework.impl.tester.component;
 
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
-import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
-import de.honoka.qqrobot.starter.framework.FrameworkBeans;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
 
-@ConditionalComponent(FrameworkBeans.class)
 @Slf4j
 @Aspect
+@Component
 public class RobotCallbackAspect {
 
     private static final String SEPERATOR = StringUtils.repeat(

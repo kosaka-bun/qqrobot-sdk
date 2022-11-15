@@ -1,13 +1,13 @@
-package de.honoka.qqrobot.starter.framework.tester.server;
+package de.honoka.qqrobot.framework.impl.tester.server;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.Framework;
+import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
+import de.honoka.qqrobot.framework.impl.tester.model.TesterMessage;
+import de.honoka.qqrobot.framework.impl.tester.model.TesterMessageType;
+import de.honoka.qqrobot.framework.impl.tester.model.TesterRobotMessage;
 import de.honoka.qqrobot.starter.common.RobotBeanHolder;
-import de.honoka.qqrobot.starter.framework.tester.config.TesterProperties;
-import de.honoka.qqrobot.starter.framework.tester.model.TesterMessage;
-import de.honoka.qqrobot.starter.framework.tester.model.TesterMessageType;
-import de.honoka.qqrobot.starter.framework.tester.model.TesterRobotMessage;
 import lombok.Getter;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;

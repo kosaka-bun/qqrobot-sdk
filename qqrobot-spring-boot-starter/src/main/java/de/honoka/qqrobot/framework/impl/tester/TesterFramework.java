@@ -1,28 +1,26 @@
-package de.honoka.qqrobot.starter.framework.tester;
+package de.honoka.qqrobot.framework.impl.tester;
 
 import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.framework.config.TesterConfig;
+import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
+import de.honoka.qqrobot.framework.impl.tester.model.TesterMessage;
+import de.honoka.qqrobot.framework.impl.tester.model.TesterMessageType;
+import de.honoka.qqrobot.framework.impl.tester.model.TesterRobotMessage;
+import de.honoka.qqrobot.framework.impl.tester.server.TesterServer;
+import de.honoka.qqrobot.framework.impl.tester.server.TesterServerConnection;
 import de.honoka.qqrobot.framework.model.RobotMessage;
 import de.honoka.qqrobot.framework.model.RobotMessageType;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
-import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
-import de.honoka.qqrobot.starter.framework.FrameworkBeans;
-import de.honoka.qqrobot.starter.framework.tester.config.TesterConfig;
-import de.honoka.qqrobot.starter.framework.tester.config.TesterProperties;
-import de.honoka.qqrobot.starter.framework.tester.model.TesterMessage;
-import de.honoka.qqrobot.starter.framework.tester.model.TesterMessageType;
-import de.honoka.qqrobot.starter.framework.tester.model.TesterRobotMessage;
-import de.honoka.qqrobot.starter.framework.tester.server.TesterServer;
-import de.honoka.qqrobot.starter.framework.tester.server.TesterServerConnection;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.InputStream;
@@ -35,7 +33,7 @@ import java.util.UUID;
 
 @Slf4j
 @Getter
-@ConditionalComponent(FrameworkBeans.class)
+@Component
 public class TesterFramework extends Framework<TesterRobotMessage> {
 
     @Resource
@@ -50,15 +48,13 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
     @Resource
     private TesterServer testerServer;
 
-    @Resource
-    private FrameworkCallback frameworkCallback;
-
     //key为图片数据流的hashCode，value为这个流对应的文件名
     private final Map<Integer, String> imageNameMap = new HashMap<>();
 
-    @PostConstruct
-    public void init() {
-        setFrameworkCallback(frameworkCallback);
+    @Resource
+    @Override
+    protected void setFrameworkCallback(FrameworkCallback frameworkCallback) {
+        super.setFrameworkCallback(frameworkCallback);
     }
 
     @SneakyThrows
