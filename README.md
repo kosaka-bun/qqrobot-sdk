@@ -8,7 +8,7 @@
 ## 简介
 本项目是一款Spring Boot平台一站式QQ机器人开发框架，其对QQ机器人开发过程中遇到的许多常见问题提供了便利的解决方案，能够快速、高效、便捷地搭建基于Spring Boot平台的QQ机器人。
 
-项目分为两个模块，分别是qqrobot-framework和qqrobot-spring-boot-starter。qqrobot-framework规定了一个QQ机器人框架需要遵循的规范，qqrobot-spring-boot-starter为基于qqrobot-framework实现的一站式QQ机器人应用开发框架，其特性包含自动化命令匹配、命令权限校验、命令参数提取、便利的持续会话实现、调用日志与异常日志等。同时还包含了便捷的测试框架以及后台管理界面。
+项目分为两个模块，分别是qqrobot-framework-api和qqrobot-spring-boot-starter。qqrobot-framework-api规定了一个QQ机器人框架需要遵循的规范，qqrobot-spring-boot-starter为基于qqrobot-framework-api实现的一站式QQ机器人应用开发框架，其特性包含自动化命令匹配、命令权限校验、命令参数提取、便利的持续会话实现、调用日志与异常日志等。同时还包含了便捷的测试框架以及后台管理界面。
 
 本项目采用Apache-2.0 License，使用本项目时，请遵守此开源许可证的相关规定。
 

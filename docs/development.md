@@ -20,7 +20,7 @@ buildscript {
     }
 }
 ```
-starter采用mirai作为qqrobot-framework的实现，其依赖了Kotlin Stdlib与Kotlin Coroutines库，并且基本都是比较新的版本。
+starter采用mirai作为qqrobot-framework-api的实现，其依赖了Kotlin Stdlib与Kotlin Coroutines库，并且基本都是比较新的版本。
 
 不论是通过Maven还是Gradle，在导入Spring Boot相关依赖时，Maven的Spring Boot Parent或Gradle的Spring Boot插件均会导入大量的Dependency Management配置，它们会影响某些子依赖的版本号，其中就包含Kotlin的版本号。
 
@@ -111,10 +111,10 @@ starter在加载时，会读取应用中所有被`@RobotController`注解的类�
 
 该类中有数个get方法，可以直接通过下标索引获取想要的类型的参数，下标索引从0开始。也可通过此类获取命令调用来源的群号和调用者的QQ号。若为私聊方式调用，则群号为`null`。
 
-#### [RobotMessage&lt;C&gt;](../qqrobot-framework/src/main/java/de/honoka/qqrobot/framework/model/RobotMessage.java)
+#### [RobotMessage&lt;C&gt;](../qqrobot-framework-api/src/main/java/de/honoka/qqrobot/framework/model/RobotMessage.java)
 富文本消息被拆分后，其中一个部分即被封装在此类中。泛型C表示这个消息部分的数据类型。
 
-#### [RobotMultipartMessage](../qqrobot-framework/src/main/java/de/honoka/qqrobot/framework/model/RobotMultipartMessage.java)
+#### [RobotMultipartMessage](../qqrobot-framework-api/src/main/java/de/honoka/qqrobot/framework/model/RobotMultipartMessage.java)
 `RobotMessage<C>`对象的容器，starter会将它转换成富文本消息后再发送出去。
 
 ### 命令定义示例
