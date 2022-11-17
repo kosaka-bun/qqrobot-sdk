@@ -28,6 +28,7 @@ import net.mamoe.mirai.utils.BotConfiguration;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jsoup.Jsoup;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -67,6 +68,8 @@ public class MiraiFramework extends Framework<MiraiMessage> {
     private final List<ListenerHost> listeners = new ArrayList<>();
 
     private BotInitProperties botInitProperties;
+
+    private boolean started = false;
 
     @AllArgsConstructor
     private static class BotInitProperties {
@@ -170,7 +173,7 @@ public class MiraiFramework extends Framework<MiraiMessage> {
      * 启动框架，登录账号，对接消息处理的回调方法（延迟注入事件监听器）
      */
     @Override
-    public void boot() {
+    public synchronized void boot() {
         miraiApi.login();
         //默认监听器
         addListener(new MiraiEventListener(this));
@@ -179,16 +182,17 @@ public class MiraiFramework extends Framework<MiraiMessage> {
             miraiApi.getEventChannel().registerListenerHost(listener);
         }
         frameworkCallback.onStartup();
+        started = true;
     }
 
     @Override
-    public void stop() {
+    public synchronized void stop() {
         miraiApi.close(null);
         frameworkCallback.onShutdown();
     }
 
     @Override
-    public void reboot() {
+    public synchronized void reboot() {
         try {
             miraiApi.login();
         } catch(Throwable t) {
@@ -204,6 +208,12 @@ public class MiraiFramework extends Framework<MiraiMessage> {
                 miraiApi.getEventChannel().registerListenerHost(listener);
             }
         }
+    }
+
+    @Scheduled(cron = "0 * * * * ?")
+    public synchronized void checkIsActive() {
+        if(!started || miraiApi.isOnline()) return;
+        reboot();
     }
 
     @SneakyThrows

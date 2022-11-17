@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.3.1
+#### qqrobot-spring-boot-starter 1.3.1
+- 为`MiraiFramework`添加定时方法，检查在线状态，并执行重连。
+
 ## 1.3.0
 #### qqrobot-framework-api 1.0.2
 - qqrobot-framework更名为qqrobot-framework-api。
