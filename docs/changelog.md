@@ -1,5 +1,12 @@
 # 更新日志
 
+## 1.3.2
+#### qqrobot-framework-api 1.0.3
+- 优化API。
+
+#### qqrobot-spring-boot-starter 1.3.2
+- 1.3.0版本中修改了`MessageExecutor`记录日志的逻辑，记录时使用`RobotMultipartMessage reply`的拷贝。但由于`reply.clone()`方法在异步代码块内执行，所以在此操作被执行时，`reply`对象很可能已经被修改了，从而使得在拷贝后的结果中，仍然会包含不重要的内容。此版本对这个问题进行了修复。
+
 ## 1.3.1
 #### qqrobot-spring-boot-starter 1.3.1
 - 为`MiraiFramework`添加定时方法，检查在线状态，并执行重连。

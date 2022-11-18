@@ -222,13 +222,12 @@ public class MessageExecutor {
         RobotMultipartMessage reply = executeMsg0(group, qq, msg);
         //结束操作，用于对消息进行一些记录或分析
         //内部类中需要局部变量未被更改才能调用
-        final RobotMultipartMessage msgCopy = msg;
+        RobotMultipartMessage replyCopy = (RobotMultipartMessage) Objects
+                .requireNonNull(reply).clone();
         //在新线程中，忽略异常地进行结束操作
         executorService.submit(() -> ActionUtils.doIgnoreException(() -> {
-            RobotMultipartMessage replyCopy = (RobotMultipartMessage) Objects
-                    .requireNonNull(reply).clone();
             //记录消息处理的相关信息
-            robotLogger.logMsgExecution(group, qq, msgCopy, replyCopy);
+            robotLogger.logMsgExecution(group, qq, msg, replyCopy);
         }));
         return reply;
     }

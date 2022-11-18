@@ -207,6 +207,7 @@ public class MiraiFramework extends Framework<MiraiMessage> {
             for(ListenerHost listener : listeners) {
                 miraiApi.getEventChannel().registerListenerHost(listener);
             }
+            log.info("\n登录成功");
         }
     }
 

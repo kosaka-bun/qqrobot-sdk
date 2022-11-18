@@ -2,18 +2,18 @@ package de.honoka.qqrobot.framework.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 @Accessors(chain = true)
 public class RobotMultipartMessage implements Cloneable {
 
     @Getter
     @Setter
-    public List<RobotMessage<?>> messageList = new ArrayList<>();
+    public ArrayList<RobotMessage<?>> messageList = new ArrayList<>();
 
     public RobotMultipartMessage() {}
 
@@ -94,10 +94,12 @@ public class RobotMultipartMessage implements Cloneable {
     }
 
     @SuppressWarnings("unchecked")
+    @SneakyThrows
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         RobotMultipartMessage clone = (RobotMultipartMessage) super.clone();
-        Object listCopy = ((ArrayList<?>) messageList).clone();
-        return clone.setMessageList((List<RobotMessage<?>>) listCopy);
+        ArrayList<RobotMessage<?>> listCopy = (ArrayList<RobotMessage<?>>)
+                messageList.clone();
+        return clone.setMessageList(listCopy);
     }
 }
