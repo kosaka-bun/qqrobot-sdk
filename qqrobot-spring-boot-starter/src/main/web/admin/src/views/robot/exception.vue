@@ -21,7 +21,7 @@
 import { getExceptionApi } from '@/api/robot/exception'
 
 export default {
-  name: "exception",
+  name: 'exception',
   data() {
     return {
       loading: false,
@@ -56,9 +56,10 @@ p {
 }
 
 .exception-item {
-  font-family: Consolas, serif;
+  font-family: Consolas, sans-serif;
   line-height: 1.25em;
   word-break: break-word;
+  white-space: pre-wrap;
   margin: 0;
 }
 

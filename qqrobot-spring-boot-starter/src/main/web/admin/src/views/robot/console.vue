@@ -52,7 +52,7 @@ export default {
 .console-content >>> pre {
   display: inline;
   font-size: 1.1em;
-  font-family: Microsoft YaHei Mono, sans-serif;
+  font-family: Microsoft YaHei Mono, Consolas, sans-serif;
   white-space: pre-wrap;
   word-break: break-word;
 }

@@ -1,3 +1,5 @@
+chcp 65001
+
 :: maven先部署到本地git仓库
 call gradlew -PremoteMavenRepositoryUrl=^
 file://C:/Personal/Projects/Other/remote-maven-repo/repository ^
