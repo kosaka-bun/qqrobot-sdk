@@ -10,7 +10,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven {
-            url 'https://www.honoka.de/maven-repo/'
+            url 'https://mirrors.honoka.de/maven-repo/'
         }
     }
 
@@ -22,14 +22,15 @@ subprojects {
         testAnnotationProcessor lombok
     }
 
-    tasks.withType(Test) {
+    tasks.withType(Test).configureEach {
         useJUnitPlatform()
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
     }
 
+    //noinspection ConfigurationAvoidance
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier 'sources'
         from sourceSets.main.allSource
@@ -40,6 +41,7 @@ subprojects {
             mavenLocal()
             if(project.hasProperty('remoteMavenRepositoryUrl')) {
                 maven {
+                    //noinspection GroovyAssignabilityCheck
                     url remoteMavenRepositoryUrl
                 }
             }
@@ -71,6 +73,6 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }

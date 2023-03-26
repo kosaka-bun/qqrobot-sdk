@@ -34,6 +34,7 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'com.h2database:h2:2.1.214'
     String framework = "de.honoka.qqrobot:qqrobot-framework-api:$frameworkApiVersion"
+    //noinspection DeprecatedConfigurations
     apiElements framework
     implementation framework
 }
