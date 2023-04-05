@@ -1,3 +1,5 @@
+//file:noinspection GrUnresolvedAccess
+
 group 'de.honoka.qqrobot'
 
 subprojects {
@@ -8,6 +10,9 @@ subprojects {
     sourceCompatibility = '1.8'
 
     repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/central'
+        }
         mavenCentral()
         maven {
             url 'https://mirrors.honoka.de/maven-repo/'
@@ -67,10 +72,6 @@ subprojects {
             }
         }
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 tasks.withType(JavaCompile).configureEach {
