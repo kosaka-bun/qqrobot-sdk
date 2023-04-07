@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.3.3
+#### qqrobot-spring-boot-starter 1.3.3
+- 适配mirai 2.14.0版本。
+
 ## 1.3.2
 #### qqrobot-framework-api 1.0.3
 - 优化API。
