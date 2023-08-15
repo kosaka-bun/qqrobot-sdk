@@ -7,6 +7,7 @@ publish
 
 :: 进入git仓库，然后提交并推送
 cd /d C:\Personal\Projects\Other\remote-maven-repo && ^
+git pull
 git add . && ^
 git commit -m "Update qqrobot-sdk" && ^
 git push
