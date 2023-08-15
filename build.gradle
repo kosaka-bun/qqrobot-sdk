@@ -1,26 +1,50 @@
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection ConfigurationAvoidance
 //file:noinspection GrUnresolvedAccess
 
-group 'de.honoka.qqrobot'
+buildscript {
+    def setupRepositories = {
+        it.repositories {
+            maven {
+                url 'https://maven.aliyun.com/repository/public'
+            }
+            mavenCentral()
+            maven {
+                url 'https://mirrors.honoka.de/maven-repo'
+            }
+        }
+    }
+    setupRepositories(delegate)
+    ext {
+        def d = delegate
+        d.setupRepositories = setupRepositories
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+group = 'de.honoka.qqrobot'
+version = '1.3.3'
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
 
-    group rootProject.group
+    group = rootProject.group
     sourceCompatibility = '1.8'
 
-    repositories {
-        maven {
-            url 'https://maven.aliyun.com/repository/central'
-        }
-        mavenCentral()
-        maven {
-            url 'https://mirrors.honoka.de/maven-repo/'
-        }
-    }
+    setupRepositories(delegate)
 
     dependencies {
-        String lombok = 'org.projectlombok:lombok:1.18.16'
+        String lombok = 'org.projectlombok:lombok:1.18.26'
         compileOnly lombok
         annotationProcessor lombok
         testCompileOnly lombok
@@ -29,10 +53,6 @@ subprojects {
 
     tasks.withType(Test).configureEach {
         useJUnitPlatform()
-    }
-
-    tasks.withType(JavaCompile).configureEach {
-        options.encoding = 'UTF-8'
     }
 
     //noinspection ConfigurationAvoidance
@@ -54,7 +74,7 @@ subprojects {
     }
 
     ext {
-        setupVersion = { String versionStr ->
+        setupVersionAndPublishing = { versionStr ->
             version versionStr
 
             publishing {
@@ -72,8 +92,4 @@ subprojects {
             }
         }
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
 }

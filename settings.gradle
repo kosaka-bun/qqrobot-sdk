@@ -1,3 +1,12 @@
+pluginManagement {
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/gradle-plugin'
+        }
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = 'qqrobot-sdk'
 include 'qqrobot-framework-api'
 include 'qqrobot-spring-boot-starter'
