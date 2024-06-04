@@ -8,7 +8,7 @@ qqrobot-spring-boot-starter = "1.3.3"
 spring-boot = "2.7.5"
 mirai = "2.14.0"
 kotlin = "1.8.10"
-kotlin-coroutines = "1.6.3"
+kotlin-coroutines = "1.6.4"
 lombok = "1.18.26"
 
 [plugins]
