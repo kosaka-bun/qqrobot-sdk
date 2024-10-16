@@ -103,19 +103,21 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         //转移日志存放目录，设置设备信息
         //定义设备信息文件路径，与存放日志的目录路径
         String deviceInfoPath = FileSystems.getDefault().getPath(
-                FileUtils.getClasspath(),
-                miraiProperties.getWorkDirectory(),
-                "deviceInfo.json"
+            FileUtils.getClasspath(),
+            miraiProperties.getWorkDirectory(),
+            "deviceInfo.json"
         ).toString();
         String logBase = FileSystems.getDefault().getPath(
-                FileUtils.getClasspath(),
-                miraiProperties.getWorkDirectory(),
-                "log"
+            FileUtils.getClasspath(),
+            miraiProperties.getWorkDirectory(),
+            "log"
         ) + File.separator;
+        log.info("mirai日志已重定向至{}", logBase);
+        log.info("若在登录过程中发现任何问题，请前往上述目录中打开日志文件进行排查");
         String cacheDirPath = FileSystems.getDefault().getPath(
-                FileUtils.getClasspath(),
-                miraiProperties.getWorkDirectory(),
-                "cache"
+            FileUtils.getClasspath(),
+            miraiProperties.getWorkDirectory(),
+            "cache"
         ).toString();
         File botLogDir = new File(logBase + "bot");
         File networkLogDir = new File(logBase + "network");

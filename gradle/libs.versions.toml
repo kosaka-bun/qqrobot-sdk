@@ -1,8 +1,8 @@
 [versions]
 # project modules version
-root = "1.3.4"
+root = "1.3.5-dev"
 qqrobot-framework-api = "1.0.3"
-qqrobot-spring-boot-starter = "1.3.4"
+qqrobot-spring-boot-starter = "1.3.5-dev"
 
 # dependencies version
 spring-boot = "2.7.5"
