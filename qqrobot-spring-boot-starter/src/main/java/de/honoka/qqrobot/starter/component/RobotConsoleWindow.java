@@ -62,8 +62,7 @@ public class RobotConsoleWindow {
         return window;
     }
 
-    public static RobotConsoleWindow of(String name, double screenZoomScale,
-                                        Class<?> springBootMainClass) {
+    public static RobotConsoleWindow of(String name, double screenZoomScale, Class<?> springBootMainClass) {
         RobotConsoleWindow window = new RobotConsoleWindow();
         window.name = name;
         window.screenZoomScale = screenZoomScale;
@@ -80,8 +79,7 @@ public class RobotConsoleWindow {
     public void create() {
         //优先使用VM选项中的配置，其次使用代码中指定的配置
         String forceNoGuiInVmOptions = System.getProperty("honoka.gui.force-no-gui");
-        boolean forceNoGui = forceNoGuiInVmOptions == null ? this.forceNoGui :
-                Boolean.getBoolean(forceNoGuiInVmOptions);
+        boolean forceNoGui = forceNoGuiInVmOptions == null ? this.forceNoGui : Boolean.parseBoolean(forceNoGuiInVmOptions);
         if(forceNoGui) {
             console = new RobotConsole();
             startApplication();
@@ -103,15 +101,11 @@ public class RobotConsoleWindow {
         startApplication();
         //添加托盘图标菜单项
         Framework<?> framework = context.getBean(Framework.class);
-        RobotBasicProperties basicProperties = context.getBean(
-                RobotBasicProperties.class);
-        consoleWindow.addTrayIconMenuItem("重新登录", true,
-                framework::reboot);
-        consoleWindow.addTrayIconMenuItem("发送测试消息",
-                false, () -> {
+        RobotBasicProperties basicProperties = context.getBean(RobotBasicProperties.class);
+        consoleWindow.addTrayIconMenuItem("重新登录", true, framework::reboot);
+        consoleWindow.addTrayIconMenuItem("发送测试消息", false, () -> {
             String time = TextUtils.getSimpleDateFormat().format(new Date());
-            framework.sendGroupMsg(basicProperties.getDevelopingGroup(),
-                    time + "\n测试消息");
+            framework.sendGroupMsg(basicProperties.getDevelopingGroup(), time + "\n测试消息");
         });
     }
 

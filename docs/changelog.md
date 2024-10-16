@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.3.4
+#### qqrobot-spring-boot-starter 1.3.4
+- 适配mirai 2.16.0版本。
+
 ## 1.3.3
 #### qqrobot-spring-boot-starter 1.3.3
 - 适配mirai 2.14.0版本。
