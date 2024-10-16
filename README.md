@@ -42,12 +42,12 @@ dependencies {
 ```
 
 ## 快速开始
-[qqrobot-demo](./qqrobot-demo)是基于本框架搭建的一个示例程序，其包含了本框架的所有基本用法示例。请先按步骤分别尝试在测试环境与正式环境中尝试运行此Demo应用。
+[qqrobot-demo](https://github.com/kosaka-bun/demo-projects/tree/master/qqrobot-demo)是基于本框架搭建的一个示例程序，其包含了本框架的所有基本用法示例。请先按步骤分别尝试在测试环境与正式环境中尝试运行此Demo应用。
 
 ### 测试环境
-1. clone本仓库。
-2. 使用IDE打开qqrobot-demo目录（非仓库根目录）。
-3. 运行qqrobot-demo的Spring Boot主类[QqRobotDemo](./qqrobot-demo/src/main/java/de/honoka/qqrobot/demo/QqRobotDemo.java)。
+1. clone [demo-projects仓库](https://github.com/kosaka-bun/demo-projects)。
+2. 使用IDE打开仓库中的qqrobot-demo目录（非仓库根目录）。
+3. 运行qqrobot-demo的Spring Boot主类[QqRobotDemo](https://github.com/kosaka-bun/demo-projects/tree/master/qqrobot-demo/src/main/java/de/honoka/qqrobot/demo/QqRobotDemo.java)。
 4. 等待应用启动完成，打开测试框架界面，默认为[http://localhost:8081/qqrobot-demo/tester-framework/index.html](http://localhost:8081/qqrobot-demo/tester-framework/index.html)。
 
 ![](./docs/img/1.png)
@@ -59,7 +59,7 @@ dependencies {
 
 ### 正式环境
 1. 在qqrobot-demo目录下，执行`gradlew bootJar`命令，等待构建完成。
-2. 将[qqrobot-demo/src/main/resources/config/application-prod.yml](./qqrobot-demo/src/main/resources/config/application-prod.yml)文件，复制到qqrobot-demo/build/libs目录下。
+2. 将[qqrobot-demo/src/main/resources/config/application-prod.yml](https://github.com/kosaka-bun/demo-projects/tree/master/qqrobot-demo/src/main/resources/config/application-prod.yml)文件，复制到qqrobot-demo/build/libs目录下。
 3. 打开libs目录下的application-prod.yml文件，修改`honoka.qqrobot`项下的`qq`、`password`、`admin-qq`、`developing-group`四个配置项，指定机器人要使用的QQ账号、密码、可调用管理员命令的用户的QQ账号，以及开发群的群号。
 4. 在libs目录下创建`startup.bat`（Windows）或`startup.sh`（Linux）文件，插入以下内容。
 ```shell
