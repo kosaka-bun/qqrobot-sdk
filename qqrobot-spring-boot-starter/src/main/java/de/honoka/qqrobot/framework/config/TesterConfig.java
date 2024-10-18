@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableConfigurationProperties(TesterProperties.class)
 @ComponentScan("de.honoka.qqrobot.framework.impl.tester")
-@ConditionalOnProperty(prefix = "honoka.qqrobot", name = "framework",
-        havingValue = "tester", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "honoka.qqrobot", name = "framework", havingValue = "tester", matchIfMissing = true)
 @Configuration
 @Data
 public class TesterConfig {
@@ -23,7 +22,6 @@ public class TesterConfig {
     private String contextPath;
 
     public String getTesterUrl() {
-        return "http://localhost:" + serverPort + contextPath +
-                TesterProperties.WEB_PREFIX + "/index.html";
+        return "http://localhost:" + serverPort + contextPath + TesterProperties.WEB_PREFIX + "/index.html";
     }
 }

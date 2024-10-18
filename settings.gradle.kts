@@ -22,3 +22,6 @@ rootProject.name = "qqrobot-sdk"
 
 include("qqrobot-framework-api")
 include("qqrobot-spring-boot-starter")
+include("qqrobot-spring-boot-starter:web")
+include("qqrobot-spring-boot-starter:web:admin")
+include("qqrobot-spring-boot-starter:web:tester")

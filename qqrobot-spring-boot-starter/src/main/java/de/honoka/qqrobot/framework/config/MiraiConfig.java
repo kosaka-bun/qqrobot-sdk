@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableConfigurationProperties(MiraiProperties.class)
 @ComponentScan("de.honoka.qqrobot.framework.impl.mirai")
-@ConditionalOnProperty(prefix = "honoka.qqrobot", name = "framework",
-        havingValue = "mirai")
+@ConditionalOnProperty(prefix = "honoka.qqrobot", name = "framework", havingValue = "mirai")
 @Configuration
 public class MiraiConfig {}

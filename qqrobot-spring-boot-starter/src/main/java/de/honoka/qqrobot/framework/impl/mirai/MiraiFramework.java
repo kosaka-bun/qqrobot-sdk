@@ -132,7 +132,7 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         }
         conf.setCacheDir(cacheDir);
         //网络设置
-        setProtocol(conf, miraiProperties.getProtocol());
+        conf.setProtocol(miraiProperties.getProtocol());
         //构建框架
         botInitProperties = new BotInitProperties(qq, password, conf);
         miraiApi = BotFactory.INSTANCE.newBot(qq, password, conf);
@@ -140,33 +140,6 @@ public class MiraiFramework extends Framework<MiraiMessage> {
 
     public void addListener(ListenerHost listener) {
         listeners.add(listener);
-    }
-
-    /**
-     * 为框架配置设置登录协议
-     */
-    public void setProtocol(BotConfiguration conf, String protocolName) {
-        BotConfiguration.MiraiProtocol protocol;
-        switch(protocolName) {
-            case "android_pad":
-                protocol = BotConfiguration.MiraiProtocol.ANDROID_PAD;
-                break;
-            case "android_phone":
-                protocol = BotConfiguration.MiraiProtocol.ANDROID_PHONE;
-                break;
-            case "android_watch":
-                protocol = BotConfiguration.MiraiProtocol.ANDROID_WATCH;
-                break;
-            case "ipad":
-                protocol = BotConfiguration.MiraiProtocol.IPAD;
-                break;
-            case "macos":
-                protocol = BotConfiguration.MiraiProtocol.MACOS;
-                break;
-            default:
-                throw new RuntimeException("Unknown protocol: " + protocolName);
-        }
-        conf.setProtocol(protocol);
     }
 
     //以下是使用mirai平台对标准框架方法的实现
@@ -221,16 +194,14 @@ public class MiraiFramework extends Framework<MiraiMessage> {
 
     @SneakyThrows
     @Override
-    public MiraiMessage transform(Long group, long qq,
-                                  RobotMultipartMessage message) {
+    public MiraiMessage transform(Long group, long qq, RobotMultipartMessage message) {
         if(message == null || message.isEmpty()) return null;
         MessageChainBuilder builder = new MessageChainBuilder();
         List<ExternalResource> externalResources = new ArrayList<>();
         for(RobotMessage<?> part : message.messageList) {
             switch(part.getType()) {
                 case TEXT:
-                    if(part.getContent() == null || part.getContent().equals(""))
-                        continue;
+                    if(part.getContent() == null || part.getContent().equals("")) continue;
                     builder.add((String) part.getContent());
                     break;
                 case AT:
@@ -244,11 +215,9 @@ public class MiraiFramework extends Framework<MiraiMessage> {
                     //判断是否是私聊消息，以判断通过何种途径上传文件
                     Image img;
                     if(group == null) {
-                        img = Objects.requireNonNull(getPrivateContact(qq))
-                                .uploadImage(imgRes);
+                        img = Objects.requireNonNull(getPrivateContact(qq)).uploadImage(imgRes);
                     } else {
-                        img = Objects.requireNonNull(miraiApi.getGroup(group))
-                                .uploadImage(imgRes);
+                        img = Objects.requireNonNull(miraiApi.getGroup(group)).uploadImage(imgRes);
                     }
                     builder.add(img);
                     break;
@@ -267,8 +236,7 @@ public class MiraiFramework extends Framework<MiraiMessage> {
                     break;
             }
         }
-        return new MiraiMessage(builder.build())
-                .setExternalResources(externalResources);
+        return new MiraiMessage(builder.build()).setExternalResources(externalResources);
     }
 
     @Override
@@ -383,9 +351,11 @@ public class MiraiFramework extends Framework<MiraiMessage> {
             String nameCard = Objects.requireNonNull(Objects.requireNonNull(
                     miraiApi.getGroup(group)).get(qq)).getNameCard();
             //群名片为空串，代表没有设置群名片
-            if(nameCard.trim().equals(""))
-                nameCard = Objects.requireNonNull(Objects.requireNonNull(miraiApi
-                        .getGroup(group)).get(qq)).getNick();
+            if(nameCard.trim().isEmpty()) {
+                nameCard = Objects.requireNonNull(
+                    Objects.requireNonNull(miraiApi.getGroup(group)).get(qq)
+                ).getNick();
+            }
             return nameCard;
         } catch(Exception e) {
             return getStrangerNick(qq);

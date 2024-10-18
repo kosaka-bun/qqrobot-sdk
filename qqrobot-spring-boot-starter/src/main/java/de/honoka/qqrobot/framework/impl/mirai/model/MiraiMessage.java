@@ -14,7 +14,7 @@ public class MiraiMessage {
 
     private MessageChain messageChain;
 
-    List<ExternalResource> externalResources = new ArrayList<>();
+    private List<ExternalResource> externalResources = new ArrayList<>();
 
     public MiraiMessage(MessageChain messageChain) {
         this.messageChain = messageChain;

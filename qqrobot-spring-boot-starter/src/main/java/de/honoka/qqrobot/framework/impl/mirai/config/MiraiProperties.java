@@ -1,6 +1,5 @@
 package de.honoka.qqrobot.framework.impl.mirai.config;
 
-import de.honoka.qqrobot.framework.impl.mirai.MiraiFramework;
 import lombok.Getter;
 import lombok.Setter;
 import net.mamoe.mirai.utils.BotConfiguration;
@@ -23,7 +22,6 @@ public class MiraiProperties {
 
     /**
      * 采用的登录协议
-     * @see MiraiFramework#setProtocol(BotConfiguration, String)
      */
-    private String protocol = "android_pad";
+    private BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.ANDROID_PAD;
 }
