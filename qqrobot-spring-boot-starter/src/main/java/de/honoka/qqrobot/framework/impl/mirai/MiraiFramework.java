@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.framework.impl.mirai.component.MiraiEventListener;
 import de.honoka.qqrobot.framework.impl.mirai.config.MiraiProperties;
 import de.honoka.qqrobot.framework.impl.mirai.model.MiraiMessage;
 import de.honoka.qqrobot.framework.model.RobotMessage;
@@ -103,19 +104,19 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         //转移日志存放目录，设置设备信息
         //定义设备信息文件路径，与存放日志的目录路径
         String deviceInfoPath = FileSystems.getDefault().getPath(
-            FileUtils.getClasspath(),
+            FileUtils.getMainClasspath(),
             miraiProperties.getWorkDirectory(),
             "deviceInfo.json"
         ).toString();
         String logBase = FileSystems.getDefault().getPath(
-            FileUtils.getClasspath(),
+            FileUtils.getMainClasspath(),
             miraiProperties.getWorkDirectory(),
             "log"
         ) + File.separator;
         log.info("mirai日志已重定向至{}", logBase);
         log.info("若在登录过程中发现任何问题，请前往上述目录中打开日志文件进行排查");
         String cacheDirPath = FileSystems.getDefault().getPath(
-            FileUtils.getClasspath(),
+            FileUtils.getMainClasspath(),
             miraiProperties.getWorkDirectory(),
             "cache"
         ).toString();
@@ -174,9 +175,9 @@ public class MiraiFramework extends Framework<MiraiMessage> {
             log.warn("\nMirai Bot直接重连失败，异常堆栈信息如下：", t);
             log.info("\n重新构造Mirai Bot");
             miraiApi = BotFactory.INSTANCE.newBot(
-                    botInitProperties.qq,
-                    botInitProperties.password,
-                    botInitProperties.conf
+                botInitProperties.qq,
+                botInitProperties.password,
+                botInitProperties.conf
             );
             miraiApi.login();
             for(ListenerHost listener : listeners) {
@@ -244,12 +245,36 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         MessageChain miraiMultiPartMsg = message.getMessageChain();
         RobotMultipartMessage multipartMessage = new RobotMultipartMessage();
         for(SingleMessage sm : miraiMultiPartMsg) {
-            if(sm.getClass().equals(At.class))
+            if(sm.getClass().equals(At.class)) {
                 multipartMessage.add(RobotMessageType.AT, ((At) sm).getTarget());
-            else
+            } else {
                 multipartMessage.add(RobotMessageType.TEXT, sm.contentToString());
+            }
         }
         return multipartMessage;
+    }
+
+    @Override
+    public void sendPrivateMsg(long qq, RobotMultipartMessage message) {
+        //查找此用户
+        Contact contact = getPrivateContact(qq);
+        //若不存在，不予发送
+        if(contact == null) return;
+        //发送消息
+        MiraiMessage msgAndRes = transform(null, qq, message);
+        sendMessage(contact, msgAndRes);
+    }
+
+    @Override
+    public void sendGroupMsg(Long group, RobotMultipartMessage message) {
+        //若群对象不存在，不予发送
+        Group groupObj = miraiApi.getGroup(group);
+        if(groupObj == null) return;
+        //机器人在该群被禁言，不予发送
+        if(isMuted(group)) return;
+        //发送消息
+        MiraiMessage msgAndRes = transform(group, 0, message);
+        sendMessage(groupObj, msgAndRes);
     }
 
     private void sendMessage(Contact contact, MiraiMessage msgAndRes) {
@@ -289,29 +314,6 @@ public class MiraiFramework extends Framework<MiraiMessage> {
                 //ignore
             }
         }
-    }
-
-    @Override
-    public void sendPrivateMsg(long qq, RobotMultipartMessage message) {
-        //查找此用户
-        Contact contact = getPrivateContact(qq);
-        //若不存在，不予发送
-        if(contact == null) return;
-        //发送消息
-        MiraiMessage msgAndRes = transform(null, qq, message);
-        sendMessage(contact, msgAndRes);
-    }
-
-    @Override
-    public void sendGroupMsg(Long group, RobotMultipartMessage message) {
-        //若群对象不存在，不予发送
-        Group groupObj = miraiApi.getGroup(group);
-        if(groupObj == null) return;
-        //机器人在该群被禁言，不予发送
-        if(isMuted(group)) return;
-        //发送消息
-        MiraiMessage msgAndRes = transform(group, 0, message);
-        sendMessage(groupObj, msgAndRes);
     }
 
     /**
@@ -365,18 +367,16 @@ public class MiraiFramework extends Framework<MiraiMessage> {
     /**
      * 调用第三方API，获取非好友的的昵称（可能需要随时更新此方法）
      */
-    public static String getStrangerNick(long qq) {
+    private static String getStrangerNick(long qq) {
         try {
             //定义接口URL
-            String url = "https://r.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg" +
-                    "?uins=%d";
+            String url = "https://r.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins=%d";
             //获取响应文本（不得请求时间过长，否则会卡住很多操作）
-            byte[] response = Jsoup.connect(String.format(url, qq))
-                    .timeout(5 * 1000).execute().bodyAsBytes();
+            byte[] response = Jsoup.connect(String.format(url, qq)).timeout(5 * 1000)
+                .execute().bodyAsBytes();
             String jsonStr = new String(response, "GB18030");
             //处理响应文本
-            jsonStr = jsonStr.substring(jsonStr.indexOf("{"),
-                    jsonStr.lastIndexOf("}") + 1);
+            jsonStr = jsonStr.substring(jsonStr.indexOf("{"), jsonStr.lastIndexOf("}") + 1);
             //提取为Json对象
             JsonObject json = JsonParser.parseString(jsonStr).getAsJsonObject();
             //从Json对象中提取某个属性的值
@@ -390,10 +390,10 @@ public class MiraiFramework extends Framework<MiraiMessage> {
     @Override
     public boolean isMuted(Long group) {
         try {
-            return Objects.requireNonNull(miraiApi.getGroup(group))
-                    .getBotMuteRemaining() > 0;
+            return Objects.requireNonNull(miraiApi.getGroup(group)).getBotMuteRemaining() > 0;
         } catch(Exception e) {
-            return true;    //机器人不在群中，无法发言，默认被禁言
+            //机器人不在群中，无法发言，默认被禁言
+            return true;
         }
     }
 

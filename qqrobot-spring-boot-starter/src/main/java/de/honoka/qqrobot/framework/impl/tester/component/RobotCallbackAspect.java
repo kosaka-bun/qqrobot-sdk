@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RobotCallbackAspect {
 
-    private static final String SEPERATOR = StringUtils.repeat(
-            "-----", 7);
+    private static final String SEPERATOR = StringUtils.repeat("-----", 7);
 
     @Before("execution(* de.honoka.qqrobot.starter.component." +
             "DefaultFrameworkCallback.onGroupMsg(..))")
@@ -22,12 +21,10 @@ public class RobotCallbackAspect {
         Long group = (Long) joinPoint.getArgs()[0];
         long qq = (long) joinPoint.getArgs()[1];
         RobotMultipartMessage msg = (RobotMultipartMessage) joinPoint.getArgs()[2];
-        log.info(String.format(
-                "\nTester收到群消息：\n" +
-                "群号：%d，QQ：%d\n" +
-                "%s\n%s\n%s",
-                group, qq, SEPERATOR, msg.contentToString(), SEPERATOR
-        ));
+        log.info(
+            "\nTester收到群消息：\n群号：{}，QQ：{}\n{}\n{}\n{}",
+            group, qq, SEPERATOR, msg.contentToString(), SEPERATOR
+        );
     }
 
     @Before("execution(* de.honoka.qqrobot.starter.component." +
@@ -35,51 +32,43 @@ public class RobotCallbackAspect {
     public void logPrivateMessage(JoinPoint joinPoint) {
         long qq = (long) joinPoint.getArgs()[0];
         RobotMultipartMessage msg = (RobotMultipartMessage) joinPoint.getArgs()[1];
-        log.info(String.format(
-                "\nTester收到私聊消息：\n" +
-                "QQ：%d\n" +
-                "%s\n%s\n%s",
-                qq, SEPERATOR, msg.contentToString(), SEPERATOR
-        ));
+        log.info(
+            "\nTester收到私聊消息：\nQQ：{}\n{}\n{}\n{}",
+            qq, SEPERATOR, msg.contentToString(), SEPERATOR
+        );
     }
 
-    @Before("execution(* de.honoka.qqrobot.framework." +
-            "FrameworkApi.sendGroupMsg(..))")
+    @Before("execution(* de.honoka.qqrobot.framework.impl.tester." +
+            "TesterFramework.sendGroupMsg(..))")
     public void logSendGroupMessage(JoinPoint joinPoint) {
         Long group = (Long) joinPoint.getArgs()[0];
         Object msg = joinPoint.getArgs()[1];
-        log.info(String.format(
-                "\nTester发送群消息：\n" +
-                "群号：%d\n" +
-                "%s\n%s\n%s",
-                group, SEPERATOR, msg, SEPERATOR
-        ));
+        log.info(
+            "\nTester发送群消息：\n群号：{}\n{}\n{}\n{}",
+            group, SEPERATOR, msg, SEPERATOR
+        );
     }
 
-    @Before("execution(* de.honoka.qqrobot.framework." +
-            "FrameworkApi.sendPrivateMsg(..))")
+    @Before("execution(* de.honoka.qqrobot.framework.impl.tester." +
+            "TesterFramework.sendPrivateMsg(..))")
     public void logSendPrivateMessage(JoinPoint joinPoint) {
         long qq = (long) joinPoint.getArgs()[0];
         Object msg = joinPoint.getArgs()[1];
-        log.info(String.format(
-                "\nTester发送私聊消息：\n" +
-                "QQ：%d\n" +
-                "%s\n%s\n%s",
-                qq, SEPERATOR, msg, SEPERATOR
-        ));
+        log.info(
+            "\nTester发送私聊消息：\nQQ：{}\n{}\n{}\n{}",
+            qq, SEPERATOR, msg, SEPERATOR
+        );
     }
 
-    @Before("execution(* de.honoka.qqrobot.framework." +
-            "FrameworkApi.reply(..))")
+    @Before("execution(* de.honoka.qqrobot.framework.impl.tester." +
+            "TesterFramework.reply(..))")
     public void logReplyMessage(JoinPoint joinPoint) {
         Long group = (Long) joinPoint.getArgs()[0];
         long qq = (long) joinPoint.getArgs()[1];
         Object msg = joinPoint.getArgs()[2];
-        log.info(String.format(
-                "\nTester发送群回复：\n" +
-                "群号：%d，QQ：%d\n" +
-                "%s\n%s\n%s",
-                group, qq, SEPERATOR, msg, SEPERATOR
-        ));
+        log.info(
+            "\nTester发送群回复：\n群号：{}，QQ：{}\n{}\n{}\n{}",
+            group, qq, SEPERATOR, msg, SEPERATOR
+        );
     }
 }

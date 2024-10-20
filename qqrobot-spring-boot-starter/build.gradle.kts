@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.spring)
 }
 
 setupVersionAndPublishing(libs.versions.qqrobot.spring.boot.starter.get())
@@ -22,9 +23,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-configuration-processor".also {
         annotationProcessor(it)
     })
-    implementation("de.honoka.sdk:honoka-utils:1.0.6")
-    implementation("de.honoka.sdk:honoka-framework-utils:1.0.0")
-    implementation("de.honoka.qqrobot:qqrobot-framework-api:1.0.3".also {
+    implementation(libs.honoka.kotlin.utils)
+    implementation(libs.lib.qqrobot.framework.api.also {
         api(it)
     })
     implementation(libs.mirai.core)
@@ -35,6 +35,10 @@ dependencies {
 }
 
 tasks {
+    compileJava {
+        dependsOn(":qqrobot-framework-api:publish")
+    }
+    
     withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs += "-Xjsr305=strict"

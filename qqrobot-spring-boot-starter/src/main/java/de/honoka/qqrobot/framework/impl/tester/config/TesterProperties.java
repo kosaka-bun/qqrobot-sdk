@@ -14,8 +14,7 @@ public class TesterProperties {
 
     public static final String WEB_PREFIX = "/tester-framework";
 
-    private String imagePath = Paths.get(FileUtils.getClasspath(),
-            "tester-framework", "image").toString();
+    private String imagePath = Paths.get(FileUtils.getMainClasspath(), "tester-framework", "image").toString();
 
     private Long groupNumber = 10000L;
 }

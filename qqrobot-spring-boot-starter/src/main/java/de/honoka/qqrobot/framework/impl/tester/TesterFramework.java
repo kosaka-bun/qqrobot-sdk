@@ -59,19 +59,18 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
 
     @SneakyThrows
     @Override
-    public void boot() {
+    public synchronized void boot() {
         File imagePath = new File(testerProperties.getImagePath());
         if(imagePath.exists()) {
             FileUtils.forceDelete(imagePath);
         }
         frameworkCallback.onStartup();
-        log.info("\nTester框架启动完成\n请访问 " + testerConfig
-                .getTesterUrl() + " 进行测试");
+        log.info("\nTester框架启动完成\n请访问 {} 进行测试", testerConfig.getTesterUrl());
     }
 
     @SneakyThrows
     @Override
-    public void stop() {
+    public synchronized void stop() {
         for(TesterServerConnection connection : testerServer.getConnections()) {
             connection.getSession().close();
         }
@@ -87,28 +86,23 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
 
     @SneakyThrows
     @Override
-    public TesterRobotMessage transform(Long group, long qq,
-                                        RobotMultipartMessage message) {
+    public TesterRobotMessage transform(Long group, long qq, RobotMultipartMessage message) {
         if(message == null || message.isEmpty()) return null;
         TesterRobotMessage testerRobotMessage = new TesterRobotMessage();
         for(RobotMessage<?> part : message.messageList) {
             switch(part.getType()) {
                 case TEXT:
-                    if(part.getContent() == null || part.getContent().equals(""))
-                        continue;
-                    testerRobotMessage.add(TesterRobotMessage.PartType.TEXT,
-                            (String) part.getContent());
+                    if(part.getContent() == null || part.getContent().equals("")) continue;
+                    testerRobotMessage.add(TesterRobotMessage.PartType.TEXT, (String) part.getContent());
                     break;
                 case AT:
                     if(group == null) break;
                     long atQq = (Long) part.getContent();
                     TesterRobotMessage.Part at = new TesterRobotMessage.Part(
-                            TesterRobotMessage.PartType.AT,
-                            "@" + getNickOrCard(group, atQq) + " "
+                        TesterRobotMessage.PartType.AT, "@" + getNickOrCard(group, atQq) + " "
                     );
                     at.setExtras(new JsonObject());
-                    at.getExtras().addProperty("qq",
-                            (long) part.getContent());
+                    at.getExtras().addProperty("qq", (long) part.getContent());
                     testerRobotMessage.add(at);
                     break;
                 case IMAGE:
@@ -118,8 +112,7 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
                         name = UUID.randomUUID().toString();
                         imageNameMap.put(inputStream.hashCode(), name);
                         byte[] bytes = IOUtils.toByteArray(inputStream);
-                        String path = Paths.get(testerProperties.getImagePath(),
-                                name + ".png").toString();
+                        String path = Paths.get(testerProperties.getImagePath(), name + ".png").toString();
                         FileUtils.touch(new File(path));
                         try(OutputStream os = Files.newOutputStream(Paths.get(path))) {
                             os.write(bytes);
@@ -128,8 +121,7 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
                     testerRobotMessage.add(TesterRobotMessage.PartType.IMAGE, name);
                     break;
                 case FILE:
-                    testerRobotMessage.add(TesterRobotMessage.PartType.TEXT,
-                            "【文件】");
+                    testerRobotMessage.add(TesterRobotMessage.PartType.TEXT, "【文件】");
                     break;
             }
         }

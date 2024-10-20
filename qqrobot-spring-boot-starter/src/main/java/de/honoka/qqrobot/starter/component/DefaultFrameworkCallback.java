@@ -3,13 +3,12 @@ package de.honoka.qqrobot.starter.component;
 import de.honoka.qqrobot.framework.Framework;
 import de.honoka.qqrobot.framework.FrameworkCallback;
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.starter.RobotStarter;
 import de.honoka.qqrobot.starter.common.ConditionalBeans;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import org.springframework.context.annotation.Lazy;
 
 import javax.annotation.Resource;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 @ConditionalComponent(ConditionalBeans.class)
 public class DefaultFrameworkCallback implements FrameworkCallback {
@@ -22,15 +21,12 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
     @Resource
     private Framework<?> framework;
 
-    private final ThreadPoolExecutor threadPoolExecutor =
-            (ThreadPoolExecutor) Executors.newCachedThreadPool();
-
     /**
      * 收到私聊消息
      */
     @Override
     public void onPrivateMsg(long qq, RobotMultipartMessage msg) {
-        threadPoolExecutor.submit(() -> {
+        RobotStarter.globalThreadPool.submit(() -> {
             //回复信息
             RobotMultipartMessage reply = messageExecutor.executeMsg(
                     null, qq, msg);
@@ -49,7 +45,7 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
     public void onGroupMsg(Long group, long qq, RobotMultipartMessage msg) {
         //若机器人被禁言，则不响应此消息
         if(framework.isMuted(group)) return;
-        threadPoolExecutor.submit(() -> {
+        RobotStarter.globalThreadPool.submit(() -> {
             //回复信息
             RobotMultipartMessage reply = messageExecutor.executeMsg(group, qq, msg);
             if(reply != null) {

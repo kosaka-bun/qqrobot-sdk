@@ -1,5 +1,6 @@
-package de.honoka.qqrobot.framework.impl.mirai;
+package de.honoka.qqrobot.framework.impl.mirai.component;
 
+import de.honoka.qqrobot.framework.impl.mirai.MiraiFramework;
 import de.honoka.qqrobot.framework.impl.mirai.model.MiraiMessage;
 import de.honoka.sdk.util.code.CodeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,8 @@ public class MiraiEventListener extends SimpleListenerHost {
     public void onNewFriendRequest(NewFriendRequestEvent e) {
         //只接受来自于群的好友添加
         if(e.getFromGroup() != null) e.accept();
-        else e.reject(false);	//是否拒绝后拉黑
+        //是否拒绝后拉黑
+        else e.reject(false);
     }
 
     //平台主动或被动重新登录. 在此事件广播前就已经登录完毕
@@ -66,9 +68,9 @@ public class MiraiEventListener extends SimpleListenerHost {
     @EventHandler
     public void onGroupMessage(GroupMessageEvent e) {
         miraiFramework.getFrameworkCallback().onGroupMsg(
-                e.getGroup().getId(),
-                e.getSender().getId(),
-                miraiFramework.transform(new MiraiMessage(e.getMessage()))
+            e.getGroup().getId(),
+            e.getSender().getId(),
+            miraiFramework.transform(new MiraiMessage(e.getMessage()))
         );
     }
 
@@ -86,8 +88,8 @@ public class MiraiEventListener extends SimpleListenerHost {
 
     private void onUserMessage(UserMessageEvent e) {
         miraiFramework.getFrameworkCallback().onPrivateMsg(
-                e.getSender().getId(),
-                miraiFramework.transform(new MiraiMessage(e.getMessage()))
+            e.getSender().getId(),
+            miraiFramework.transform(new MiraiMessage(e.getMessage()))
         );
     }
 }
