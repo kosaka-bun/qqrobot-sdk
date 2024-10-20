@@ -9,22 +9,23 @@ plugins {
 
 setupVersionAndPublishing(libs.versions.qqrobot.spring.boot.starter.get())
 
-dependencyManagement {
-    imports {
-        mavenBom(libs.spring.boot.dependencies.get().toString())
-    }
-}
-
 dependencies {
+    compileOnly(platform(libs.spring.boot.dependencies))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
-    implementation("org.springframework.boot:spring-boot-configuration-processor".also {
-        annotationProcessor(it)
+    /*
+     * spring-boot-configuration-processor的作用是生成配置的元数据信息，即META-INF目录下的
+     * spring-configuration-metadata.json文件，从而告诉Spring这个jar包中有哪些自定义的配置。
+     */
+    compileOnly("org.springframework.boot:spring-boot-configuration-processor".also {
+        //若不手动添加版本号，则annotationProcessor无法读取到指定依赖的版本号
+        annotationProcessor("$it:${libs.versions.spring.boot.get()}")
     })
     implementation(libs.honoka.kotlin.utils)
-    implementation(libs.lib.qqrobot.framework.api.also {
+    implementation(libs.honoka.framework.utils)
+    implementation(libs.qqrobot.framework.api.also {
         api(it)
     })
     implementation(libs.mirai.core)

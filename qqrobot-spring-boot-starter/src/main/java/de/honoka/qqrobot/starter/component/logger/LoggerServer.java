@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component.logger;
 
-import de.honoka.sdk.util.file.FileUtils;
+import cn.hutool.core.io.FileUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -37,10 +38,11 @@ public class LoggerServer {
 
     @SneakyThrows
     public void createTable() {
-        String sql = FileUtils.urlToString(Objects.requireNonNull(
-                LoggerServer.class.getResource("/logger/table.sql")
-        ));
-        log.debug("\nExecute SQL: \n" + sql);
+        String sql = FileUtil.readString(
+            Objects.requireNonNull(LoggerServer.class.getResource("/logger/table.sql")),
+            StandardCharsets.UTF_8
+        );
+        log.debug("\nExecute SQL: \n{}", sql);
         try(Connection connection = getConnection();
             Statement statement = connection.createStatement()) {
             statement.execute(sql);

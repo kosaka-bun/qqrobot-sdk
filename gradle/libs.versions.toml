@@ -6,6 +6,7 @@ qqrobot-spring-boot-starter = "1.4.0-dev"
 
 # dependencies version
 honoka-kotlin-utils = "1.0.0"
+honoka-framework-utils = "1.0.4"
 lib-qqrobot-framework-api = "1.0.3"
 spring-boot = "2.7.5"
 mirai = "2.16.0"
@@ -15,11 +16,11 @@ lombok = "1.18.26"
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
-dependency-management = "io.spring.dependency-management:1.0.11.RELEASE"
 
 [libraries]
 honoka-kotlin-utils = { module = "de.honoka.sdk:honoka-kotlin-utils", version.ref = "honoka-kotlin-utils" }
-lib-qqrobot-framework-api = { module = "de.honoka.qqrobot:qqrobot-framework-api", version.ref = "lib-qqrobot-framework-api" }
+honoka-framework-utils = { module = "de.honoka.sdk:honoka-framework-utils", version.ref = "honoka-framework-utils" }
+qqrobot-framework-api = { module = "de.honoka.qqrobot:qqrobot-framework-api", version.ref = "lib-qqrobot-framework-api" }
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 mirai-core = { module = "net.mamoe:mirai-core-jvm", version.ref = "mirai" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }

@@ -14,6 +14,5 @@ public class LoggerProperties {
 
     private Class<?> databaseDriver = org.h2.Driver.class;
 
-    private String jdbcUrl = "jdbc:h2:" + Paths.get(FileUtils.getClasspath(),
-            "qqrobot", "log");
+    private String jdbcUrl = "jdbc:h2:" + Paths.get(FileUtils.getMainClasspath(), "qqrobot", "log");
 }

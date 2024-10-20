@@ -6,7 +6,6 @@ plugins {
     java
     `java-library`
     `maven-publish`
-    alias(libs.plugins.dependency.management) apply false
 }
 
 group = "de.honoka.qqrobot"
@@ -16,7 +15,6 @@ subprojects {
     apply(plugin = "java")
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
-    apply(plugin = "io.spring.dependency-management")
 
     group = rootProject.group
 
