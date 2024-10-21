@@ -77,17 +77,18 @@ public class MiraiEventListener extends SimpleListenerHost {
     //临时会话
     @EventHandler
     public void onTempMessage(GroupTempMessageEvent e) {
-        onUserMessage(e);
+        onUserMessage(e.getGroup().getId(), e);
     }
 
     //好友会话
     @EventHandler
     public void onFriendMessage(FriendMessageEvent e) {
-        onUserMessage(e);
+        onUserMessage(null, e);
     }
 
-    private void onUserMessage(UserMessageEvent e) {
+    private void onUserMessage(Long group, UserMessageEvent e) {
         miraiFramework.getFrameworkCallback().onPrivateMsg(
+            group,
             e.getSender().getId(),
             miraiFramework.transform(new MiraiMessage(e.getMessage()))
         );

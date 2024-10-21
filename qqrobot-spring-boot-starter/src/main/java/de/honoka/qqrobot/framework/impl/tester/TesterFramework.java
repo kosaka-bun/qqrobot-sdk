@@ -150,9 +150,14 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
             );
         }
     }
-
+    
     @Override
-    public void sendGroupMsg(Long group, RobotMultipartMessage message) {
+    public void sendTempPrivateMsg(long group, long qq, RobotMultipartMessage message) {
+        sendPrivateMsg(qq, message);
+    }
+    
+    @Override
+    public void sendGroupMsg(long group, RobotMultipartMessage message) {
         for(TesterServerConnection connection : testerServer.getConnections()) {
             JsonObject data = new JsonObject();
             data.addProperty("name", "Robot");
@@ -166,12 +171,12 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
     }
 
     @Override
-    public String getGroupName(Long group) {
+    public String getGroupName(long group) {
         return "Tester Group";
     }
 
     @Override
-    public String getNickOrCard(Long group, long qq) {
+    public String getNickOrCard(long group, long qq) {
         for(TesterServerConnection connection : testerServer.getConnections()) {
             long qqOfConnection = connection.getData().get("qq").getAsLong();
             if(qqOfConnection == qq) {
@@ -182,7 +187,7 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
     }
 
     @Override
-    public boolean isMuted(Long group) {
+    public boolean isMuted(long group) {
         return false;
     }
 }

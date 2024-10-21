@@ -186,9 +186,14 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
         reboot();
     }
 
-    @SneakyThrows
     @Override
     public MiraiMessage transform(Long group, long qq, RobotMultipartMessage message) {
+        return transform(group, qq, null, message);
+    }
+    
+    //contact不为null则采用contact，否则采用group或qq去寻找contact（group优先）
+    @SneakyThrows
+    private MiraiMessage transform(Long group, Long qq, Contact contact, RobotMultipartMessage message) {
         if(message == null || message.isEmpty()) return null;
         MessageChainBuilder builder = new MessageChainBuilder();
         List<ExternalResource> externalResources = new ArrayList<>();
@@ -208,20 +213,30 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
                     externalResources.add(imgRes);
                     //判断是否是私聊消息，以判断通过何种途径上传文件
                     Image img;
-                    if(group == null) {
-                        img = Objects.requireNonNull(getPrivateContact(qq)).uploadImage(imgRes);
+                    if(contact != null) {
+                        img = contact.uploadImage(imgRes);
                     } else {
-                        img = Objects.requireNonNull(miraiApi.getGroup(group)).uploadImage(imgRes);
+                        if(group == null) {
+                            img = Objects.requireNonNull(getPrivateContact(qq)).uploadImage(imgRes);
+                        } else {
+                            img = Objects.requireNonNull(miraiApi.getGroup(group)).uploadImage(imgRes);
+                        }
                     }
                     builder.add(img);
                     break;
                 case FILE:
                     InputStream fileBytes = (InputStream) part.getContent();
+                    Group groupObj;
+                    if(contact != null) {
+                        if(!(contact instanceof Group)) break;
+                        groupObj = (Group) contact;
+                    } else {
+                        groupObj = miraiApi.getGroup(Objects.requireNonNull(group));
+                    }
                     //若群对象不存在，不予发送
-                    Group groupObj = miraiApi.getGroup(Objects.requireNonNull(group));
                     if(groupObj == null) break;
                     //机器人在该群被禁言，不予发送
-                    if(isMuted(group)) break;
+                    if(isMuted(groupObj.getId())) break;
                     //发送消息
                     String fileName = (String) part.getOthers().get("fileName");
                     try(ExternalResource res = ExternalResource.create(fileBytes)) {
@@ -257,16 +272,26 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
         MiraiMessage msgAndRes = transform(null, qq, message);
         sendMessage(contact, msgAndRes);
     }
-
+    
     @Override
-    public void sendGroupMsg(Long group, RobotMultipartMessage message) {
+    public void sendTempPrivateMsg(long group, long qq, RobotMultipartMessage message) {
+        Group groupObj = miraiApi.getGroup(group);
+        if(groupObj == null) return;
+        Contact contact = groupObj.get(qq);
+        if(contact == null) return;
+        MiraiMessage msgAndRes = transform(null, null, contact, message);
+        sendMessage(contact, msgAndRes);
+    }
+    
+    @Override
+    public void sendGroupMsg(long group, RobotMultipartMessage message) {
         //若群对象不存在，不予发送
         Group groupObj = miraiApi.getGroup(group);
         if(groupObj == null) return;
         //机器人在该群被禁言，不予发送
         if(isMuted(group)) return;
         //发送消息
-        MiraiMessage msgAndRes = transform(group, 0, message);
+        MiraiMessage msgAndRes = transform(group, null, null, message);
         sendMessage(groupObj, msgAndRes);
     }
 
@@ -330,10 +355,8 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
     }
 
     @Override
-    public String getGroupName(Long group) {
+    public String getGroupName(long group) {
         try {
-            if(group == null)
-                return "【私聊消息】";
             return Objects.requireNonNull(miraiApi.getGroup(group)).getName();
         } catch(Exception e) {
             return "未知";
@@ -341,7 +364,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
     }
 
     @Override
-    public synchronized String getNickOrCard(Long group, long qq) {
+    public synchronized String getNickOrCard(long group, long qq) {
         try {
             String nameCard = Objects.requireNonNull(Objects.requireNonNull(
                     miraiApi.getGroup(group)).get(qq)).getNameCard();
@@ -381,7 +404,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
     }
 
     @Override
-    public boolean isMuted(Long group) {
+    public boolean isMuted(long group) {
         try {
             return Objects.requireNonNull(miraiApi.getGroup(group)).getBotMuteRemaining() > 0;
         } catch(Exception e) {

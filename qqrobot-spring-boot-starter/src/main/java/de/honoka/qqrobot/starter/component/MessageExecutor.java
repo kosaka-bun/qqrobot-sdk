@@ -5,6 +5,7 @@ import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
+import de.honoka.qqrobot.starter.RobotStarter;
 import de.honoka.qqrobot.starter.command.CommandInvoker;
 import de.honoka.qqrobot.starter.common.ConstantMessage;
 import de.honoka.qqrobot.starter.common.annotation.RobotController;
@@ -23,8 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * 消息处理器，按相应的逻辑统一地处理各类消息
@@ -56,9 +55,6 @@ public class MessageExecutor {
     private List<Object> controllers;
 
     //endregion
-
-    private final ExecutorService executorService =
-            Executors.newCachedThreadPool();
 
     /**
      * 命令调用器
@@ -98,8 +94,7 @@ public class MessageExecutor {
     }
 
     @SuppressWarnings("unchecked")
-    private RobotMultipartMessage executeMsg0(Long group, long qq,
-                                              RobotMultipartMessage msg) {
+    private RobotMultipartMessage executeMsg0(Long group, long qq, RobotMultipartMessage msg) {
         RobotMultipartMessage reply = null;
         boolean foundCommand = false;	//是否找到了对应的命令
         try {
@@ -180,8 +175,7 @@ public class MessageExecutor {
      * 消息统一处理方法，处理各类群消息（群、讨论组）与各类私聊消息（好友，临时会话）
      */
     @SuppressWarnings("unchecked")
-    public RobotMultipartMessage executeMsg(Long group, long qq,
-                                            RobotMultipartMessage msg) {
+    public RobotMultipartMessage executeMsg(Long group, long qq, RobotMultipartMessage msg) {
         //起始操作，优化要处理的信息
         //移除空串部分
         msg.removeEmptyPart();
@@ -192,10 +186,8 @@ public class MessageExecutor {
             str = StringUtils.stripStart(str, null);
             part.setContent(str);
         }
-        if(msg.messageList.get(msg.messageList.size() - 1).getType()
-                .equals(RobotMessageType.TEXT)) {
-            RobotMessage<String> part = (RobotMessage<String>) msg.messageList
-                    .get(msg.messageList.size() - 1);
+        if(msg.messageList.get(msg.messageList.size() - 1).getType().equals(RobotMessageType.TEXT)) {
+            RobotMessage<String> part = (RobotMessage<String>) msg.messageList.get(msg.messageList.size() - 1);
             String str = part.getContent();
             str = StringUtils.stripEnd(str, null);
             part.setContent(str);
@@ -222,10 +214,9 @@ public class MessageExecutor {
         RobotMultipartMessage reply = executeMsg0(group, qq, msg);
         //结束操作，用于对消息进行一些记录或分析
         //内部类中需要局部变量未被更改才能调用
-        RobotMultipartMessage replyCopy = (RobotMultipartMessage) Objects
-                .requireNonNull(reply).clone();
+        RobotMultipartMessage replyCopy = (RobotMultipartMessage) Objects.requireNonNull(reply).clone();
         //在新线程中，忽略异常地进行结束操作
-        executorService.submit(() -> ActionUtils.doIgnoreException(() -> {
+        RobotStarter.globalThreadPool.submit(() -> ActionUtils.doIgnoreException(() -> {
             //记录消息处理的相关信息
             robotLogger.logMsgExecution(group, qq, msg, replyCopy);
         }));

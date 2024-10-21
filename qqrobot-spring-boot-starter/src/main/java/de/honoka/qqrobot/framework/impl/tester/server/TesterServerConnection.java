@@ -193,17 +193,16 @@ public class TesterServerConnection {
         JsonObject resData = new JsonObject();
         resData.addProperty("status", true);
         sendMessage(new TesterMessage(message.getId())
-                .setType(TesterMessageType.PRIVATE_MESSAGE_RESPONSE)
-                .setData(resData)
+            .setType(TesterMessageType.PRIVATE_MESSAGE_RESPONSE)
+            .setData(resData)
         );
         //处理消息
-        JsonArray content = message.getData().getAsJsonArray(
-                "content");
-        Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
-                testerServer.getFramework();
+        JsonArray content = message.getData().getAsJsonArray("content");
+        Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>) testerServer.getFramework();
         framework.getFrameworkCallback().onPrivateMsg(
-                data.get("qq").getAsLong(),
-                framework.transform(TesterRobotMessage.of(content))
+            null,
+            data.get("qq").getAsLong(),
+            framework.transform(TesterRobotMessage.of(content))
         );
     }
 }

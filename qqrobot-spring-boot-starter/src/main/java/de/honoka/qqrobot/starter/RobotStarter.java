@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class RobotStarter {
 
     public static final ThreadPoolExecutor globalThreadPool = new ThreadPoolExecutor(
-        5, 10, 60, TimeUnit.SECONDS,
-        new LinkedBlockingDeque<>(20), new ThreadPoolExecutor.CallerRunsPolicy()
+        5, 20, 60, TimeUnit.SECONDS,
+        new LinkedBlockingDeque<>(20), new ThreadPoolExecutor.AbortPolicy()
     );
 }

@@ -8,14 +8,14 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 public interface FrameworkCallback {
 	
 	/**
-	 * 收到私聊消息
+	 * 收到私聊消息（好友私聊或群临时会话）
 	 */
-	void onPrivateMsg(long qq, RobotMultipartMessage msg);
+	void onPrivateMsg(Long group, long qq, RobotMultipartMessage msg);
 	
 	/**
 	 * 收到群消息
 	 */
-	void onGroupMsg(Long group, long qq, RobotMultipartMessage msg);
+	void onGroupMsg(long group, long qq, RobotMultipartMessage msg);
 	
 	/**
 	 * 框架启动时

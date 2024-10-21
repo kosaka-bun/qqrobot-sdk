@@ -25,24 +25,27 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
      * 收到私聊消息
      */
     @Override
-    public void onPrivateMsg(long qq, RobotMultipartMessage msg) {
+    public void onPrivateMsg(Long group, long qq, RobotMultipartMessage msg) {
         RobotStarter.globalThreadPool.submit(() -> {
             //回复信息
-            RobotMultipartMessage reply = messageExecutor.executeMsg(
-                    null, qq, msg);
+            RobotMultipartMessage reply = messageExecutor.executeMsg(null, qq, msg);
             if(reply != null) {
                 reply.removeEmptyPart();
                 if(reply.isEmpty()) return;
-                framework.reply(null, qq, reply);
+                if(group != null) {
+                    framework.sendTempPrivateMsg(group, qq, reply);
+                } else {
+                    framework.sendPrivateMsg(qq, reply);
+                }
             }
         });
     }
-
+    
     /**
      * 收到群消息
      */
     @Override
-    public void onGroupMsg(Long group, long qq, RobotMultipartMessage msg) {
+    public void onGroupMsg(long group, long qq, RobotMultipartMessage msg) {
         //若机器人被禁言，则不响应此消息
         if(framework.isMuted(group)) return;
         RobotStarter.globalThreadPool.submit(() -> {
