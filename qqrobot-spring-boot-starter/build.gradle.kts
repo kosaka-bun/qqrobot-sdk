@@ -14,19 +14,21 @@ plugins {
 
 setupVersionAndPublishing(libs.versions.qqrobot.spring.boot.starter.get())
 
+dependencyManagement {
+    imports {
+        //必须按照顺序导入，后导入的依赖配置将覆盖先导入的相同依赖的配置
+        mavenBom(libs.spring.boot.dependencies.get().toString())
+        mavenBom(libs.kotlin.bom.get().toString())
+    }
+}
+
 dependencies {
-    compileOnly(platform(libs.spring.boot.dependencies))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
-    /*
-     * spring-boot-configuration-processor的作用是生成配置的元数据信息，即META-INF目录下的
-     * spring-configuration-metadata.json文件，从而告诉Spring这个jar包中有哪些自定义的配置。
-     */
-    compileOnly("org.springframework.boot:spring-boot-configuration-processor".also {
-        //若不手动添加版本号，则annotationProcessor无法读取到指定依赖的版本号
-        annotationProcessor("$it:${libs.versions.spring.boot.get()}")
+    implementation("org.springframework.boot:spring-boot-configuration-processor".also {
+        annotationProcessor(it)
     })
     implementation(libs.honoka.kotlin.utils)
     implementation(libs.honoka.framework.utils)
