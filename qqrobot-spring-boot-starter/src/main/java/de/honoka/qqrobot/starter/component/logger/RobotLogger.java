@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component.logger;
 
-import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 
 /**
  * 由用户自行实现的日志记录器

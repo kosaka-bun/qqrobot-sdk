@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.component.admin;
 
 import com.google.gson.JsonObject;
-import de.honoka.qqrobot.framework.Framework;
+import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import de.honoka.qqrobot.starter.component.RobotConsoleWindow;

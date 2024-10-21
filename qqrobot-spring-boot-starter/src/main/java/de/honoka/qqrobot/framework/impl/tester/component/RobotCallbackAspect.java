@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.framework.impl.tester.component;
 
-import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;

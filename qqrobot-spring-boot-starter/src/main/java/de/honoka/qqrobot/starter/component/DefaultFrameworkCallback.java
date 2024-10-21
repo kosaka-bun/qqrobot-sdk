@@ -1,8 +1,8 @@
 package de.honoka.qqrobot.starter.component;
 
-import de.honoka.qqrobot.framework.Framework;
-import de.honoka.qqrobot.framework.FrameworkCallback;
-import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.Framework;
+import de.honoka.qqrobot.framework.api.FrameworkCallback;
+import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotStarter;
 import de.honoka.qqrobot.starter.common.ConditionalBeans;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;

@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.framework.impl.tester.server;
 
-import de.honoka.qqrobot.framework.Framework;
+import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
 import lombok.Getter;
 import org.springframework.context.annotation.Lazy;

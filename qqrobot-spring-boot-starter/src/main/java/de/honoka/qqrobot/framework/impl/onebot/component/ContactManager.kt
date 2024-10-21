@@ -6,11 +6,17 @@ import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.impl.onebot.OnebotFramework
 import de.honoka.qqrobot.framework.impl.onebot.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.config.urlPrefix
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
 @Component
 class ContactManager(private val onebotProperties: OnebotProperties) {
+    
+    companion object {
+        
+        private val log = LoggerFactory.getLogger(ContactManager::class.java)
+    }
     
     data class Contact(val name: String)
     
@@ -47,6 +53,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
             friends[qq] = contact
         }
         this.friends = friends
+        log.info("读取了${friends.size}个好友信息")
     }
     
     private fun readGroups() {
@@ -55,7 +62,9 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
             JSONUtil.parseObj(it)
         }
         val groups = HashMap<Long, Group>()
-        res.getJSONArray("data").forEach {
+        val groupsJson = res.getJSONArray("data")
+        log.info("读取了${groupsJson.size}个群信息")
+        groupsJson.forEach {
             it as JSONObject
             val groupId = it.getLong("group_id")
             val group = Group(it.getStr("group_name"), readGroupMemberList(groupId))
@@ -70,9 +79,9 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
             url,
             JSONObject().let {
                 it["group_id"] = groupId
-                toString()
+                it.toString()
             },
-            OnebotFramework.HTTP_REQUEST_TIMEOUT
+            OnebotFramework.HTTP_REQUEST_TIMEOUT + 3 * 1000
         ).let { JSONUtil.parseObj(it) }
         val memberList = HashMap<Long, Contact>()
         res.getJSONArray("data").forEach {
@@ -83,6 +92,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
             val contact = Contact(name)
             memberList[qq] = contact
         }
+        log.info("群${groupId}中有${memberList.size}位成员")
         return memberList
     }
     

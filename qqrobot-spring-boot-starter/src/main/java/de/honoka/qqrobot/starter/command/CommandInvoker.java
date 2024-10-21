@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.command;
 
-import de.honoka.qqrobot.framework.model.RobotMessage;
-import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.model.RobotMessage;
+import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.common.ConstantMessage;
 import de.honoka.qqrobot.starter.common.annotation.Command;

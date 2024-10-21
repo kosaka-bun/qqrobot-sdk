@@ -1,8 +1,8 @@
 package de.honoka.qqrobot.starter.component;
 
-import de.honoka.qqrobot.framework.Framework;
-import de.honoka.qqrobot.framework.model.RobotMessage;
-import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.Framework;
+import de.honoka.qqrobot.framework.api.model.RobotMessage;
+import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
 import de.honoka.sdk.util.code.ActionUtils;

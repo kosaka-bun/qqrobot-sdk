@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component.session;
 
-import de.honoka.qqrobot.framework.Framework;
+import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.sdk.util.code.ThrowsConsumer;
 import lombok.AccessLevel;
 import lombok.Getter;

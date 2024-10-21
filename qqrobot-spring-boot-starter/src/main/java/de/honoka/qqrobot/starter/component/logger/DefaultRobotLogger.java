@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.component.logger;
 
-import de.honoka.qqrobot.framework.Framework;
-import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.Framework;
+import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.common.ConditionalBeans;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;

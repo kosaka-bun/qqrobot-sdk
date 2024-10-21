@@ -2,7 +2,7 @@ package de.honoka.qqrobot.framework.impl.tester.server;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import de.honoka.qqrobot.framework.Framework;
+import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterMessage;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterMessageType;

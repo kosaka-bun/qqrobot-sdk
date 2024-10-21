@@ -1,9 +1,9 @@
 package de.honoka.qqrobot.starter.component;
 
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
-import de.honoka.qqrobot.framework.model.RobotMessage;
-import de.honoka.qqrobot.framework.model.RobotMessageType;
-import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.model.RobotMessage;
+import de.honoka.qqrobot.framework.api.model.RobotMessageType;
+import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.command.CommandInvoker;
 import de.honoka.qqrobot.starter.common.ConstantMessage;

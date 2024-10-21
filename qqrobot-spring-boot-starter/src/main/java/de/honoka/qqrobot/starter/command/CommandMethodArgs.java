@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.command;
 
-import de.honoka.qqrobot.framework.model.RobotMessage;
-import de.honoka.qqrobot.framework.model.RobotMessageType;
+import de.honoka.qqrobot.framework.api.model.RobotMessage;
+import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import lombok.Getter;
 
 /**

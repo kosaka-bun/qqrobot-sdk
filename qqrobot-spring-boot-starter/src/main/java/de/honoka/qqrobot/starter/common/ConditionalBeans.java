@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.common;
 
-import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.framework.api.FrameworkCallback;
 import de.honoka.qqrobot.starter.component.DefaultFrameworkCallback;
 import de.honoka.qqrobot.starter.component.logger.DefaultRobotLogger;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;

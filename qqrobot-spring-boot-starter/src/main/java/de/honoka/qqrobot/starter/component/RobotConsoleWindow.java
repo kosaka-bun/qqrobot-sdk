@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component;
 
-import de.honoka.qqrobot.framework.Framework;
+import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.sdk.util.code.ThrowsRunnable;
 import de.honoka.sdk.util.system.gui.ConsoleWindow;

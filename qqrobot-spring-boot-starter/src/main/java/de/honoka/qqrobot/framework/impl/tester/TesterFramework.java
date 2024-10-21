@@ -1,8 +1,11 @@
 package de.honoka.qqrobot.framework.impl.tester;
 
 import com.google.gson.JsonObject;
-import de.honoka.qqrobot.framework.Framework;
-import de.honoka.qqrobot.framework.FrameworkCallback;
+import de.honoka.qqrobot.framework.api.Framework;
+import de.honoka.qqrobot.framework.api.FrameworkCallback;
+import de.honoka.qqrobot.framework.api.model.RobotMessage;
+import de.honoka.qqrobot.framework.api.model.RobotMessageType;
+import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.framework.config.TesterConfig;
 import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterMessage;
@@ -10,9 +13,6 @@ import de.honoka.qqrobot.framework.impl.tester.model.TesterMessageType;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterRobotMessage;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServer;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServerConnection;
-import de.honoka.qqrobot.framework.model.RobotMessage;
-import de.honoka.qqrobot.framework.model.RobotMessageType;
-import de.honoka.qqrobot.framework.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import lombok.Getter;
 import lombok.SneakyThrows;
