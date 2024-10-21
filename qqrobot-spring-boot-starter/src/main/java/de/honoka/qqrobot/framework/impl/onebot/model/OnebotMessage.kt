@@ -9,9 +9,9 @@ class OnebotMessage(messageJson: JSONArray? = null) : AutoCloseable {
 
     data class Part(
         
-        val type: String? = null,
+        var type: String? = null,
         
-        val data: JSONObject? = null
+        var data: JSONObject? = null
     )
     
     val parts: MutableList<Part> = run {

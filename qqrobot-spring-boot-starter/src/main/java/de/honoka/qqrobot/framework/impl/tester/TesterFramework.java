@@ -1,8 +1,7 @@
 package de.honoka.qqrobot.framework.impl.tester;
 
 import com.google.gson.JsonObject;
-import de.honoka.qqrobot.framework.api.Framework;
-import de.honoka.qqrobot.framework.api.FrameworkCallback;
+import de.honoka.qqrobot.framework.BaseFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
@@ -34,7 +33,7 @@ import java.util.UUID;
 @Slf4j
 @Getter
 @Component
-public class TesterFramework extends Framework<TesterRobotMessage> {
+public class TesterFramework extends BaseFramework<TesterRobotMessage> {
 
     @Resource
     private RobotBasicProperties basicProperties;
@@ -50,12 +49,6 @@ public class TesterFramework extends Framework<TesterRobotMessage> {
 
     //key为图片数据流的hashCode，value为这个流对应的文件名
     private final Map<Integer, String> imageNameMap = new HashMap<>();
-
-    @Resource
-    @Override
-    protected void setFrameworkCallback(FrameworkCallback frameworkCallback) {
-        super.setFrameworkCallback(frameworkCallback);
-    }
 
     @SneakyThrows
     @Override

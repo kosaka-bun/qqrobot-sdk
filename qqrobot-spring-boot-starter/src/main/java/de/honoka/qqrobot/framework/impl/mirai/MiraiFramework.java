@@ -3,8 +3,7 @@ package de.honoka.qqrobot.framework.impl.mirai;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import de.honoka.qqrobot.framework.api.Framework;
-import de.honoka.qqrobot.framework.api.FrameworkCallback;
+import de.honoka.qqrobot.framework.BaseFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
@@ -50,7 +49,7 @@ import java.util.Objects;
 @Slf4j
 @Getter
 @Component
-public class MiraiFramework extends Framework<MiraiMessage> {
+public class MiraiFramework extends BaseFramework<MiraiMessage> {
 
     @Resource
     private RobotBasicProperties basicProperties;
@@ -80,12 +79,6 @@ public class MiraiFramework extends Framework<MiraiMessage> {
         private String password;
 
         private BotConfiguration conf;
-    }
-
-    @Resource
-    @Override
-    protected void setFrameworkCallback(FrameworkCallback frameworkCallback) {
-        super.setFrameworkCallback(frameworkCallback);
     }
 
     /**

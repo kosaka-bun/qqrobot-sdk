@@ -6,13 +6,14 @@ import cn.hutool.core.util.IdUtil
 import cn.hutool.http.HttpUtil
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
-import de.honoka.qqrobot.framework.Framework
+import de.honoka.qqrobot.framework.BaseFramework
+import de.honoka.qqrobot.framework.api.model.RobotMessageType.*
+import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
 import de.honoka.qqrobot.framework.impl.onebot.config.*
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
-import de.honoka.qqrobot.framework.model.RobotMessageType.*
-import de.honoka.qqrobot.framework.model.RobotMultipartMessage
 import de.honoka.qqrobot.starter.RobotBasicProperties
+import de.honoka.qqrobot.starter.RobotStarter
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -34,7 +35,7 @@ class OnebotFramework(
     private val basicProperties: RobotBasicProperties,
     private val onebotProperties: OnebotProperties,
     private val contactManager: ContactManager
-) : Framework<OnebotMessage>() {
+) : BaseFramework<OnebotMessage>() {
 
     companion object {
 
@@ -48,15 +49,20 @@ class OnebotFramework(
     inner class WebSocketHandlerImpl : WebSocketHandler {
         
         override fun afterConnectionEstablished(session: WebSocketSession) {
-            checkIsOnline()
-            if(online) frameworkCallback.onStartup()
+            /*
+             * 若不采用异步，则在这个方法返回之前，webSocketClient.doHandshake().get()语句
+             * 都不会返回。
+             * 这条语句在synchronized方法中，checkIsOnline也是一个synchronized方法，不采用
+             * 异步将会导致循环等待。
+             */
+            RobotStarter.globalThreadPool.submit {
+                checkIsOnline()
+                if(online) frameworkCallback.onStartup()
+            }
         }
         
         override fun handleMessage(session: WebSocketSession, message: WebSocketMessage<*>) {
-            //在线时长不足5秒，忽略传入的消息，避免响应用户在上线前很久时所发的命令
-            val shouldIgnore = message !is TextMessage || !online ||
-                System.currentTimeMillis() - onlineTimePoint < TIME_TO_WAIT_ONLINE
-            if(shouldIgnore) return
+            if(message !is TextMessage) return
             runCatching {
                 val json = JSONUtil.parseObj(message.payload)
                 when(json.getStr("post_type")) {
@@ -67,6 +73,8 @@ class OnebotFramework(
         }
         
         private fun handleMessageEvent(json: JSONObject) {
+            //在线时长不足，忽略传入的消息，避免响应用户在上线前很久时所发的命令
+            if(!online || System.currentTimeMillis() - onlineTimePoint < TIME_TO_WAIT_ONLINE) return
             val qq = json.getLong("user_id")
             val robotMessage = transform(OnebotMessage(json.getJSONArray("message")))
             when(json.getStr("message_type")) {
@@ -260,7 +268,7 @@ class OnebotFramework(
                             it["user_id"] = qq
                         }
                         it["message"] = message.parts
-                        toString()
+                        it.toString()
                     },
                     HTTP_REQUEST_TIMEOUT
                 ).let { JSONUtil.parseObj(it) }
