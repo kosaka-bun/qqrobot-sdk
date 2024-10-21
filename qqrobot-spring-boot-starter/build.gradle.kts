@@ -5,6 +5,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.spring)
+    /*
+     * Lombok Kotlin compiler plugin is an experimental feature.
+     * See: https://kotlinlang.org/docs/components-stability.html.
+     */
+    alias(libs.plugins.kotlin.lombok)
 }
 
 setupVersionAndPublishing(libs.versions.qqrobot.spring.boot.starter.get())

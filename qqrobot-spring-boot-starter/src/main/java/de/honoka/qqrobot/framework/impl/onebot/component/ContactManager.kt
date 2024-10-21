@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.impl.onebot.OnebotFramework
 import de.honoka.qqrobot.framework.impl.onebot.config.OnebotProperties
+import de.honoka.qqrobot.framework.impl.onebot.config.urlPrefix
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 

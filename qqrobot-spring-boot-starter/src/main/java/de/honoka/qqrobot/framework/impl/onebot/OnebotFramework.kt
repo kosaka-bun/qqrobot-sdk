@@ -8,7 +8,7 @@ import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.Framework
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
-import de.honoka.qqrobot.framework.impl.onebot.config.OnebotProperties
+import de.honoka.qqrobot.framework.impl.onebot.config.*
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
 import de.honoka.qqrobot.framework.model.RobotMessageType.*
 import de.honoka.qqrobot.framework.model.RobotMultipartMessage

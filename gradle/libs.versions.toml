@@ -16,6 +16,7 @@ lombok = "1.18.26"
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kotlin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
 
 [libraries]
 honoka-kotlin-utils = { module = "de.honoka.sdk:honoka-kotlin-utils", version.ref = "honoka-kotlin-utils" }
