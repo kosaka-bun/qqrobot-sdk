@@ -172,7 +172,15 @@ public class MessageExecutor {
     }
 
     /**
-     * 消息统一处理方法，处理各类群消息（群、讨论组）与各类私聊消息（好友，临时会话）
+     * 消息统一处理方法，处理各类群消息（群、讨论组）与各类私聊消息（好友，临时会话）。
+     * <p>
+     * 在此前的实现中，约定group为null的消息为群消息，反之则为私聊消息。目前，当group为null时，消息也可能是
+     * 来自于某个群的临时会话，这种情况下，临时会话所来源的群号就有可能被使用到。
+     * <p>
+     * 在group为null时，若需获取临时会话来源群的群号，可调用
+     * {@link de.honoka.qqrobot.framework.api.FrameworkCallback#callerInfoHolder}。
+     * <p>
+     * 任何组件在调用此方法时，均不得在处理临时会话消息时，将群号传入，否则被处理的消息将被视为群消息。
      */
     @SuppressWarnings("unchecked")
     public RobotMultipartMessage executeMsg(Long group, long qq, RobotMultipartMessage msg) {

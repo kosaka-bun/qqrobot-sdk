@@ -27,8 +27,7 @@ public class SessionManager {
     /**
      * 当前会话列表
      */
-    private final List<RobotSession> sessionList = Collections.synchronizedList(
-            new LinkedList<>());
+    private final List<RobotSession> sessionList = Collections.synchronizedList(new LinkedList<>());
 
     /**
      * 获取一个会话
@@ -67,8 +66,10 @@ public class SessionManager {
         sessionList.add(session);
     }
 
-    public void openSession(Long group, long qq, ThrowsConsumer<RobotSession> action,
-                            ThrowsConsumer<RobotSession> onTimeout) {
+    public void openSession(
+        Long group, long qq, ThrowsConsumer<RobotSession> action,
+        ThrowsConsumer<RobotSession> onTimeout
+    ) {
         createSession(group, qq).setAction(action).setOnTimeout(onTimeout).run();
     }
 
