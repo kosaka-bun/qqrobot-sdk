@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.framework.model;
+package de.honoka.qqrobot.framework.api.model;
 
 import lombok.Getter;
 import lombok.Setter;

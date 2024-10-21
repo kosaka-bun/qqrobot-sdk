@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.framework;
+package de.honoka.qqrobot.framework.api;
 
 import lombok.AccessLevel;
 import lombok.Getter;

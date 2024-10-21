@@ -1,7 +1,7 @@
 [versions]
 # project modules version
 root = "1.4.0-dev"
-qqrobot-framework-api = "1.0.3"
+qqrobot-framework-api = "1.1.0-dev"
 qqrobot-spring-boot-starter = "1.4.0-dev"
 
 # dependencies version
