@@ -1,0 +1,5 @@
+#file: noinspection SpringBootApplicationYaml
+
+file-receiver:
+  custom-path: ''
+  enable-gui: true

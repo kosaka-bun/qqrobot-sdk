@@ -1,15 +1,8 @@
 import de.honoka.gradle.buildsrc.MavenPublish.setupVersionAndPublishing
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.spring)
-    /*
-     * Lombok Kotlin compiler plugin is an experimental feature.
-     * See: https://kotlinlang.org/docs/components-stability.html.
-     */
-    alias(libs.plugins.kotlin.lombok)
 }
 
 setupVersionAndPublishing(libs.versions.qqrobot.spring.boot.starter.get())
@@ -45,12 +38,5 @@ dependencies {
 tasks {
     compileJava {
         dependsOn(":qqrobot-framework-api:publish")
-    }
-    
-    withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs += "-Xjsr305=strict"
-            jvmTarget = java.sourceCompatibility.toString()
-        }
     }
 }

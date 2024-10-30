@@ -3,21 +3,25 @@
 root = "1.4.0-dev"
 qqrobot-framework-api = "1.1.0-dev"
 qqrobot-spring-boot-starter = "1.4.0-dev"
+file-receiver = "1.0.0-dev"
 
 # dependencies version
 honoka-kotlin-utils = "1.0.0"
-honoka-framework-utils = "1.0.4"
+honoka-framework-utils = "1.0.5-dev"
 lib-qqrobot-framework-api = "1.1.0-dev"
 spring-boot = "2.7.5"
 mirai = "2.16.0"
 kotlin = "1.8.10"
+kotlin-coroutines = "1.6.4"
 lombok = "1.18.26"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 kotlin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 dependency-management = "io.spring.dependency-management:1.0.11.RELEASE"
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 
 [libraries]
 honoka-kotlin-utils = { module = "de.honoka.sdk:honoka-kotlin-utils", version.ref = "honoka-kotlin-utils" }

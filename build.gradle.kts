@@ -1,4 +1,5 @@
 import de.honoka.gradle.buildsrc.MavenPublish.defineCheckVersionOfProjectsTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.charset.StandardCharsets
 
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -7,6 +8,12 @@ plugins {
     `java-library`
     `maven-publish`
     alias(libs.plugins.dependency.management) apply false
+    alias(libs.plugins.kotlin) apply false
+    /*
+     * Lombok Kotlin compiler plugin is an experimental feature.
+     * See: https://kotlinlang.org/docs/components-stability.html.
+     */
+    alias(libs.plugins.kotlin.lombok) apply false
 }
 
 group = "de.honoka.qqrobot"
@@ -17,6 +24,8 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "io.spring.dependency-management")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
 
     group = rootProject.group
 
@@ -40,6 +49,13 @@ subprojects {
     tasks {
         compileJava {
             options.encoding = StandardCharsets.UTF_8.name()
+        }
+        
+        withType<KotlinCompile> {
+            kotlinOptions {
+                freeCompilerArgs += "-Xjsr305=strict"
+                jvmTarget = java.sourceCompatibility.toString()
+            }
         }
 
         test {

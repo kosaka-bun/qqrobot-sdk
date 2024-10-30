@@ -3,3 +3,5 @@ build/
 
 .idea/
 .gradle/
+
+/image-receiver/src/test/http/*

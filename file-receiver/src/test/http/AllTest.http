@@ -1,0 +1,21 @@
+###
+POST {{base_url}}/uploadImage
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< C:\Personal\用户主目录\图集\壁纸\98870078_p0.jpg
+--WebAppBoundary--
+
+###
+POST {{base_url}}/uploadFile
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< C:\Personal\用户主目录\图集\壁纸\98870078_p0.jpg
+--WebAppBoundary--
