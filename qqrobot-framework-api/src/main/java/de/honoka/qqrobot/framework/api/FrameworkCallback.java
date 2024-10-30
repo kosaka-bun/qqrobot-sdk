@@ -15,7 +15,7 @@ public interface FrameworkCallback {
 	/**
 	 * 收到群消息
 	 */
-	void onGroupMsg(Long group, long qq, RobotMultipartMessage msg);
+	void onGroupMsg(long group, long qq, RobotMultipartMessage msg);
 	
 	/**
 	 * 框架启动时

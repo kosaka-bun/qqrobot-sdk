@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.impl.onebot.OnebotFramework
 import de.honoka.qqrobot.framework.impl.onebot.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.config.urlPrefix
+import de.honoka.qqrobot.starter.RobotStarter
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
@@ -23,11 +24,11 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
     data class Group(val name: String, val memberList: Map<Long, Contact>)
     
     @Volatile
-    final lateinit var friends: Map<Long, Contact>
+    final var friends: Map<Long, Contact> = mapOf()
         private set
     
     @Volatile
-    final lateinit var groups: Map<Long, Group>
+    final var groups: Map<Long, Group> = mapOf()
         private set
     
     @PostConstruct
@@ -35,6 +36,9 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
         flush()
     }
     
+    /**
+     * 同步刷新好友列表，异步刷新群列表及群成员列表
+     */
     fun flush() {
         readFriends()
         readGroups()
@@ -61,16 +65,18 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
         val res = HttpUtil.post(url, "{}", OnebotFramework.HTTP_REQUEST_TIMEOUT).let {
             JSONUtil.parseObj(it)
         }
-        val groups = HashMap<Long, Group>()
         val groupsJson = res.getJSONArray("data")
         log.info("读取了${groupsJson.size}个群信息")
-        groupsJson.forEach {
-            it as JSONObject
-            val groupId = it.getLong("group_id")
-            val group = Group(it.getStr("group_name"), readGroupMemberList(groupId))
-            groups[groupId] = group
+        RobotStarter.globalThreadPool.submit {
+            val groups = HashMap<Long, Group>()
+            groupsJson.forEach {
+                it as JSONObject
+                val groupId = it.getLong("group_id")
+                val group = Group(it.getStr("group_name"), readGroupMemberList(groupId))
+                groups[groupId] = group
+            }
+            this.groups = groups
         }
-        this.groups = groups
     }
     
     private fun readGroupMemberList(groupId: Long): Map<Long, Contact> {
@@ -81,7 +87,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
                 it["group_id"] = groupId
                 it.toString()
             },
-            OnebotFramework.HTTP_REQUEST_TIMEOUT + 3 * 1000
+            OnebotFramework.HTTP_REQUEST_TIMEOUT + 30 * 1000
         ).let { JSONUtil.parseObj(it) }
         val memberList = HashMap<Long, Contact>()
         res.getJSONArray("data").forEach {

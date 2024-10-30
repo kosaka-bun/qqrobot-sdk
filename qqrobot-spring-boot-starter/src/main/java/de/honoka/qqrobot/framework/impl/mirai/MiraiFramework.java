@@ -259,7 +259,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
     }
 
     @Override
-    public void sendGroupMsg(Long group, RobotMultipartMessage message) {
+    public void sendGroupMsg(long group, RobotMultipartMessage message) {
         //若群对象不存在，不予发送
         Group groupObj = miraiApi.getGroup(group);
         if(groupObj == null) return;
@@ -330,10 +330,8 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
     }
 
     @Override
-    public String getGroupName(Long group) {
+    public String getGroupName(long group) {
         try {
-            if(group == null)
-                return "【私聊消息】";
             return Objects.requireNonNull(miraiApi.getGroup(group)).getName();
         } catch(Exception e) {
             return "未知";
@@ -341,7 +339,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
     }
 
     @Override
-    public synchronized String getNickOrCard(Long group, long qq) {
+    public synchronized String getNickOrCard(long group, long qq) {
         try {
             String nameCard = Objects.requireNonNull(Objects.requireNonNull(
                     miraiApi.getGroup(group)).get(qq)).getNameCard();
@@ -381,7 +379,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
     }
 
     @Override
-    public boolean isMuted(Long group) {
+    public boolean isMuted(long group) {
         try {
             return Objects.requireNonNull(miraiApi.getGroup(group)).getBotMuteRemaining() > 0;
         } catch(Exception e) {
@@ -399,10 +397,11 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
         //发送测试消息
         MessageReceipt<?> receipt = null;
         try {
-            receipt = Objects.requireNonNull(miraiApi.getGroup(basicProperties
-                    .getDevelopingGroup()))
-                    .sendMessage(new SimpleDateFormat("HH:mm:ss")
-                            .format(new Date()) + "\n平台重新登录");
+            receipt = Objects.requireNonNull(
+                miraiApi.getGroup(basicProperties.getDevelopingGroup())
+            ).sendMessage(
+                new SimpleDateFormat("HH:mm:ss").format(new Date()) + "\n平台重新登录"
+            );
         } catch(Throwable ex) {
             //none
         }

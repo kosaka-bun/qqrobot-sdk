@@ -51,10 +51,11 @@ public class RobotSession {
      * @param timeout 超时时间，单位为秒
      * @return  回复
      */
-    public RobotMultipartMessage waitingForReply(int timeout)
-            throws TimeoutException {
-        reply = null;  //等待回复前，先忽略已有的回复
-        int i = 0;  //已等待秒数
+    public RobotMultipartMessage waitingForReply(int timeout) throws TimeoutException {
+        //等待回复前，先忽略已有的回复
+        reply = null;
+        //已等待秒数
+        int i = 0;
         while(reply == null) {
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -76,7 +77,7 @@ public class RobotSession {
     }
 
     //package-private
-    public void run() {
+    void run() {
         sessionManager.openSession(this);
         try {
             action.accept(this);
@@ -86,8 +87,7 @@ public class RobotSession {
             if(onTimeout != null) {
                 onTimeout.accept(this);
             } else {
-                sessionManager.getFramework().reply(group, qq,
-                        "会话已超时关闭");
+                sessionManager.getFramework().reply(group, qq, "会话已超时关闭");
             }
         } finally {
             close();

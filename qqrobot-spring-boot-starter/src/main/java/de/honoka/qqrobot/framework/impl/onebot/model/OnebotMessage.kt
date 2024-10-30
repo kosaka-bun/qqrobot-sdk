@@ -40,7 +40,12 @@ class OnebotMessage(messageJson: JSONArray? = null) : AutoCloseable {
     
     fun addImagePart(path: String) {
         val part = Part("image", JSONObject().also {
-            it["file"] = File(path).toURI().toASCIIString()
+            it["file"] = File(path).toURI().toASCIIString().run {
+                if(!contains("file:///")) {
+                    return@run replace("file:/", "file:///")
+                }
+                this
+            }
         })
         parts.add(part)
         externalResources.add(path)

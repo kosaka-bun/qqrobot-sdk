@@ -27,8 +27,7 @@ public class SessionManager {
     /**
      * 当前会话列表
      */
-    private final List<RobotSession> sessionList = Collections.synchronizedList(
-            new LinkedList<>());
+    private final List<RobotSession> sessionList = Collections.synchronizedList(new LinkedList<>());
 
     /**
      * 获取一个会话
@@ -37,8 +36,7 @@ public class SessionManager {
         //任何对列表的遍历之前，都必须对列表加锁，阻止其他线程对列表的修改
         synchronized (sessionList) {
             for(RobotSession s : sessionList) {
-                if(qq == s.getQq() && Objects.equals(group, s.getGroup()))
-                    return s;
+                if(qq == s.getQq() && Objects.equals(group, s.getGroup())) return s;
             }
             return null;
         }
@@ -60,15 +58,16 @@ public class SessionManager {
      */
     void openSession(RobotSession session) {
         //检查是否有存在的会话
-        RobotSession existSession = getCurrentSession(session.getGroup(),
-                session.getQq());
+        RobotSession existSession = getCurrentSession(session.getGroup(), session.getQq());
         if(existSession != null) return;
         //添加
         sessionList.add(session);
     }
 
-    public void openSession(Long group, long qq, ThrowsConsumer<RobotSession> action,
-                            ThrowsConsumer<RobotSession> onTimeout) {
+    public void openSession(
+        Long group, long qq, ThrowsConsumer<RobotSession> action,
+        ThrowsConsumer<RobotSession> onTimeout
+    ) {
         createSession(group, qq).setAction(action).setOnTimeout(onTimeout).run();
     }
 

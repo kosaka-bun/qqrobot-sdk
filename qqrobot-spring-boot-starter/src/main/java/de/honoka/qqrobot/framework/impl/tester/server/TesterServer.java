@@ -19,8 +19,7 @@ public class TesterServer {
 
     private List<TesterServerConnection> connections;
 
-    private final ThreadPoolExecutor executor = (ThreadPoolExecutor)
-            Executors.newCachedThreadPool();
+    private final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     @Lazy
     @Resource

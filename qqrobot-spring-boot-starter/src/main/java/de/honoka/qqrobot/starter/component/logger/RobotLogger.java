@@ -15,7 +15,5 @@ public interface RobotLogger {
     /**
      * 记录消息处理的相关信息
      */
-    void logMsgExecution(Long group, long qq,
-                         RobotMultipartMessage msg,
-                         RobotMultipartMessage reply);
+    void logMsgExecution(Long group, long qq, RobotMultipartMessage msg, RobotMultipartMessage reply);
 }

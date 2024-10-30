@@ -15,8 +15,11 @@ public class RobotCallbackAspect {
 
     private static final String SEPERATOR = StringUtils.repeat("-----", 7);
 
-    @Before("execution(* de.honoka.qqrobot.starter.component." +
-            "DefaultFrameworkCallback.onGroupMsg(..))")
+    @Before(
+        "execution(* de.honoka.qqrobot.starter.component.DefaultFrameworkCallback.onGroupMsg" +
+            "(long, long, de.honoka.qqrobot.framework.api.model.RobotMultipartMessage)" +
+            ")"
+    )
     public void logGroupMessage(JoinPoint joinPoint) {
         Long group = (Long) joinPoint.getArgs()[0];
         long qq = (long) joinPoint.getArgs()[1];
@@ -27,8 +30,11 @@ public class RobotCallbackAspect {
         );
     }
 
-    @Before("execution(* de.honoka.qqrobot.starter.component." +
-            "DefaultFrameworkCallback.onPrivateMsg(..))")
+    @Before(
+        "execution(* de.honoka.qqrobot.starter.component.DefaultFrameworkCallback.onPrivateMsg" +
+            "(Long, long, de.honoka.qqrobot.framework.api.model.RobotMultipartMessage)" +
+            ")"
+    )
     public void logPrivateMessage(JoinPoint joinPoint) {
         long qq = (long) joinPoint.getArgs()[0];
         RobotMultipartMessage msg = (RobotMultipartMessage) joinPoint.getArgs()[1];
@@ -38,8 +44,7 @@ public class RobotCallbackAspect {
         );
     }
 
-    @Before("execution(* de.honoka.qqrobot.framework.impl.tester." +
-            "TesterFramework.sendGroupMsg(..))")
+    @Before("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.sendGroupMsg(..))")
     public void logSendGroupMessage(JoinPoint joinPoint) {
         Long group = (Long) joinPoint.getArgs()[0];
         Object msg = joinPoint.getArgs()[1];
@@ -49,8 +54,7 @@ public class RobotCallbackAspect {
         );
     }
 
-    @Before("execution(* de.honoka.qqrobot.framework.impl.tester." +
-            "TesterFramework.sendPrivateMsg(..))")
+    @Before("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.sendPrivateMsg(..))")
     public void logSendPrivateMessage(JoinPoint joinPoint) {
         long qq = (long) joinPoint.getArgs()[0];
         Object msg = joinPoint.getArgs()[1];
@@ -60,8 +64,7 @@ public class RobotCallbackAspect {
         );
     }
 
-    @Before("execution(* de.honoka.qqrobot.framework.impl.tester." +
-            "TesterFramework.reply(..))")
+    @Before("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.reply(..))")
     public void logReplyMessage(JoinPoint joinPoint) {
         Long group = (Long) joinPoint.getArgs()[0];
         long qq = (long) joinPoint.getArgs()[1];

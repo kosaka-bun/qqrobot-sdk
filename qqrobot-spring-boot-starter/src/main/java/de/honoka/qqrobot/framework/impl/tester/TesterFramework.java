@@ -126,8 +126,7 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
         RobotMultipartMessage multipartMessage = new RobotMultipartMessage();
         for(TesterRobotMessage.Part part : message.getParts()) {
             if(part.getType().equals(TesterRobotMessage.PartType.AT)) {
-                multipartMessage.add(RobotMessageType.AT, part.getExtras()
-                        .get("qq").getAsLong());
+                multipartMessage.add(RobotMessageType.AT, part.getExtras().get("qq").getAsLong());
             } else {
                 multipartMessage.add(RobotMessageType.TEXT, part.getContent());
             }
@@ -142,17 +141,17 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
             if(qqOfConnection != qq) continue;
             JsonObject data = new JsonObject();
             data.addProperty("name", "Robot");
-            data.add("content", transform(null, qq, message)
-                    .toJsonArray());
-            connection.sendMessage(new TesterMessage(null)
+            data.add("content", transform(null, qq, message).toJsonArray());
+            connection.sendMessage(
+                new TesterMessage(null)
                     .setType(TesterMessageType.PRIVATE_MESSAGE)
                     .setData(data)
             );
         }
     }
-
+    
     @Override
-    public void sendGroupMsg(Long group, RobotMultipartMessage message) {
+    public void sendGroupMsg(long group, RobotMultipartMessage message) {
         for(TesterServerConnection connection : testerServer.getConnections()) {
             JsonObject data = new JsonObject();
             data.addProperty("name", "Robot");
@@ -166,12 +165,12 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
     }
 
     @Override
-    public String getGroupName(Long group) {
+    public String getGroupName(long group) {
         return "Tester Group";
     }
 
     @Override
-    public String getNickOrCard(Long group, long qq) {
+    public String getNickOrCard(long group, long qq) {
         for(TesterServerConnection connection : testerServer.getConnections()) {
             long qqOfConnection = connection.getData().get("qq").getAsLong();
             if(qqOfConnection == qq) {
@@ -182,7 +181,7 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
     }
 
     @Override
-    public boolean isMuted(Long group) {
+    public boolean isMuted(long group) {
         return false;
     }
 }

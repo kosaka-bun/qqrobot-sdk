@@ -38,8 +38,7 @@ public class TesterServerConnection {
 
     public void sendMessage(TesterMessage message) {
         try {
-            this.session.getBasicRemote().sendText(RobotBeanHolder
-                    .gson.toJson(message));
+            this.session.getBasicRemote().sendText(RobotBeanHolder.gson.toJson(message));
         } catch(Throwable t) {
             t.printStackTrace();
         }
@@ -52,8 +51,7 @@ public class TesterServerConnection {
 
     @OnMessage
     public void onMessage(String messageStr) {
-        TesterMessage message = RobotBeanHolder.gson.fromJson(messageStr,
-                TesterMessage.class);
+        TesterMessage message = RobotBeanHolder.gson.fromJson(messageStr, TesterMessage.class);
         switch(message.getType()) {
             case TesterMessageType.LOGIN:
                 sendMessage(onLogin(message));
@@ -74,9 +72,11 @@ public class TesterServerConnection {
     public void onClose() {
         testerServer.getConnections().remove(this);
         for(TesterServerConnection connection : testerServer.getConnections()) {
-            connection.sendMessage(new TesterMessage(null)
+            connection.sendMessage(
+                new TesterMessage(null)
                     .setType(TesterMessageType.UESR_LOGOUT)
-                    .setData(data));
+                    .setData(data)
+            );
         }
     }
 
@@ -90,8 +90,7 @@ public class TesterServerConnection {
         JsonObject resData = res.getData();
         if(StringUtils.equalsIgnoreCase(username, "robot")) {
             resData.addProperty("status", false);
-            resData.addProperty("message",
-                    "不能使用Robot作为用户名");
+            resData.addProperty("message", "不能使用Robot作为用户名");
             return res;
         }
         if(!ObjectUtils.allNotNull(qq, username) || username.isEmpty()) {
@@ -106,8 +105,7 @@ public class TesterServerConnection {
                 resData.addProperty("message", "该账号已登录");
                 return res;
             }
-            if(Objects.equals(connection.data.get("name")
-                    .getAsString(), username)) {
+            if(Objects.equals(connection.data.get("name").getAsString(), username)) {
                 resData.addProperty("status", false);
                 resData.addProperty("message", "该用户名已存在");
                 return res;
@@ -124,7 +122,8 @@ public class TesterServerConnection {
                 notifyMsgData.addProperty("name", username);
                 notifyMsgData.addProperty("qq", qq);
                 notifyMsgData.add("data", data);
-                connection.sendMessage(new TesterMessage(null)
+                connection.sendMessage(
+                    new TesterMessage(null)
                         .setType(TesterMessageType.NEW_USER_LOGIN)
                         .setData(notifyMsgData)
                 );
@@ -139,8 +138,7 @@ public class TesterServerConnection {
         JsonArray messageData = new JsonArray();
         for(TesterServerConnection connection : testerServer.getConnections()) {
             JsonObject item = new JsonObject();
-            item.addProperty("name", connection.data
-                    .get("name").getAsString());
+            item.addProperty("name", connection.data.get("name").getAsString());
             item.add("data", connection.data);
             messageData.add(item);
         }
@@ -155,35 +153,33 @@ public class TesterServerConnection {
         //收到消息，发送回执
         JsonObject resData = new JsonObject();
         resData.addProperty("status", true);
-        sendMessage(new TesterMessage(message.getId())
+        sendMessage(
+            new TesterMessage(message.getId())
                 .setType(TesterMessageType.GROUP_MESSAGE_RESPONSE)
                 .setData(resData)
         );
         //提醒其他用户
-        JsonArray content = message.getData().getAsJsonArray(
-                "content");
+        JsonArray content = message.getData().getAsJsonArray("content");
         testerServer.getExecutor().execute(() -> {
             for(TesterServerConnection connection : testerServer.getConnections()) {
-                if(connection.data.get("name").getAsString().equals(
-                        data.get("name").getAsString()))
+                if(connection.data.get("name").getAsString().equals(data.get("name").getAsString()))
                     continue;
                 JsonObject notifyMsgData = new JsonObject();
-                notifyMsgData.addProperty("name",
-                        data.get("name").getAsString());
+                notifyMsgData.addProperty("name", data.get("name").getAsString());
                 notifyMsgData.add("content", content);
-                connection.sendMessage(new TesterMessage(null)
+                connection.sendMessage(
+                    new TesterMessage(null)
                         .setType(TesterMessageType.GROUP_MESSAGE)
                         .setData(notifyMsgData)
                 );
             }
         });
         //处理消息
-        Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
-                testerServer.getFramework();
+        Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>) testerServer.getFramework();
         framework.getFrameworkCallback().onGroupMsg(
-                testerServer.getTesterProperties().getGroupNumber(),
-                data.get("qq").getAsLong(),
-                framework.transform(TesterRobotMessage.of(content))
+            testerServer.getTesterProperties().getGroupNumber(),
+            data.get("qq").getAsLong(),
+            framework.transform(TesterRobotMessage.of(content))
         );
     }
 
@@ -192,18 +188,17 @@ public class TesterServerConnection {
         //收到消息，发送回执
         JsonObject resData = new JsonObject();
         resData.addProperty("status", true);
-        sendMessage(new TesterMessage(message.getId())
+        sendMessage(
+            new TesterMessage(message.getId())
                 .setType(TesterMessageType.PRIVATE_MESSAGE_RESPONSE)
                 .setData(resData)
         );
         //处理消息
-        JsonArray content = message.getData().getAsJsonArray(
-                "content");
-        Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>)
-                testerServer.getFramework();
+        JsonArray content = message.getData().getAsJsonArray("content");
+        Framework<TesterRobotMessage> framework = (Framework<TesterRobotMessage>) testerServer.getFramework();
         framework.getFrameworkCallback().onPrivateMsg(
-                data.get("qq").getAsLong(),
-                framework.transform(TesterRobotMessage.of(content))
+            data.get("qq").getAsLong(),
+            framework.transform(TesterRobotMessage.of(content))
         );
     }
 }

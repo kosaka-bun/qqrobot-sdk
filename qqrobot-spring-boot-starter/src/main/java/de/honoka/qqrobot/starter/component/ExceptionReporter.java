@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,8 @@ public class ExceptionReporter {
      * 将错误信息发送到开发群
      */
     public void sendExceptionToDevelopingGroup(Throwable t) {
-        t.printStackTrace();    //首先将信息写入控制台
+        //首先将信息写入控制台
+        t.printStackTrace();
         try {
             //只发送和记录最根本的错误信息
             while(t.getCause() != null) t = t.getCause();
@@ -65,16 +65,11 @@ public class ExceptionReporter {
             //endregion
             //报告
             exceptionList.add(rows[0]);
-            RobotMultipartMessage reply = RobotMultipartMessage.of(
-                    "出现了问题，堆栈信息如下：\n");
-            reply.add(RobotMessage.image(getExceptionTextImg(exceptionText)));
+            RobotMultipartMessage reply = RobotMultipartMessage.of("出现了问题，堆栈信息如下：\n");
+            reply.add(RobotMessage.image(ImageUtils.textToImageBySize(exceptionText, 3500)));
             framework.sendGroupMsg(basicProperties.getDevelopingGroup(), reply);
         } catch(Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    protected InputStream getExceptionTextImg(String exceptionText) {
-        return ImageUtils.textToImageBySize(exceptionText, 3500);
     }
 }

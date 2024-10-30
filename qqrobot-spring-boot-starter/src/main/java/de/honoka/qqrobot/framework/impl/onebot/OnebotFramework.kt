@@ -75,14 +75,12 @@ class OnebotFramework(
         private fun handleMessageEvent(json: JSONObject) {
             //在线时长不足，忽略传入的消息，避免响应用户在上线前很久时所发的命令
             if(!online || System.currentTimeMillis() - onlineTimePoint < TIME_TO_WAIT_ONLINE) return
+            val group = json.getLong("group_id")
             val qq = json.getLong("user_id")
             val robotMessage = transform(OnebotMessage(json.getJSONArray("message")))
             when(json.getStr("message_type")) {
                 "private" -> frameworkCallback.onPrivateMsg(qq, robotMessage)
-                "group" -> {
-                    val group = json.getLong("group_id")
-                    frameworkCallback.onGroupMsg(group, qq, robotMessage)
-                }
+                "group" -> frameworkCallback.onGroupMsg(group, qq, robotMessage)
             }
         }
         
@@ -178,14 +176,21 @@ class OnebotFramework(
             return
         }
         val url = "${onebotProperties.urlPrefix}/get_status"
+        val onlineBeforeFlush = online
         online = try {
             val res = HttpUtil.post(url, "{}", HTTP_REQUEST_TIMEOUT).let { JSONUtil.parseObj(it) }
-            val online = res.getByPath("data.online") as Boolean
-            //此前不在线，现在在线，更新上线时间点
-            if(online && !this.online) onlineTimePoint = System.currentTimeMillis()
-            online
+            res.getByPath("data.online") as Boolean
         } catch(t: Throwable) {
             false
+        }
+        if(online != onlineBeforeFlush) {
+            //此前不在线，现在在线，更新上线时间点
+            if(online) {
+                log.info("QQ已在线，${TIME_TO_WAIT_ONLINE / 1000L}秒后开始处理消息")
+                onlineTimePoint = System.currentTimeMillis()
+            } else {
+                log.info("QQ已离线")
+            }
         }
     }
     
@@ -203,6 +208,7 @@ class OnebotFramework(
         }
     }
 
+    //group与qq参数均未使用
     override fun transform(group: Long?, qq: Long, message: RobotMultipartMessage): OnebotMessage {
         val onebotMessage = OnebotMessage()
         message.messageList.forEach {
@@ -232,6 +238,8 @@ class OnebotFramework(
         }
         return onebotMessage
     }
+    
+    private fun transform(message: RobotMultipartMessage) = transform(null, 0, message)
 
     override fun transform(onebotMessage: OnebotMessage): RobotMultipartMessage {
         val message = RobotMultipartMessage()
@@ -246,36 +254,34 @@ class OnebotFramework(
     
     override fun sendPrivateMsg(qq: Long, message: RobotMultipartMessage) {
         val contact = contactManager.searchContact(qq) ?: return
-        sendMessage(contact[0], qq, transform(contact[0], qq, message))
+        sendMessage(contact[0], qq, transform(message))
     }
-
+    
     override fun sendGroupMsg(group: Long, message: RobotMultipartMessage) {
         if(group !in contactManager.groups || isMuted(group)) return
-        sendMessage(group, null, transform(group, 0, message))
+        sendMessage(group, null, transform(message))
     }
     
     private fun sendMessage(group: Long?, qq: Long?, message: OnebotMessage) {
-        val apiName = if(group != null) "send_group_msg" else "send_private_msg"
+        val apiName = if(qq == null) "send_group_msg" else "send_private_msg"
         val url = "${onebotProperties.urlPrefix}/$apiName"
         for(i in 1..3) {
             try {
                 val res = HttpUtil.post(
                     url,
                     JSONObject().let {
-                        if(group != null) {
-                            it["group_id"] = group
-                        } else {
-                            it["user_id"] = qq
-                        }
+                        it["group_id"] = group
+                        it["user_id"] = qq
                         it["message"] = message.parts
                         it.toString()
                     },
                     HTTP_REQUEST_TIMEOUT
                 ).let { JSONUtil.parseObj(it) }
                 val retcode = res.getInt("retcode")
-                if(retcode != 0) throw Exception("retcode = $retcode")
+                val errMsg = res.getStr("message")
+                if(retcode != 0) throw Exception("retcode = $retcode，errMsg = $errMsg")
             } catch(t: Throwable) {
-                log.error("\n消息发送失败！已尝试次数：${i + 1}\n要发送的内容：\n${message.toRawString()}", t)
+                log.error("\n消息发送失败！已尝试次数：$i\n要发送的内容：\n${message.toRawString()}", t)
                 if(!basicProperties.resendOnSendFailed) break
                 continue
             }
