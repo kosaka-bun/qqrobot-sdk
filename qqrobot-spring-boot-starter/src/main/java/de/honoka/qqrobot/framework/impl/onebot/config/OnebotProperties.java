@@ -18,6 +18,8 @@ public class OnebotProperties {
     
     private Integer websocketPort;
     
+    private Integer fileReceiverPort;
+    
     /**
      * 定义缓存文件所存放的目录。<br>
      *

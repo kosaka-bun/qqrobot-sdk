@@ -14,6 +14,20 @@ import org.springframework.stereotype.Component;
 public class RobotCallbackAspect {
 
     private static final String SEPERATOR = StringUtils.repeat("-----", 7);
+    
+    @Before(
+        "execution(* de.honoka.qqrobot.starter.component.DefaultFrameworkCallback.onPrivateMsg" +
+            "(long, de.honoka.qqrobot.framework.api.model.RobotMultipartMessage)" +
+            ")"
+    )
+    public void logPrivateMessage(JoinPoint joinPoint) {
+        long qq = (long) joinPoint.getArgs()[0];
+        RobotMultipartMessage msg = (RobotMultipartMessage) joinPoint.getArgs()[1];
+        log.info(
+            "\nTester收到私聊消息：\nQQ：{}\n{}\n{}\n{}",
+            qq, SEPERATOR, msg.contentToString(), SEPERATOR
+        );
+    }
 
     @Before(
         "execution(* de.honoka.qqrobot.starter.component.DefaultFrameworkCallback.onGroupMsg" +
@@ -29,18 +43,14 @@ public class RobotCallbackAspect {
             group, qq, SEPERATOR, msg.contentToString(), SEPERATOR
         );
     }
-
-    @Before(
-        "execution(* de.honoka.qqrobot.starter.component.DefaultFrameworkCallback.onPrivateMsg" +
-            "(Long, long, de.honoka.qqrobot.framework.api.model.RobotMultipartMessage)" +
-            ")"
-    )
-    public void logPrivateMessage(JoinPoint joinPoint) {
+    
+    @Before("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.sendPrivateMsg(..))")
+    public void logSendPrivateMessage(JoinPoint joinPoint) {
         long qq = (long) joinPoint.getArgs()[0];
-        RobotMultipartMessage msg = (RobotMultipartMessage) joinPoint.getArgs()[1];
+        Object msg = joinPoint.getArgs()[1];
         log.info(
-            "\nTester收到私聊消息：\nQQ：{}\n{}\n{}\n{}",
-            qq, SEPERATOR, msg.contentToString(), SEPERATOR
+            "\nTester发送私聊消息：\nQQ：{}\n{}\n{}\n{}",
+            qq, SEPERATOR, msg, SEPERATOR
         );
     }
 
@@ -51,16 +61,6 @@ public class RobotCallbackAspect {
         log.info(
             "\nTester发送群消息：\n群号：{}\n{}\n{}\n{}",
             group, SEPERATOR, msg, SEPERATOR
-        );
-    }
-
-    @Before("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.sendPrivateMsg(..))")
-    public void logSendPrivateMessage(JoinPoint joinPoint) {
-        long qq = (long) joinPoint.getArgs()[0];
-        Object msg = joinPoint.getArgs()[1];
-        log.info(
-            "\nTester发送私聊消息：\nQQ：{}\n{}\n{}\n{}",
-            qq, SEPERATOR, msg, SEPERATOR
         );
     }
 

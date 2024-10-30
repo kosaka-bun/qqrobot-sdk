@@ -194,23 +194,10 @@ class OnebotFramework(
         }
     }
     
-    private fun writeResouceToFile(`in`: InputStream, filePath: String) {
-        val file = File(filePath)
-        try {
-            if(file.exists()) file.delete()
-            FileUtil.touch(file)
-            file.outputStream().use {
-                IoUtil.copy(`in`, it)
-            }
-        } catch(t: Throwable) {
-            if(file.exists()) file.delete()
-            throw t
-        }
-    }
-
     //group与qq参数均未使用
     override fun transform(group: Long?, qq: Long, message: RobotMultipartMessage): OnebotMessage {
         val onebotMessage = OnebotMessage()
+        val remoteMode = onebotProperties.fileReceiverPort != null
         message.messageList.forEach {
             when(it.type) {
                 TEXT -> {
@@ -219,19 +206,31 @@ class OnebotFramework(
                 }
                 AT -> onebotMessage.addAtPart(it.content as Long)
                 IMAGE -> {
-                    val path = Path(
-                        onebotProperties.imagePath,
-                        "${IdUtil.getSnowflakeNextId()}.png"
-                    ).toString()
-                    writeResouceToFile(it.content as InputStream, path)
-                    onebotMessage.addImagePart(path)
+                    val `in` = it.content as InputStream
+                    val fileName = "${IdUtil.getSnowflakeNextId()}.png"
+                    val path = if(remoteMode) {
+                        uploadFileToReceiver(`in`, "uploadImage", fileName)
+                    } else {
+                        Path(onebotProperties.imagePath, fileName).toString().run {
+                            writeResouceToFile(`in`, this)
+                            this
+                        }
+                    }
+                    onebotMessage.addImagePart(path, !remoteMode)
                 }
                 FILE -> {
+                    val `in` = it.content as InputStream
                     val fileName = "${IdUtil.getSnowflakeNextId()}.bin"
                     val displayFileName = it.others["fileName"] as String? ?: fileName
-                    val path = Path(onebotProperties.fileToUploadPath, fileName).toString()
-                    writeResouceToFile(it.content as InputStream, path)
-                    onebotMessage.addFilePart(path, displayFileName)
+                    val path = if(remoteMode) {
+                        uploadFileToReceiver(`in`, "uploadFile", displayFileName)
+                    } else {
+                        Path(onebotProperties.fileToUploadPath, fileName).toString().run {
+                            writeResouceToFile(it.content as InputStream, this)
+                            this
+                        }
+                    }
+                    onebotMessage.addFilePart(path, displayFileName, !remoteMode)
                 }
                 else -> {}
             }
@@ -250,6 +249,34 @@ class OnebotFramework(
             }
         }
         return message
+    }
+    
+    private fun writeResouceToFile(`in`: InputStream, filePath: String) {
+        val file = File(filePath)
+        try {
+            if(file.exists()) file.delete()
+            FileUtil.touch(file)
+            file.outputStream().use {
+                IoUtil.copy(`in`, it)
+            }
+        } catch(t: Throwable) {
+            if(file.exists()) file.delete()
+            throw t
+        }
+    }
+    
+    private fun uploadFileToReceiver(`in`: InputStream, urlPath: String, fileName: String): String {
+        val url = "${onebotProperties.fileReceiverUrlPrefix}/$urlPath"
+        val content = IoUtil.readBytes(`in`)
+        HttpUtil.createPost(url).run {
+            form("file", content, fileName)
+            timeout(HTTP_REQUEST_TIMEOUT)
+            val res = JSONUtil.parseObj(execute().body())
+            if(res.getBool("status") != true) {
+                throw Exception("File receiver returns failed status: ${res.getStr("msg")}")
+            }
+            return res.getStr("data")
+        }
     }
     
     override fun sendPrivateMsg(qq: Long, message: RobotMultipartMessage) {

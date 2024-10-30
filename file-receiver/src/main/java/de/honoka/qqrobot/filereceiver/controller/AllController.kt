@@ -28,6 +28,16 @@ class AllController(private val mainProperties: MainProperties) {
         path.toPath().normalize().toString()
     }
     
+    @PostMapping("/uploadImage")
+    fun uploadImage(@RequestParam file: MultipartFile): ApiResponse<*> = run {
+        ApiResponse.success(writeToFile("image", "png", file.inputStream))
+    }
+    
+    @PostMapping("/uploadFile")
+    fun uploadFile(@RequestParam file: MultipartFile): ApiResponse<*> = run {
+        ApiResponse.success(writeToFile("file", "bin", file.inputStream))
+    }
+    
     private fun writeToFile(subDir: String, fileExt: String, `in`: InputStream): String {
         val path = Path(
             filePathPrefix,
@@ -44,15 +54,5 @@ class AllController(private val mainProperties: MainProperties) {
                 return replaceFirst("file:/", "file:///")
             }
         }
-    }
-
-    @PostMapping("/uploadImage")
-    fun uploadImage(@RequestParam file: MultipartFile): ApiResponse<*> = run {
-        ApiResponse.success(writeToFile("image", "png", file.inputStream))
-    }
-    
-    @PostMapping("/uploadFile")
-    fun uploadFile(@RequestParam file: MultipartFile): ApiResponse<*> = run {
-        ApiResponse.success(writeToFile("file", "bin", file.inputStream))
     }
 }

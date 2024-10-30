@@ -6,7 +6,7 @@ qqrobot-spring-boot-starter = "1.4.0-dev"
 file-receiver = "1.0.0-dev"
 
 # dependencies version
-honoka-kotlin-utils = "1.0.0"
+honoka-kotlin-utils = "1.0.1-dev"
 honoka-framework-utils = "1.0.5-dev"
 lib-qqrobot-framework-api = "1.1.0-dev"
 spring-boot = "2.7.5"

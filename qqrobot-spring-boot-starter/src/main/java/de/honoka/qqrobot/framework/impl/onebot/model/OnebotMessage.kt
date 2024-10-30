@@ -2,6 +2,7 @@ package de.honoka.qqrobot.framework.impl.onebot.model
 
 import cn.hutool.json.JSONArray
 import cn.hutool.json.JSONObject
+import de.honoka.sdk.util.file.FileUtils
 import java.io.File
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -38,26 +39,31 @@ class OnebotMessage(messageJson: JSONArray? = null) : AutoCloseable {
         parts.add(part)
     }
     
-    fun addImagePart(path: String) {
+    fun addImagePart(path: String, toUri: Boolean) {
         val part = Part("image", JSONObject().also {
-            it["file"] = File(path).toURI().toASCIIString().run {
-                if(!contains("file:///")) {
-                    return@run replace("file:/", "file:///")
+            it["file"] = if(toUri) {
+                FileUtils.toUriPath(path).apply {
+                    externalResources.add(path)
                 }
-                this
+            } else {
+                path
             }
         })
         parts.add(part)
-        externalResources.add(path)
     }
     
-    fun addFilePart(path: String, fileName: String) {
+    fun addFilePart(path: String, fileName: String, toUri: Boolean) {
         val part = Part("file", JSONObject().also {
-            it["file"] = File(path).toURI().toASCIIString()
+            it["file"] = if(toUri) {
+                FileUtils.toUriPath(path).apply {
+                    externalResources.add(path)
+                }
+            } else {
+                path
+            }
             it["name"] = fileName
         })
         parts.add(part)
-        externalResources.add(path)
     }
     
     fun toJson(): JSONArray = JSONArray(parts)

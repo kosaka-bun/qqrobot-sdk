@@ -1,5 +1,8 @@
 #file: noinspection SpringBootApplicationYaml
 
+server:
+  port: 8081
+
 file-receiver:
   custom-path: ''
   enable-gui: true
