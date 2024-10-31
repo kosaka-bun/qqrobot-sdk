@@ -4,7 +4,6 @@ import cn.hutool.core.io.FileUtil
 import cn.hutool.core.io.IoUtil
 import cn.hutool.core.util.IdUtil
 import de.honoka.qqrobot.filereceiver.config.MainProperties
-import de.honoka.sdk.util.file.FileUtils
 import de.honoka.sdk.util.framework.web.ApiResponse
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -16,17 +15,6 @@ import kotlin.io.path.Path
 
 @RestController
 class AllController(private val mainProperties: MainProperties) {
-    
-    private val filePathPrefix: String = run {
-        if(mainProperties.customPath.isNullOrBlank()) {
-            return@run Path(FileUtils.getMainClasspath(), "upload").toString()
-        }
-        val path = File(mainProperties.customPath!!).apply {
-            if(!exists()) mkdirs()
-            if(!isDirectory) throw Exception("Not directory: $absolutePath")
-        }
-        path.toPath().normalize().toString()
-    }
     
     @PostMapping("/uploadImage")
     fun uploadImage(@RequestParam file: MultipartFile): ApiResponse<*> = run {
@@ -40,7 +28,7 @@ class AllController(private val mainProperties: MainProperties) {
     
     private fun writeToFile(subDir: String, fileExt: String, `in`: InputStream): String {
         val path = Path(
-            filePathPrefix,
+            mainProperties.filePathPrefix,
             subDir,
             "${IdUtil.getSnowflakeNextId()}.$fileExt"
         ).toString()
