@@ -79,8 +79,19 @@ class OnebotFramework(
             val qq = json.getLong("user_id")
             val robotMessage = transform(OnebotMessage(json.getJSONArray("message")))
             when(json.getStr("message_type")) {
-                "private" -> frameworkCallback.onPrivateMsg(qq, robotMessage)
-                "group" -> frameworkCallback.onGroupMsg(group, qq, robotMessage)
+                "private" -> {
+                    if(group != null && !contactManager.memberToGroupCache.containsKey(qq)) {
+                        contactManager.memberToGroupCache[qq] = group
+                    }
+                    frameworkCallback.onPrivateMsg(qq, robotMessage)
+                }
+                "group" -> {
+                    //临时添加一个群信息
+                    contactManager.groupCache[group] = ContactManager.Group(
+                        "【未知】", ConcurrentHashMap()
+                    )
+                    frameworkCallback.onGroupMsg(group, qq, robotMessage)
+                }
             }
         }
         
@@ -135,6 +146,9 @@ class OnebotFramework(
     @Volatile
     private var onlineTimePoint = 0L
     
+    /**
+     * 在群中被禁言结束时的时间点
+     */
     private val groupToMuteEndTimePointMap = ConcurrentHashMap<Long, Long>()
 
     @Synchronized
@@ -184,11 +198,16 @@ class OnebotFramework(
             false
         }
         if(online != onlineBeforeFlush) {
-            //此前不在线，现在在线，更新上线时间点
             if(online) {
+                //此前不在线，现在在线，更新上线时间点
                 log.info("QQ已在线，${TIME_TO_WAIT_ONLINE / 1000L}秒后开始处理消息")
                 onlineTimePoint = System.currentTimeMillis()
+                RobotStarter.globalThreadPool.submit {
+                    Thread.sleep(TIME_TO_WAIT_ONLINE)
+                    log.info("已开始处理消息")
+                }
             } else {
+                //此前在线，现在不在线
                 log.info("QQ已离线")
             }
         }
@@ -285,7 +304,7 @@ class OnebotFramework(
     }
     
     override fun sendGroupMsg(group: Long, message: RobotMultipartMessage) {
-        if(group !in contactManager.groups || isMuted(group)) return
+        if(!contactManager.containsGroup(group) || isMuted(group)) return
         sendMessage(group, null, transform(message))
     }
     
@@ -318,11 +337,11 @@ class OnebotFramework(
         message.close()
     }
 
-    override fun getGroupName(group: Long): String = contactManager.groups[group]?.name ?: "【未知】"
+    override fun getGroupName(group: Long): String = contactManager.groupCache[group]?.name ?: "【未知】"
 
     override fun getNickOrCard(group: Long, qq: Long): String {
-        val groupObj = contactManager.groups[group]
-        val nickname = contactManager.friends[qq]?.name ?: "【未知】"
+        val groupObj = contactManager.groupCache[group]
+        val nickname = contactManager.friendCache[qq]?.name ?: "【未知】"
         return groupObj?.memberList?.get(qq)?.name ?: nickname
     }
 

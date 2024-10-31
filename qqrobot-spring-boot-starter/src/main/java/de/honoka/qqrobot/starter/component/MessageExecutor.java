@@ -91,6 +91,62 @@ public class MessageExecutor {
         }
         menu = menuBuilder.substring(0, menuBuilder.length() - 1);
     }
+    
+    /**
+     * 消息统一处理方法，处理各类群消息（群、讨论组）与各类私聊消息（好友，临时会话）
+     */
+    @SuppressWarnings("unchecked")
+    public RobotMultipartMessage executeMsg(Long group, long qq, RobotMultipartMessage msg) {
+        //起始操作，优化要处理的信息
+        //移除空串部分
+        msg.removeEmptyPart();
+        //处理信息前先去掉信息左右两侧的空格
+        if(msg.getFirst().getType().equals(RobotMessageType.TEXT)) {
+            RobotMessage<String> part = (RobotMessage<String>) msg.getFirst();
+            String str = part.getContent();
+            str = StringUtils.stripStart(str, null);
+            part.setContent(str);
+        }
+        if(msg.messageList.get(msg.messageList.size() - 1).getType().equals(RobotMessageType.TEXT)) {
+            RobotMessage<String> part = (RobotMessage<String>) msg.messageList.get(msg.messageList.size() - 1);
+            String str = part.getContent();
+            str = StringUtils.stripEnd(str, null);
+            part.setContent(str);
+        }
+        //进行简繁转换
+        for(RobotMessage<?> part0 : msg.messageList) {
+            if(!part0.getType().equals(RobotMessageType.TEXT)) continue;
+            RobotMessage<String> part = (RobotMessage<String>) part0;
+            part.setContent(ZhConverterUtil.toSimple(part.getContent()));
+        }
+        //判断发送消息的qq是否在会话列表内
+        RobotSession session = sessionManager.getCurrentSession(group, qq);
+        //如果发送此消息的qq在会话列表内，则此qq发送的任何信息都需要被处理
+        if(session != null) {
+            //检查总开关状态，若未开启，则不将信息传递给会话
+            if(!attributes.isEnabled()) return null;
+            /*
+             * reply是驱动会话进行的动力，waitingForReply方法会时刻监听reply的内容，
+             * 直到reply不为null时返回
+             */
+            //记录此消息，传递给会话线程
+            session.setReply(msg);
+            //截获此信息，不再进行下面的命令匹配
+            return null;
+        }
+        //若不处于会话当中，则进行命令匹配
+        //处理消息
+        RobotMultipartMessage reply = executeMsg0(group, qq, msg);
+        //结束操作，用于对消息进行一些记录或分析
+        //内部类中需要局部变量未被更改才能调用
+        RobotMultipartMessage replyCopy = (RobotMultipartMessage) Objects.requireNonNull(reply).clone();
+        //在新线程中，忽略异常地进行结束操作
+        RobotStarter.globalThreadPool.submit(() -> {
+            //记录消息处理的相关信息
+            robotLogger.logMsgExecution(group, qq, msg, replyCopy);
+        });
+        return reply;
+    }
 
     @SuppressWarnings("unchecked")
     private RobotMultipartMessage executeMsg0(Long group, long qq, RobotMultipartMessage msg) {
@@ -165,62 +221,6 @@ public class MessageExecutor {
             //找到了命令但没有正确处理
             if(foundCommand) reply = RobotMultipartMessage.of(ConstantMessage.ERROR);
         }
-        return reply;
-    }
-
-    /**
-     * 消息统一处理方法，处理各类群消息（群、讨论组）与各类私聊消息（好友，临时会话）
-     */
-    @SuppressWarnings("unchecked")
-    public RobotMultipartMessage executeMsg(Long group, long qq, RobotMultipartMessage msg) {
-        //起始操作，优化要处理的信息
-        //移除空串部分
-        msg.removeEmptyPart();
-        //处理信息前先去掉信息左右两侧的空格
-        if(msg.getFirst().getType().equals(RobotMessageType.TEXT)) {
-            RobotMessage<String> part = (RobotMessage<String>) msg.getFirst();
-            String str = part.getContent();
-            str = StringUtils.stripStart(str, null);
-            part.setContent(str);
-        }
-        if(msg.messageList.get(msg.messageList.size() - 1).getType().equals(RobotMessageType.TEXT)) {
-            RobotMessage<String> part = (RobotMessage<String>) msg.messageList.get(msg.messageList.size() - 1);
-            String str = part.getContent();
-            str = StringUtils.stripEnd(str, null);
-            part.setContent(str);
-        }
-        //进行简繁转换
-        for(RobotMessage<?> part0 : msg.messageList) {
-            if(!part0.getType().equals(RobotMessageType.TEXT)) continue;
-            RobotMessage<String> part = (RobotMessage<String>) part0;
-            part.setContent(ZhConverterUtil.toSimple(part.getContent()));
-        }
-        //判断发送消息的qq是否在会话列表内
-        RobotSession session = sessionManager.getCurrentSession(group, qq);
-        //如果发送此消息的qq在会话列表内，则此qq发送的任何信息都需要被处理
-        if(session != null) {
-            //检查总开关状态，若未开启，则不将信息传递给会话
-            if(!attributes.isEnabled()) return null;
-            /*
-             * reply是驱动会话进行的动力，waitingForReply方法会时刻监听reply的内容，
-             * 直到reply不为null时返回
-             */
-            //记录此消息，传递给会话线程
-            session.setReply(msg);
-            //截获此信息，不再进行下面的命令匹配
-            return null;
-        }
-        //若不处于会话当中，则进行命令匹配
-        //处理消息
-        RobotMultipartMessage reply = executeMsg0(group, qq, msg);
-        //结束操作，用于对消息进行一些记录或分析
-        //内部类中需要局部变量未被更改才能调用
-        RobotMultipartMessage replyCopy = (RobotMultipartMessage) Objects.requireNonNull(reply).clone();
-        //在新线程中，忽略异常地进行结束操作
-        RobotStarter.globalThreadPool.submit(() -> {
-            //记录消息处理的相关信息
-            robotLogger.logMsgExecution(group, qq, msg, replyCopy);
-        });
         return reply;
     }
 }
