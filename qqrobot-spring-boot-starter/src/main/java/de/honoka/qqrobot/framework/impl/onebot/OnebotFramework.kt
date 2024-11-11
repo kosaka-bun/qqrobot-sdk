@@ -49,6 +49,7 @@ class OnebotFramework(
     inner class WebSocketHandlerImpl : WebSocketHandler {
         
         override fun afterConnectionEstablished(session: WebSocketSession) {
+            log.info("WebSocket连接已建立")
             /*
              * 若不采用异步，则在这个方法返回之前，webSocketClient.doHandshake().get()语句
              * 都不会返回。
@@ -112,10 +113,13 @@ class OnebotFramework(
         }
         
         override fun afterConnectionClosed(session: WebSocketSession, closeStatus: CloseStatus) {
-            frameworkCallback.onShutdown()
-            if(started) {
-                //不直接使用reboot，以确保不会和自动重连任务相冲突，导致执行两次重启
-                checkIsActive()
+            log.info("WebSocket连接已断开")
+            RobotStarter.globalThreadPool.submit {
+                frameworkCallback.onShutdown()
+                if(started) {
+                    //不直接使用reboot，以确保不会和自动重连任务相冲突，导致执行两次重启
+                    checkIsActive()
+                }
             }
         }
         

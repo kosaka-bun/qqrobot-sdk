@@ -34,8 +34,7 @@ public class MiraiEventListener extends SimpleListenerHost {
     @EventHandler
     public void onRelogin(BotReloginEvent e) {
         log.info("平台重新登录");
-        if(!miraiFramework.getBasicProperties().getSendTestMessageOnRelogin())
-            return;
+        if(!miraiFramework.getBasicProperties().getSendTestMessageOnRelogin()) return;
         //发送测试消息
         boolean success = miraiFramework.sendTestMessageOnRelogin();
         //发送成功，返回

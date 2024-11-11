@@ -26,12 +26,12 @@ import java.util.*;
 public class AdminApiController {
 
     public static final String LOGIN_USERNAME = "robot_admin";
-
-    private static final int
-            //使用记录的每页记录条数
-            USAGE_LOG_PAGE_SIZE = 20,
-            //异常信息最大显示条数
-            EXCEPTION_RECORD_MAX_SIZE = 10;
+    
+    //使用记录的每页记录条数
+    private static final int USAGE_LOG_PAGE_SIZE = 20;
+    
+    //异常信息最大显示条数
+    private static final int EXCEPTION_RECORD_MAX_SIZE = 10;
 
     //region components
 
@@ -96,10 +96,8 @@ public class AdminApiController {
     public ApiResponse<?> mainInfo() {
         Map<String, Object> data = new HashMap<>();
         data.put("system_info", new SystemInfoBean());
-        data.put("will_send_test_message_on_relogin", basicProperties
-                .getSendTestMessageOnRelogin());
-        data.put("will_resend_on_send_failed", basicProperties
-                .getResendOnSendFailed());
+        data.put("will_send_test_message_on_relogin", basicProperties.getSendTestMessageOnRelogin());
+        data.put("will_resend_on_send_failed", basicProperties.getResendOnSendFailed());
         return ApiResponse.success(null, data);
     }
 
@@ -112,8 +110,7 @@ public class AdminApiController {
 
     @RequestMapping("/switch/send_test_message")
     public ApiResponse<?> switchWillSendTestMessageOnRelogin() {
-        basicProperties.setSendTestMessageOnRelogin(!basicProperties
-                .getSendTestMessageOnRelogin());
+        basicProperties.setSendTestMessageOnRelogin(!basicProperties.getSendTestMessageOnRelogin());
         return ApiResponse.success(null);
     }
 
@@ -125,8 +122,7 @@ public class AdminApiController {
     }
 
     @RequestMapping("/usage_log")
-    public String getUsageLog(
-            @RequestParam(required = false, defaultValue = "1") int page) {
+    public String getUsageLog(@RequestParam(required = false, defaultValue = "1") int page) {
         int maxPage;
         //获取信息
         //计算最大页数
