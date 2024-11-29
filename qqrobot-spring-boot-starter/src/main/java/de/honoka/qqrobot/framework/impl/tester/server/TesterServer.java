@@ -2,11 +2,11 @@ package de.honoka.qqrobot.framework.impl.tester.server;
 
 import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
+import jakarta.annotation.Resource;
 import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;

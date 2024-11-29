@@ -7,11 +7,11 @@ import de.honoka.qqrobot.framework.impl.onebot.OnebotFramework
 import de.honoka.qqrobot.framework.impl.onebot.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.config.urlPrefix
 import de.honoka.qqrobot.starter.RobotStarter
+import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
-import javax.annotation.PostConstruct
 
 @Component
 class ContactManager(private val onebotProperties: OnebotProperties) {

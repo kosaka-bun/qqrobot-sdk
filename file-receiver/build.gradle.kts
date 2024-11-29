@@ -14,8 +14,7 @@ dependencies {
     kotlin(project)
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation(libs.honoka.kotlin.utils)
-    implementation(libs.honoka.framework.utils)
+    implementation(libs.honoka.spring.boot.starter)
     //仅用于避免libs.versions.toml中产生version变量未使用的提示
     libs.versions.kotlin.coroutines
 }

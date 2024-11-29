@@ -10,9 +10,9 @@ import de.honoka.qqrobot.starter.component.logger.entity.ExceptionRecord;
 import de.honoka.qqrobot.starter.component.logger.entity.UsageLog;
 import de.honoka.sdk.util.text.ExceptionUtils;
 import de.honoka.sdk.util.various.Retrier;
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 
-import javax.annotation.Resource;
 import java.util.Date;
 
 @ConditionalComponent(ConditionalBeans.class)

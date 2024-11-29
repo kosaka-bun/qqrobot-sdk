@@ -14,6 +14,7 @@ import de.honoka.qqrobot.framework.impl.onebot.config.*
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
 import de.honoka.qqrobot.starter.RobotBasicProperties
 import de.honoka.qqrobot.starter.RobotStarter
+import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -22,7 +23,6 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient
 import java.io.File
 import java.io.InputStream
 import java.util.concurrent.ConcurrentHashMap
-import javax.annotation.PreDestroy
 import kotlin.io.path.Path
 
 /**

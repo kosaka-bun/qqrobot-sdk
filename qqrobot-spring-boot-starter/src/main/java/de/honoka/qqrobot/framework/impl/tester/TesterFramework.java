@@ -13,6 +13,7 @@ import de.honoka.qqrobot.framework.impl.tester.model.TesterRobotMessage;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServer;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServerConnection;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
+import jakarta.annotation.Resource;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;

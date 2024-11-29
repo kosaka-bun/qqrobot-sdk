@@ -8,10 +8,10 @@ import de.honoka.qqrobot.starter.component.logger.RobotLogger;
 import de.honoka.sdk.util.code.ActionUtils;
 import de.honoka.sdk.util.text.ExceptionUtils;
 import de.honoka.sdk.util.various.ImageUtils;
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 

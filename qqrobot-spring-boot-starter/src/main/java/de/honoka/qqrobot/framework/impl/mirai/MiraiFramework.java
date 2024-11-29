@@ -13,6 +13,8 @@ import de.honoka.qqrobot.framework.impl.mirai.model.MiraiMessage;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.sdk.util.file.FileUtils;
 import de.honoka.sdk.util.text.TextUtils;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -31,8 +33,6 @@ import org.jsoup.Jsoup;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.FileSystems;

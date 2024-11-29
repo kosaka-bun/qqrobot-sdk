@@ -9,15 +9,15 @@ import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
 import de.honoka.qqrobot.starter.component.logger.entity.ExceptionRecord;
 import de.honoka.qqrobot.starter.component.logger.entity.UsageLog;
+import de.honoka.sdk.spring.starter.core.web.ApiResponse;
 import de.honoka.sdk.util.code.ActionUtils;
-import de.honoka.sdk.util.framework.web.ApiResponse;
 import de.honoka.sdk.util.system.SystemInfoBean;
 import de.honoka.sdk.util.text.TextUtils;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 @CrossOrigin

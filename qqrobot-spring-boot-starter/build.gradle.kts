@@ -24,9 +24,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-configuration-processor".also {
         annotationProcessor(it)
     })
-    implementation(libs.honoka.kotlin.utils)
-    implementation(libs.honoka.framework.utils)
-    implementationApi(libs.qqrobot.framework.api)
+    implementation(libs.honoka.spring.boot.starter)
+    implementationApi("de.honoka.qqrobot:qqrobot-framework-api:1.1.0-dev")
     implementation(libs.mirai.core)
     implementation("com.google.code.gson:gson")
     implementation("com.github.houbb:opencc4j:1.6.0")

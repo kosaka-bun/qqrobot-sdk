@@ -2,10 +2,10 @@ package de.honoka.qqrobot.starter.component.logger.dao;
 
 import de.honoka.qqrobot.starter.component.logger.LoggerServer;
 import de.honoka.qqrobot.starter.component.logger.entity.UsageLog;
+import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

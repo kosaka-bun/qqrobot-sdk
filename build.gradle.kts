@@ -30,7 +30,7 @@ subprojects {
     group = rootProject.group
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = sourceCompatibility
         withSourcesJar()
     }

@@ -2,8 +2,7 @@ package de.honoka.qqrobot.framework;
 
 import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.framework.api.FrameworkCallback;
-
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 public abstract class BaseFramework<M> extends Framework<M> {
     

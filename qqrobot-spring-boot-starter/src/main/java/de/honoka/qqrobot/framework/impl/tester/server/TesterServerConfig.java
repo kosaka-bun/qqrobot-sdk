@@ -1,6 +1,7 @@
 package de.honoka.qqrobot.framework.impl.tester.server;
 
 import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
+import jakarta.annotation.Resource;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
@@ -8,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
-
-import javax.annotation.Resource;
 
 @Getter
 @Configuration

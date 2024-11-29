@@ -5,9 +5,9 @@ import de.honoka.qqrobot.starter.common.annotation.Command;
 import de.honoka.qqrobot.starter.common.annotation.RobotController;
 import de.honoka.qqrobot.starter.component.MessageExecutor;
 import de.honoka.sdk.util.various.ImageUtils;
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 
-import javax.annotation.Resource;
 import java.io.InputStream;
 
 @SuppressWarnings("unused")

@@ -2,12 +2,12 @@ package de.honoka.qqrobot.starter.component.session;
 
 import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.sdk.util.code.ThrowsConsumer;
+import jakarta.annotation.Resource;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
