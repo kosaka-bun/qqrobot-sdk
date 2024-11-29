@@ -10,6 +10,10 @@ fun Project.publishing(configure: Action<PublishingExtension>) {
     extensions.configure("publishing", configure)
 }
 
-fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? = run {
-    add("implementation", dependencyNotation)
+fun DependencyHandler.implementation(dn: Any): Dependency? = run {
+    add("implementation", dn)
+}
+
+fun DependencyHandler.api(dn: Any): Dependency? = run {
+    add("api", dn)
 }

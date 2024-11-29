@@ -1,4 +1,5 @@
 import de.honoka.gradle.buildsrc.MavenPublish.setupVersionAndPublishing
+import de.honoka.gradle.buildsrc.implementationApi
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -25,9 +26,7 @@ dependencies {
     })
     implementation(libs.honoka.kotlin.utils)
     implementation(libs.honoka.framework.utils)
-    implementation(libs.qqrobot.framework.api.also {
-        api(it)
-    })
+    implementationApi(libs.qqrobot.framework.api)
     implementation(libs.mirai.core)
     implementation("com.google.code.gson:gson")
     implementation("com.github.houbb:opencc4j:1.6.0")
@@ -36,7 +35,7 @@ dependencies {
 }
 
 tasks {
-    compileJava {
+    compileKotlin {
         dependsOn(":qqrobot-framework-api:publish")
     }
 }

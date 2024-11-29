@@ -8,9 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-/**
- * 解决循环依赖
- */
 @Getter
 @Component
 public class RobotBeanHolder {
@@ -19,7 +16,7 @@ public class RobotBeanHolder {
     private ApplicationContext applicationContext;
 
     public static final Gson gson = new GsonBuilder()
-            .serializeNulls()
-            .setDateFormat("yyyy-MM-dd HH:mm:ss")
-            .create();
+        .serializeNulls()
+        .setDateFormat("yyyy-MM-dd HH:mm:ss")
+        .create();
 }
