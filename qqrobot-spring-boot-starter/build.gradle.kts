@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.honoka.spring.boot.starter)
     implementationApi("de.honoka.qqrobot:qqrobot-framework-api:1.1.0-dev")
     implementation(libs.mirai.core)
+    implementation(libs.mirai.console.compiler.annotations)
     implementation("com.google.code.gson:gson")
     implementation("com.github.houbb:opencc4j:1.6.0")
     implementation("org.hibernate.validator:hibernate-validator")

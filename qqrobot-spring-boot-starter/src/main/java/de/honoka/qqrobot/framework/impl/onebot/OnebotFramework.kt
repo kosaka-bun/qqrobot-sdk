@@ -160,7 +160,7 @@ class OnebotFramework(
         started = true
         if(webSocketSession?.isOpen == true) return
         val url = "${onebotProperties.websocketUrlPrefix}/event"
-        webSocketSession = webSocketClient.doHandshake(webSocketHandler, url).get()
+        webSocketSession = webSocketClient.execute(webSocketHandler, url).get()
     }
 
     @PreDestroy

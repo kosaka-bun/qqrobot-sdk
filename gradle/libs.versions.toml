@@ -26,4 +26,5 @@ honoka-spring-boot-starter = { module = "de.honoka.sdk:honoka-spring-boot-starte
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 mirai-core = { module = "net.mamoe:mirai-core-jvm", version.ref = "mirai" }
+mirai-console-compiler-annotations = { module = "net.mamoe:mirai-console-compiler-annotations-jvm", version.ref = "mirai" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }

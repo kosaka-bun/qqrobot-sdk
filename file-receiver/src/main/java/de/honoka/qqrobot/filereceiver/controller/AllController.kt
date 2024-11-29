@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil
 import cn.hutool.core.io.IoUtil
 import cn.hutool.core.util.IdUtil
 import de.honoka.qqrobot.filereceiver.config.MainProperties
-import de.honoka.sdk.util.framework.web.ApiResponse
+import de.honoka.sdk.spring.starter.core.web.ApiResponse
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
