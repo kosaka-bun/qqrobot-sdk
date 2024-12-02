@@ -87,10 +87,12 @@ class OnebotFramework(
                     frameworkCallback.onPrivateMsg(qq, robotMessage)
                 }
                 "group" -> {
-                    //临时添加一个群信息
-                    contactManager.groupCache[group] = ContactManager.Group(
-                        "【未知】", ConcurrentHashMap()
-                    )
+                    if(!contactManager.groupCache.containsKey(group)) {
+                        //临时添加一个群信息
+                        contactManager.groupCache[group] = ContactManager.Group(
+                            "【未知】", ConcurrentHashMap()
+                        )
+                    }
                     frameworkCallback.onGroupMsg(group, qq, robotMessage)
                 }
             }

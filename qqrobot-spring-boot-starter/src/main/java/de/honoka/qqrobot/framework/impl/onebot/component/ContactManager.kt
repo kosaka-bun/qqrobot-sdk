@@ -105,7 +105,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
             res.getJSONArray("data").forEach {
                 it as JSONObject
                 var name = it.getStr("card")
-                if(name?.isNotBlank() == true) name = it.getStr("nickname")
+                if(name?.isNotBlank() != true) name = it.getStr("nickname")
                 val qq = it.getLong("user_id")
                 val contact = Contact(name)
                 memberList[qq] = contact

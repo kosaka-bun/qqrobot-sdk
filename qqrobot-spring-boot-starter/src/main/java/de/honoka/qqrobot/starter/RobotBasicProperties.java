@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.starter;
 
+import de.honoka.qqrobot.framework.FrameworkEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -42,7 +43,7 @@ public class RobotBasicProperties {
     /**
      * 使用哪个框架作为实现（默认为tester）
      */
-    private String framework = "tester";
+    private FrameworkEnum framework = FrameworkEnum.TESTER;
 
     /**
      * 消息发送失败时是否重发消息

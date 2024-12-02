@@ -1,12 +1,12 @@
 [versions]
 # project modules version
 root = "2.0.0-dev"
-qqrobot-framework-api = "2.0.0-dev"
+qqrobot-framework-api = "2.0.0"
 qqrobot-spring-boot-starter = "2.0.0-dev"
-file-receiver = "2.0.0-dev"
+file-receiver = "1.0.0"
 
 # dependencies version
-honoka-spring-boot-starter = "2.0.0"
+honoka-spring-boot-starter = "1.0.0"
 spring-boot = "3.2.5"
 mirai = "2.16.0"
 kotlin = "1.8.10"

@@ -1,4 +1,5 @@
 import de.honoka.gradle.buildsrc.MavenPublish.defineCheckVersionOfProjectsTask
+import de.honoka.gradle.buildsrc.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.charset.StandardCharsets
 
@@ -7,7 +8,7 @@ plugins {
     java
     `java-library`
     `maven-publish`
-    alias(libs.plugins.dependency.management) apply false
+    alias(libs.plugins.dependency.management)
     alias(libs.plugins.kotlin) apply false
     /*
      * Lombok Kotlin compiler plugin is an experimental feature.
@@ -26,6 +27,8 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
+    
+    val libs = rootProject.libs
 
     group = rootProject.group
 
@@ -34,9 +37,17 @@ subprojects {
         targetCompatibility = sourceCompatibility
         withSourcesJar()
     }
+    
+    dependencyManagement {
+        imports {
+            mavenBom(libs.kotlin.bom.get().toString())
+        }
+    }
 
     dependencies {
-        val libs = rootProject.libs
+        kotlin(rootProject)
+        //仅用于避免libs.versions.toml中产生version变量未使用的提示
+        libs.versions.kotlin.coroutines
         compileOnly(libs.lombok.also {
             annotationProcessor(it)
             testCompileOnly(it)

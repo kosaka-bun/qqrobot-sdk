@@ -1,5 +1,26 @@
 # 更新日志
 
+## 2.0.0
+#### 工程
+- 新增file-receiver项目，用于辅助qqrobot-spring-boot-starter的OneBot实现，在OneBot框架所在的操作系统中接受机器人应用要发送的图片内容。
+- 移动qqrobot-spring-boot-starter/src/main/web至qqrobot-spring-boot-starter目录下，并将其与其子项目（admin、tester）设置为gradle子项目。
+- 所有项目均改为最低支持Java 17。
+- 需要引入Kotlin的项目统一采用Kotlin 1.8.10与Kotlin Coroutines 1.6.4版本。
+
+#### qqrobot-framework-api 2.0.0
+- 适配Java 17。
+- 更改顶级包路径为`de.honoka.qqrobot.framework.api`。
+- 更新`FrameworkApi`与`FrameworkCallback`。
+
+#### qqrobot-spring-boot-starter 2.0.0
+- 适配Spring Boot 3.2.5。
+- 适配qqrobot-framework-api 2.0.0。
+- 适配honoka-spring-boot-starter 2.0.0。
+- 实现对OneBot 11标准的支持。
+
+#### file-receiver 1.0.0
+- 初始版本，实现图片与文件接收接口，返回存储的文件所在的URI路径。
+
 ## 1.3.4
 #### qqrobot-spring-boot-starter 1.3.4
 - 适配mirai 2.16.0版本。

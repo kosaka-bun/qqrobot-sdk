@@ -38,7 +38,7 @@ fi
 
 echo "IS_DEVELOPMENT_VERSION=$is_development_version" >> "$GITHUB_OUTPUT"
 
-gradle_publish() {
+gradle-publish() {
   task_name=publish
   if [ -n "$1" ]; then
     task_name=":$1:$task_name"
@@ -53,8 +53,8 @@ gradle_publish() {
 #
 # 需要根据模块间依赖关系，按顺序多次执行不同的构建。
 #
-gradle_publish qqrobot-framework-api
-gradle_publish
+gradle-publish qqrobot-framework-api
+gradle-publish
 
 # 将maven-repo/repository目录打包，然后将tar移动到另一个单独的目录中
 tar -zcf maven-repo.tar.gz maven-repo/repository

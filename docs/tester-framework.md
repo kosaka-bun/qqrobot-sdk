@@ -3,7 +3,7 @@
 ## 简介
 Tester框架是一个用于在不真正登录QQ账号的情况下，模拟任何QQ账号通过群聊或私聊与机器人进行交互。
 
-其前端源代码位于[此处](../qqrobot-spring-boot-starter/src/main/web/tester)，后端源代码位于[此处](../qqrobot-spring-boot-starter/src/main/java/de/honoka/qqrobot/starter/framework/tester)。 前端与后端通过WebSocket进行通信。
+其前端源代码位于[此处](../qqrobot-spring-boot-starter/web/tester)，后端源代码位于[此处](../qqrobot-spring-boot-starter/src/main/java/de/honoka/qqrobot/framework/impl/tester)。 前端与后端通过WebSocket进行通信。
 
 支持接收机器人发送的图文信息，支持向机器人发送带`@用户`类型的参数的信息。
 

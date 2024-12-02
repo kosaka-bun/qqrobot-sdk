@@ -14,9 +14,9 @@ qqrobot-spring-boot-starter（以下简称starter）基于Spring Boot框架运�
 ```groovy
 buildscript {
     ext {
-        springBootVersion = '2.3.5.RELEASE'
-        kotlinVersion = '1.6.21'
-        qqrobotStarterVersion = '1.2.0'
+        springBootVersion = '3.2.5'
+        kotlinVersion = '1.8.10'
+        qqrobotStarterVersion = '2.0.0'
     }
 }
 ```
@@ -32,7 +32,7 @@ plugins {
     id 'java'
     //引用buildscript中配置的变量作为版本号
     id 'org.springframework.boot' version "$springBootVersion"
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'io.spring.dependency-management' version '1.1.6'
     //配置Kotlin插件，使用自行指定的版本
     id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
     id 'org.jetbrains.kotlin.plugin.spring' version "$kotlinVersion"

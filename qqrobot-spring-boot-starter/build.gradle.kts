@@ -25,7 +25,7 @@ dependencies {
         annotationProcessor(it)
     })
     implementation(libs.honoka.spring.boot.starter)
-    implementationApi("de.honoka.qqrobot:qqrobot-framework-api:1.1.0-dev")
+    implementationApi("de.honoka.qqrobot:qqrobot-framework-api:2.0.0")
     implementation(libs.mirai.core)
     implementation(libs.mirai.console.compiler.annotations)
     implementation("com.google.code.gson:gson")

@@ -10,7 +10,7 @@ import kotlin.io.path.Path
 
 @EnableScheduling
 @EnableConfigurationProperties(MainProperties::class)
-@Configuration
+@Configuration("fileReceiverMainConfig")
 class MainConfig
 
 @ConfigurationProperties("file-receiver")
