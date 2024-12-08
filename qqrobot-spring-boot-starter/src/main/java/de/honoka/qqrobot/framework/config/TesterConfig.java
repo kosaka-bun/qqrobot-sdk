@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class TesterConfig {
 
-    @Value("${server.port}")
+    @Value("${server.port:8080}")
     private int serverPort;
 
     @Value("${server.servlet.context-path:}")

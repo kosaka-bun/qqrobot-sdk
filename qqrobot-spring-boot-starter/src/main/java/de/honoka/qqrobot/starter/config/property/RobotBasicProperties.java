@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.starter;
+package de.honoka.qqrobot.starter.config.property;
 
 import de.honoka.qqrobot.framework.FrameworkEnum;
 import lombok.Getter;
@@ -27,18 +27,23 @@ public class RobotBasicProperties {
     /**
      * 是否需要报告运行时异常
      */
-    private Boolean reportException = true;
+    private boolean reportException = true;
 
     /**
      * 命令起始字符
      */
     private String commandPrefix = "%";
+    
+    /**
+     * 是否在Spring Boot应用启动完成后自动启动框架
+     */
+    private boolean autoBoot = true;
 
     /**
      * 是否默认启用消息处理功能
      * @see de.honoka.qqrobot.starter.component.RobotStatus#isEnabled()
      */
-    private Boolean defaultEnabled = true;
+    private boolean defaultEnabled = true;
 
     /**
      * 使用哪个框架作为实现（默认为tester）
@@ -48,10 +53,10 @@ public class RobotBasicProperties {
     /**
      * 消息发送失败时是否重发消息
      */
-    private Boolean resendOnSendFailed = false;
+    private boolean resendOnSendFailed = false;
 
     /**
      * 重新登录时是否发送测试消息
      */
-    private Boolean sendTestMessageOnRelogin = false;
+    private boolean sendTestMessageOnRelogin = false;
 }

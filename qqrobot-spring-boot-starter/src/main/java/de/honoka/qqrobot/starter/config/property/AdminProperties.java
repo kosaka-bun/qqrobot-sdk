@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.starter.component.admin;
+package de.honoka.qqrobot.starter.config.property;
 
 import lombok.Getter;
 import lombok.Setter;

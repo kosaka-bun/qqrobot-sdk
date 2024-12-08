@@ -4,12 +4,12 @@ import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.framework.api.FrameworkCallback;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.RobotStarter;
-import de.honoka.qqrobot.starter.common.ConditionalBeans;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
+import de.honoka.qqrobot.starter.config.ConditionalBeansConfig;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 
-@ConditionalComponent(ConditionalBeans.class)
+@ConditionalComponent(ConditionalBeansConfig.class)
 public class DefaultFrameworkCallback implements FrameworkCallback {
 
     @Lazy

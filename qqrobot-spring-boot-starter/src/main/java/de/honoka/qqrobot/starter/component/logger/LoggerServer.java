@@ -1,6 +1,7 @@
 package de.honoka.qqrobot.starter.component.logger;
 
 import cn.hutool.core.io.FileUtil;
+import de.honoka.qqrobot.starter.config.property.LoggerProperties;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.SneakyThrows;

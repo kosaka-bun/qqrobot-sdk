@@ -1,6 +1,7 @@
 package de.honoka.qqrobot.starter;
 
-import de.honoka.qqrobot.starter.component.admin.AdminProperties;
+import de.honoka.qqrobot.starter.config.property.AdminProperties;
+import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

@@ -11,7 +11,7 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.framework.impl.mirai.component.MiraiEventListener;
 import de.honoka.qqrobot.framework.impl.mirai.config.MiraiProperties;
 import de.honoka.qqrobot.framework.impl.mirai.model.MiraiMessage;
-import de.honoka.qqrobot.starter.RobotBasicProperties;
+import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
 import de.honoka.sdk.util.file.FileUtils;
 import de.honoka.sdk.util.text.TextUtils;
 import jakarta.annotation.PostConstruct;

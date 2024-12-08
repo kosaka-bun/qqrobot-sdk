@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * 命令方法参数类型，被@Command注解的类必须采用此参数类型
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "ClassCanBeRecord" })
 @Getter
 public class CommandMethodArgs {
 
@@ -81,8 +81,7 @@ public class CommandMethodArgs {
     @SuppressWarnings("unchecked")
     public RobotMessage<Long> getAt(int index) {
         Object arg = args[index];
-        if(arg instanceof RobotMessage) {
-            RobotMessage<?> message = (RobotMessage<?>) arg;
+        if(arg instanceof RobotMessage<?> message) {
             if(message.getType().equals(RobotMessageType.AT)) {
                 return (RobotMessage<Long>) message;
             }

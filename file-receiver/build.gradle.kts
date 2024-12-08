@@ -11,7 +11,7 @@ version = libs.versions.file.receiver.get()
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation(libs.honoka.spring.boot.starter)
+    implementation("de.honoka.sdk:honoka-spring-boot-starter:1.0.0")
 }
 
 tasks {

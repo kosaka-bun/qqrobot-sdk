@@ -14,7 +14,7 @@ import de.honoka.qqrobot.framework.impl.tester.model.TesterMessageType;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterRobotMessage;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServer;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServerConnection;
-import de.honoka.qqrobot.starter.RobotBasicProperties;
+import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
 import jakarta.annotation.Resource;
 import lombok.Getter;
 import lombok.SneakyThrows;

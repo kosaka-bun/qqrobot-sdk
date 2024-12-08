@@ -13,8 +13,8 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
 import de.honoka.qqrobot.framework.impl.onebot.config.*
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
-import de.honoka.qqrobot.starter.RobotBasicProperties
 import de.honoka.qqrobot.starter.RobotStarter
+import de.honoka.qqrobot.starter.config.property.RobotBasicProperties
 import de.honoka.sdk.util.kotlin.code.json.toJsonWrapper
 import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory

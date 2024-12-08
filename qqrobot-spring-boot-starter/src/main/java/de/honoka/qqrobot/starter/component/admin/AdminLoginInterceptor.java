@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.starter.component.admin;
 
+import de.honoka.qqrobot.starter.config.property.AdminProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
@@ -18,7 +19,7 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
 
     private final Map<String, String> tokenMap = new HashMap<>();
 
-    @Value("${server.servlet.context-path}")
+    @Value("${server.servlet.context-path:}")
     private String contextPath;
 
     public void putToken(String username, String token) {
@@ -30,14 +31,15 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
      * 如果返回false，表示被拦截，将不会执行处理方法
      * 返回true，继续执行处理方法
      */
-    @Override
     @SneakyThrows
-    public boolean preHandle(@NotNull HttpServletRequest request,
-                             @NotNull HttpServletResponse response,
-                             @NotNull Object handler) {
+    @Override
+    public boolean preHandle(
+        @NotNull HttpServletRequest request,
+        @NotNull HttpServletResponse response,
+        @NotNull Object handler
+    ) {
         //只拦截admin所部署的路径下的请求
-        if(!request.getRequestURI().startsWith(contextPath +
-                AdminProperties.WEB_PREFIX)) {
+        if(!request.getRequestURI().startsWith(contextPath + AdminProperties.WEB_PREFIX)) {
             return true;
         }
         if(request.getMethod().toLowerCase(Locale.ROOT).equals("options")) {
@@ -57,9 +59,11 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
      * 在处理方法执行之后，在渲染视图执行之前执行，一般用来做一些清理工作
      */
     @Override
-    public void postHandle(@NotNull HttpServletRequest request,
-                           @NotNull HttpServletResponse response,
-                           @NotNull Object handler, ModelAndView modelAndView) {
+    public void postHandle(
+        @NotNull HttpServletRequest request,
+        @NotNull HttpServletResponse response,
+        @NotNull Object handler, ModelAndView modelAndView
+    ) {
 
     }
 
@@ -67,9 +71,11 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
      * 在视图渲染后执行，一般用来释放资源
      */
     @Override
-    public void afterCompletion(@NotNull HttpServletRequest request,
-                                @NotNull HttpServletResponse response,
-                                @NotNull Object handler, Exception ex) {
+    public void afterCompletion(
+        @NotNull HttpServletRequest request,
+        @NotNull HttpServletResponse response,
+        @NotNull Object handler, Exception ex
+    ) {
 
     }
 }

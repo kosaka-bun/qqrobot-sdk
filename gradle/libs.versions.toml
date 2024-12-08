@@ -1,12 +1,11 @@
 [versions]
 # project modules version
-root = "2.0.0"
+root = "2.0.1-dev"
 qqrobot-framework-api = "2.0.0"
-qqrobot-spring-boot-starter = "2.0.0"
+qqrobot-spring-boot-starter = "2.0.1-dev"
 file-receiver = "1.0.0"
 
 # dependencies version
-honoka-spring-boot-starter = "1.0.0"
 spring-boot = "3.2.5"
 mirai = "2.16.0"
 kotlin = "1.8.10"
@@ -22,7 +21,6 @@ dependency-management = "io.spring.dependency-management:1.1.6"
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 
 [libraries]
-honoka-spring-boot-starter = { module = "de.honoka.sdk:honoka-spring-boot-starter", version.ref = "honoka-spring-boot-starter" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 mirai-core = { module = "net.mamoe:mirai-core-jvm", version.ref = "mirai" }

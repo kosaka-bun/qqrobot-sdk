@@ -5,7 +5,6 @@ import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
-import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.RobotStarter;
 import de.honoka.qqrobot.starter.command.CommandInvoker;
 import de.honoka.qqrobot.starter.common.ConstantMessage;
@@ -13,6 +12,7 @@ import de.honoka.qqrobot.starter.common.annotation.RobotController;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
 import de.honoka.qqrobot.starter.component.session.RobotSession;
 import de.honoka.qqrobot.starter.component.session.SessionManager;
+import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class MessageExecutor {
     private RobotBasicProperties basicProperties;
 
     @Resource
-    private RobotStatus attributes;
+    private RobotStatus robotStatus;
 
     @Resource
     private RobotLogger robotLogger;
@@ -124,7 +124,7 @@ public class MessageExecutor {
         //如果发送此消息的qq在会话列表内，则此qq发送的任何信息都需要被处理
         if(session != null) {
             //检查总开关状态，若未开启，则不将信息传递给会话
-            if(!attributes.isEnabled()) return null;
+            if(!robotStatus.isEnabled()) return null;
             /*
              * reply是驱动会话进行的动力，waitingForReply方法会时刻监听reply的内容，
              * 直到reply不为null时返回
@@ -193,7 +193,7 @@ public class MessageExecutor {
                 //包含，则可确认此消息是需要响应的命令，将调用此命令调用器，并跳出
                 foundCommand = true;
                 //响应命令前先检查总开关状态，若未开启，则回复提示信息，不响应命令
-                if(!attributes.isEnabled()) {
+                if(!robotStatus.isEnabled()) {
                     return RobotMultipartMessage.of(ConstantMessage.OFF);
                 }
                 //优化参数列表

@@ -2,10 +2,10 @@ package de.honoka.qqrobot.starter.command;
 
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
-import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.common.ConstantMessage;
 import de.honoka.qqrobot.starter.common.annotation.Command;
 import de.honoka.qqrobot.starter.component.session.RobotSession;
+import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
 import lombok.Getter;
 import lombok.SneakyThrows;
 

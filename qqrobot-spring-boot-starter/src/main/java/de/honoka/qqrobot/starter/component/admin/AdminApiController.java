@@ -3,13 +3,14 @@ package de.honoka.qqrobot.starter.component.admin;
 import cn.hutool.core.util.ObjectUtil;
 import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.api.Framework;
-import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import de.honoka.qqrobot.starter.component.RobotConsoleWindow;
 import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
 import de.honoka.qqrobot.starter.component.logger.entity.ExceptionRecord;
 import de.honoka.qqrobot.starter.component.logger.entity.UsageLog;
+import de.honoka.qqrobot.starter.config.property.AdminProperties;
+import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
 import de.honoka.sdk.util.code.ActionUtils;
 import de.honoka.sdk.util.system.SystemInfoBean;
 import de.honoka.sdk.util.text.TextUtils;
@@ -96,33 +97,33 @@ public class AdminApiController {
     public ApiResponse<?> mainInfo() {
         Map<String, Object> data = new HashMap<>();
         data.put("system_info", new SystemInfoBean());
-        data.put("will_send_test_message_on_relogin", basicProperties.getSendTestMessageOnRelogin());
-        data.put("will_resend_on_send_failed", basicProperties.getResendOnSendFailed());
+        data.put("will_send_test_message_on_relogin", basicProperties.isSendTestMessageOnRelogin());
+        data.put("will_resend_on_send_failed", basicProperties.isResendOnSendFailed());
         return ApiResponse.success(null, data);
     }
 
     @RequestMapping("/switch/resend_on_failed")
     public ApiResponse<?> switchWillResendOnSendFailed() {
-        basicProperties.setResendOnSendFailed(!basicProperties
-                .getResendOnSendFailed());
+        basicProperties.setResendOnSendFailed(!basicProperties.isResendOnSendFailed());
         return ApiResponse.success(null);
     }
 
     @RequestMapping("/switch/send_test_message")
     public ApiResponse<?> switchWillSendTestMessageOnRelogin() {
-        basicProperties.setSendTestMessageOnRelogin(!basicProperties.getSendTestMessageOnRelogin());
+        basicProperties.setSendTestMessageOnRelogin(!basicProperties.isSendTestMessageOnRelogin());
         return ApiResponse.success(null);
     }
 
     @RequestMapping("/exception")
     public String getException() {
-        List<ExceptionRecord> list = exceptionRecordDao.readException(
-                EXCEPTION_RECORD_MAX_SIZE);
+        List<ExceptionRecord> list = exceptionRecordDao.readException(EXCEPTION_RECORD_MAX_SIZE);
         return RobotBeanHolder.gson.toJson(ApiResponse.success(list));
     }
 
     @RequestMapping("/usage_log")
-    public String getUsageLog(@RequestParam(required = false, defaultValue = "1") int page) {
+    public String getUsageLog(
+        @RequestParam(required = false, defaultValue = "1") int page
+    ) {
         int maxPage;
         //获取信息
         //计算最大页数

@@ -1,5 +1,7 @@
-package de.honoka.qqrobot.starter.component.admin;
+package de.honoka.qqrobot.starter.config;
 
+import de.honoka.qqrobot.starter.component.admin.AdminLoginInterceptor;
+import de.honoka.qqrobot.starter.config.property.AdminProperties;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;

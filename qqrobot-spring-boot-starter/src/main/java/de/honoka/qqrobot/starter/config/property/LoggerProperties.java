@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.starter.component.logger;
+package de.honoka.qqrobot.starter.config.property;
 
 import de.honoka.sdk.util.file.FileUtils;
 import lombok.Getter;

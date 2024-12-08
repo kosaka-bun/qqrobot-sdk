@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.starter.common;
+package de.honoka.qqrobot.starter.config;
 
 import de.honoka.qqrobot.framework.api.FrameworkCallback;
 import de.honoka.qqrobot.starter.component.DefaultFrameworkCallback;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ConditionalBeans {
+public class ConditionalBeansConfig {
 
     @ConditionalOnMissingBean(RobotLogger.class)
     @Bean

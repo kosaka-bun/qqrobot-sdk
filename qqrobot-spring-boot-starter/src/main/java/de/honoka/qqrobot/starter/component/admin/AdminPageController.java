@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.starter.component.admin;
 
+import de.honoka.qqrobot.starter.config.property.AdminProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminPageController {
 
     @RequestMapping(AdminProperties.WEB_PREFIX + "/")
-    public String main() {
+    public String index() {
         return "forward:/admin/index.html";
     }
 
