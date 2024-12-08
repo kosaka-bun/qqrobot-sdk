@@ -345,7 +345,7 @@ class OnebotFramework(
                 if(retcode != 0) throw Exception("retcode = $retcode，errMsg = $errMsg")
             } catch(t: Throwable) {
                 log.error("\n消息发送失败！已尝试次数：$i\n要发送的内容：\n${message.toRawString()}", t)
-                if(!basicProperties.resendOnSendFailed) break
+                if(!basicProperties.isResendOnSendFailed) break
                 continue
             }
             if(i > 1) log.info("\n消息重发成功：\n${message.toRawString()}")

@@ -21,19 +21,19 @@ public class AdminWebConfig implements WebMvcConfigurer {
     public void addInterceptors(@NotNull InterceptorRegistry registry) {
         String prefix = AdminProperties.WEB_PREFIX;
         registry.addInterceptor(adminLoginInterceptor)
-                .addPathPatterns(prefix + "/**")
-                .excludePathPatterns(Arrays.asList(
-                        prefix + "/static/**",
-                        prefix + "/api/login",
-                        prefix + "/favicon.ico",
-                        prefix + "/index.html",
-                        prefix + "/"
-                ));
+            .addPathPatterns(prefix + "/**")
+            .excludePathPatterns(Arrays.asList(
+                prefix + "/static/**",
+                prefix + "/api/login",
+                prefix + "/favicon.ico",
+                prefix + "/index.html",
+                prefix + "/"
+            ));
     }
 
     @Override
     public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
         registry.addResourceHandler(AdminProperties.WEB_PREFIX + "/**")
-                .addResourceLocations("classpath:/web/admin/");
+            .addResourceLocations("classpath:/web/admin/");
     }
 }

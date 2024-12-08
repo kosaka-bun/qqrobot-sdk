@@ -55,7 +55,7 @@ public class ExceptionReporter {
             //region 判断是否需要报告异常，若不需要，则跳出
             String exceptionText = ExceptionUtils.transfer(t);
             //配置为不报告
-            if(!basicProperties.getReportException()) return;
+            if(!basicProperties.isReportException()) return;
             //将信息拆分成行
             String[] rows = exceptionText.split("\n");
             //如果该异常已经发生过则不予报告

@@ -25,15 +25,14 @@ public class LoggerServer {
 
     @SneakyThrows
     public Connection getConnection() {
-        Connection connection = DriverManager.getConnection(
-                loggerProperties.getJdbcUrl());
+        Connection connection = DriverManager.getConnection(loggerProperties.getJdbcUrl());
         connection.setAutoCommit(true);
         return connection;
     }
 
     @PostConstruct
     public void init() {
-        log.info("Logger Data Source: " + loggerProperties.getJdbcUrl());
+        log.info("Logger Data Source: {}", loggerProperties.getJdbcUrl());
         createTable();
     }
 

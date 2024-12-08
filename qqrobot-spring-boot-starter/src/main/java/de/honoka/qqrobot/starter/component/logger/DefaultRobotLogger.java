@@ -40,9 +40,9 @@ public class DefaultRobotLogger implements RobotLogger {
     }
 
     @Override
-    public void logMsgExecution(Long group, long qq,
-                                RobotMultipartMessage msg,
-                                RobotMultipartMessage reply) {
+    public void logMsgExecution(
+        Long group, long qq, RobotMultipartMessage msg, RobotMultipartMessage reply
+    ) {
         new Retrier().tryCode(() -> {
             usageLogDao.insert(new UsageLog()
                     .setGroupName(framework.getGroupName(group))

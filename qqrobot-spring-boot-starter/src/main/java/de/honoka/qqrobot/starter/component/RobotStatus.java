@@ -19,6 +19,6 @@ public class RobotStatus {
     private boolean enabled;
 
     public RobotStatus(RobotBasicProperties basicProperties) {
-        enabled = basicProperties.getDefaultEnabled();
+        enabled = basicProperties.isDefaultEnabled();
     }
 }

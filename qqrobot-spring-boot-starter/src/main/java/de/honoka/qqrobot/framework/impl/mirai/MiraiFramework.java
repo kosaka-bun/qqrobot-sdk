@@ -288,7 +288,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
                 System.err.println("要发送的内容：\n" + msg.contentToString());
                 e.printStackTrace();
                 //是否需要重发
-                if(!basicProperties.getResendOnSendFailed()) break;
+                if(!basicProperties.isResendOnSendFailed()) break;
                 continue;
             }
             //发送成功，不再继续尝试
