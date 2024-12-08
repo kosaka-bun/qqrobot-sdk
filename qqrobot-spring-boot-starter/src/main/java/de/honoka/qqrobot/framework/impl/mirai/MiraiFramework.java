@@ -1,9 +1,11 @@
 package de.honoka.qqrobot.framework.impl.mirai;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import de.honoka.qqrobot.framework.BaseFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
@@ -29,7 +31,6 @@ import net.mamoe.mirai.message.MessageReceipt;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.BotConfiguration;
 import net.mamoe.mirai.utils.ExternalResource;
-import org.jsoup.Jsoup;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -363,16 +364,20 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
             //定义接口URL
             String url = "https://r.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins=%d";
             //获取响应文本（不得请求时间过长，否则会卡住很多操作）
-            byte[] response = Jsoup.connect(String.format(url, qq)).timeout(5 * 1000)
-                .execute().bodyAsBytes();
+            byte[] response;
+            HttpResponse resObj = HttpUtil.createGet(String.format(url, qq))
+                .timeout(5 * 1000).execute();
+            try(resObj) {
+                response = resObj.bodyBytes();
+            }
             String jsonStr = new String(response, "GB18030");
             //处理响应文本
             jsonStr = jsonStr.substring(jsonStr.indexOf("{"), jsonStr.lastIndexOf("}") + 1);
             //提取为Json对象
-            JsonObject json = JsonParser.parseString(jsonStr).getAsJsonObject();
+            JSONObject json = JSONUtil.parseObj(jsonStr);
             //从Json对象中提取某个属性的值
-            JsonArray ja = json.get(String.valueOf(qq)).getAsJsonArray();
-            return ja.get(6).getAsString();
+            JSONArray ja = json.getJSONArray(String.valueOf(qq));
+            return (String) ja.get(6);
         } catch(Exception e) {
             return String.valueOf(qq);
         }

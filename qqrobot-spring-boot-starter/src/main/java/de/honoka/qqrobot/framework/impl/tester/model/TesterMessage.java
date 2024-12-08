@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.framework.impl.tester.model;
 
-import com.google.gson.JsonObject;
+import cn.hutool.json.JSONObject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,7 +12,7 @@ public class TesterMessage {
 
     private String type;
 
-    private JsonObject data = new JsonObject();
+    private JSONObject data = new JSONObject();
 
     public TesterMessage(String id) {
         this.id = id;

@@ -1,9 +1,7 @@
 package de.honoka.qqrobot.framework.impl.tester.model;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import de.honoka.qqrobot.starter.common.RobotBeanHolder;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,16 +16,16 @@ public class TesterRobotMessage {
     private List<Part> parts = new ArrayList<>();
 
     public TesterRobotMessage() {}
-
-    @Data
+    
     @AllArgsConstructor
+    @Data
     public static class Part {
 
         private String type;
 
         private String content;
 
-        private JsonObject extras;
+        private JSONObject extras;
 
         public Part(String type, String content) {
             this.type = type;
@@ -44,10 +42,10 @@ public class TesterRobotMessage {
         String IMAGE = "image";
     }
 
-    public static TesterRobotMessage of(JsonArray content) {
+    public static TesterRobotMessage of(JSONArray content) {
         TesterRobotMessage message = new TesterRobotMessage();
-        for(JsonElement partJson : content) {
-            Part part = RobotBeanHolder.gson.fromJson(partJson, Part.class);
+        for(Object partJson : content) {
+            Part part = ((JSONObject) partJson).toBean(Part.class);
             message.parts.add(part);
         }
         return message;
@@ -63,7 +61,7 @@ public class TesterRobotMessage {
         return this;
     }
 
-    public JsonArray toJsonArray() {
-        return RobotBeanHolder.gson.toJsonTree(parts).getAsJsonArray();
+    public JSONArray toJsonArray() {
+        return new JSONArray(parts);
     }
 }

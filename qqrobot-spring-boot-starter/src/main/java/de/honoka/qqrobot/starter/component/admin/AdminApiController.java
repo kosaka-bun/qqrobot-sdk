@@ -1,9 +1,7 @@
 package de.honoka.qqrobot.starter.component.admin;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.api.Framework;
-import de.honoka.qqrobot.starter.common.RobotBeanHolder;
 import de.honoka.qqrobot.starter.component.RobotConsoleWindow;
 import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
@@ -102,26 +100,26 @@ public class AdminApiController {
         return ApiResponse.success(null, data);
     }
 
-    @RequestMapping("/switch/resend_on_failed")
+    @GetMapping("/switch/resend_on_failed")
     public ApiResponse<?> switchWillResendOnSendFailed() {
         basicProperties.setResendOnSendFailed(!basicProperties.isResendOnSendFailed());
         return ApiResponse.success(null);
     }
 
-    @RequestMapping("/switch/send_test_message")
+    @GetMapping("/switch/send_test_message")
     public ApiResponse<?> switchWillSendTestMessageOnRelogin() {
         basicProperties.setSendTestMessageOnRelogin(!basicProperties.isSendTestMessageOnRelogin());
         return ApiResponse.success(null);
     }
 
-    @RequestMapping("/exception")
-    public String getException() {
+    @GetMapping("/exception")
+    public ApiResponse<?> getException() {
         List<ExceptionRecord> list = exceptionRecordDao.readException(EXCEPTION_RECORD_MAX_SIZE);
-        return RobotBeanHolder.gson.toJson(ApiResponse.success(list));
+        return ApiResponse.success(list);
     }
 
-    @RequestMapping("/usage_log")
-    public String getUsageLog(
+    @GetMapping("/usage_log")
+    public ApiResponse<?> getUsageLog(
         @RequestParam(required = false, defaultValue = "1") int page
     ) {
         int maxPage;
@@ -135,32 +133,26 @@ public class AdminApiController {
         if(page > maxPage) page = maxPage;    //此处page可能会被赋值为0
         if(page <= 0) page = 1;
         //获取使用记录
-        List<UsageLog> logs = usageLogDao.selectPage(page,
-                USAGE_LOG_PAGE_SIZE);
+        List<UsageLog> logs = usageLogDao.selectPage(page, USAGE_LOG_PAGE_SIZE);
         //组装Json
         Map<String, Object> result = new HashMap<>();
         result.put("page", page);
         result.put("maxPage", maxPage);
         result.put("PAGE_SIZE", USAGE_LOG_PAGE_SIZE);
         result.put("list", logs);
-        return RobotBeanHolder.gson.toJson(ApiResponse.success(result));
+        return ApiResponse.success(result);
     }
 
-    @RequestMapping("/console")
-    public String getConsole() {
+    @GetMapping("/console")
+    public ApiResponse<?> getConsole() {
         String content = RobotConsoleWindow.getConsoleText();
         if(content == null) {
-            content = "<div style=\"color: white;\">" +
-                    "应用未开启控制台窗口" +
-                    "</div>";
+            content = "<div style=\"color: white;\">应用未开启控制台窗口</div>";
         }
-        JsonObject result = new JsonObject();
-        result.addProperty("status", true);
-        result.addProperty("data", content);
-        return RobotBeanHolder.gson.toJson(result);
+        return ApiResponse.success(content);
     }
 
-    @RequestMapping("/action/send_test_message")
+    @GetMapping("/action/send_test_message")
     public ApiResponse<?> sendTestMessage() {
         ActionUtils.doAction("发送测试消息", () -> {
             framework.sendGroupMsg(
@@ -172,7 +164,7 @@ public class AdminApiController {
         return ApiResponse.success(null, null);
     }
 
-    @RequestMapping("/action/relogin")
+    @GetMapping("/action/relogin")
     public ApiResponse<?> relogin() {
         ActionUtils.doAction("重新登录", framework::reboot);
         return ApiResponse.success(null, null);

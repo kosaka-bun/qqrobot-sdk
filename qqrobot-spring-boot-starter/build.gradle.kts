@@ -28,7 +28,6 @@ dependencies {
     implementationApi("de.honoka.qqrobot:qqrobot-framework-api:2.0.0")
     compileOnly(libs.mirai.core)
     compileOnly(libs.mirai.console.compiler.annotations)
-    implementation("com.google.code.gson:gson")
     implementation("com.github.houbb:opencc4j:1.6.0")
     implementation("org.hibernate.validator:hibernate-validator")
     implementation("com.h2database:h2:2.1.214")

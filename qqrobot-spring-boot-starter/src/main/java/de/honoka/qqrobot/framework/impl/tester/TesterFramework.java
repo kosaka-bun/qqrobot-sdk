@@ -2,7 +2,7 @@ package de.honoka.qqrobot.framework.impl.tester;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
-import com.google.gson.JsonObject;
+import cn.hutool.json.JSONObject;
 import de.honoka.qqrobot.framework.BaseFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
@@ -94,8 +94,8 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
                     TesterRobotMessage.Part at = new TesterRobotMessage.Part(
                         TesterRobotMessage.PartType.AT, "@" + getNickOrCard(group, atQq) + " "
                     );
-                    at.setExtras(new JsonObject());
-                    at.getExtras().addProperty("qq", (long) part.getContent());
+                    at.setExtras(new JSONObject());
+                    at.getExtras().set("qq", part.getContent());
                     testerRobotMessage.add(at);
                     break;
                 case IMAGE:
@@ -126,7 +126,7 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
         RobotMultipartMessage multipartMessage = new RobotMultipartMessage();
         for(TesterRobotMessage.Part part : message.getParts()) {
             if(part.getType().equals(TesterRobotMessage.PartType.AT)) {
-                multipartMessage.add(RobotMessageType.AT, part.getExtras().get("qq").getAsLong());
+                multipartMessage.add(RobotMessageType.AT, part.getExtras().getLong("qq"));
             } else {
                 multipartMessage.add(RobotMessageType.TEXT, part.getContent());
             }
@@ -137,11 +137,11 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
     @Override
     public void sendPrivateMsg(long qq, RobotMultipartMessage message) {
         for(TesterServerConnection connection : testerServer.getConnections()) {
-            long qqOfConnection = connection.getData().get("qq").getAsLong();
+            long qqOfConnection = connection.getData().getLong("qq");
             if(qqOfConnection != qq) continue;
-            JsonObject data = new JsonObject();
-            data.addProperty("name", "Robot");
-            data.add("content", transform(null, qq, message).toJsonArray());
+            JSONObject data = new JSONObject();
+            data.set("name", "Robot");
+            data.set("content", transform(null, qq, message).toJsonArray());
             connection.sendMessage(
                 new TesterMessage(null)
                     .setType(TesterMessageType.PRIVATE_MESSAGE)
@@ -153,11 +153,11 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
     @Override
     public void sendGroupMsg(long group, RobotMultipartMessage message) {
         for(TesterServerConnection connection : testerServer.getConnections()) {
-            JsonObject data = new JsonObject();
-            data.addProperty("name", "Robot");
-            data.add("content", transform(group, 0, message)
-                    .toJsonArray());
-            connection.sendMessage(new TesterMessage(null)
+            JSONObject data = new JSONObject();
+            data.set("name", "Robot");
+            data.set("content", transform(group, 0, message).toJsonArray());
+            connection.sendMessage(
+                new TesterMessage(null)
                     .setType(TesterMessageType.GROUP_MESSAGE)
                     .setData(data)
             );
@@ -172,9 +172,9 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
     @Override
     public String getNickOrCard(long group, long qq) {
         for(TesterServerConnection connection : testerServer.getConnections()) {
-            long qqOfConnection = connection.getData().get("qq").getAsLong();
+            long qqOfConnection = connection.getData().getLong("qq");
             if(qqOfConnection == qq) {
-                return connection.getData().get("name").getAsString();
+                return connection.getData().getStr("name");
             }
         }
         return null;
