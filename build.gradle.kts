@@ -59,7 +59,12 @@ subprojects {
 
     tasks {
         compileJava {
-            options.encoding = StandardCharsets.UTF_8.name()
+            options.run {
+                encoding = StandardCharsets.UTF_8.name()
+                compilerArgs.run {
+                    add("-parameters")
+                }
+            }
         }
         
         withType<KotlinCompile> {
