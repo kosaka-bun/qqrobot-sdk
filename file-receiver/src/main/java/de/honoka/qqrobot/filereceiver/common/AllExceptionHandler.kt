@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.filereceiver.common
 
-import de.honoka.sdk.spring.starter.core.web.ApiResponse
+import de.honoka.sdk.util.web.ApiResponse
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
