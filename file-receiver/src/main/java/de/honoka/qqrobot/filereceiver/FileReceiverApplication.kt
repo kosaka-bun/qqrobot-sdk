@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.filereceiver
 
-import de.honoka.sdk.util.system.gui.ConsoleWindow
+import de.honoka.sdk.util.gui.ConsoleWindow
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 

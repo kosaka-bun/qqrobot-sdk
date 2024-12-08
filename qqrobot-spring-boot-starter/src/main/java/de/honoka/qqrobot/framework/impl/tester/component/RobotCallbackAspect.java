@@ -1,8 +1,8 @@
 package de.honoka.qqrobot.framework.impl.tester.component;
 
+import cn.hutool.core.util.StrUtil;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RobotCallbackAspect {
 
-    private static final String SEPERATOR = StringUtils.repeat("-----", 7);
+    private static final String SEPERATOR = StrUtil.repeat("-----", 7);
     
     @Before(
         "execution(* de.honoka.qqrobot.starter.component.DefaultFrameworkCallback.onPrivateMsg" +

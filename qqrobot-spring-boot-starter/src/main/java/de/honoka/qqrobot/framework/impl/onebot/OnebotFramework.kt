@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil
 import cn.hutool.core.io.IoUtil
 import cn.hutool.core.util.IdUtil
 import cn.hutool.http.HttpUtil
+import cn.hutool.json.JSONArray
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.BaseFramework
@@ -14,6 +15,7 @@ import de.honoka.qqrobot.framework.impl.onebot.config.*
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
 import de.honoka.qqrobot.starter.RobotBasicProperties
 import de.honoka.qqrobot.starter.RobotStarter
+import de.honoka.sdk.util.kotlin.code.json.toJsonWrapper
 import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
@@ -51,7 +53,7 @@ class OnebotFramework(
         override fun afterConnectionEstablished(session: WebSocketSession) {
             log.info("WebSocket连接已建立")
             /*
-             * 若不采用异步，则在这个方法返回之前，webSocketClient.doHandshake().get()语句
+             * 若不采用异步，则在这个方法返回之前，webSocketClient.execute().get()语句
              * 都不会返回。
              * 这条语句在synchronized方法中，checkIsOnline也是一个synchronized方法，不采用
              * 异步将会导致循环等待。
@@ -64,21 +66,29 @@ class OnebotFramework(
         
         override fun handleMessage(session: WebSocketSession, message: WebSocketMessage<*>) {
             if(message !is TextMessage) return
-            runCatching {
+            try {
                 val json = JSONUtil.parseObj(message.payload)
                 when(json.getStr("post_type")) {
-                    "message" -> handleMessageEvent(json)
+                    "message" -> handleBotMessageEvent(json)
                     "notice" -> handleNoticeEvent(json)
                 }
+            } catch(t: Throwable) {
+                log.error("", t)
             }
         }
         
-        private fun handleMessageEvent(json: JSONObject) {
+        private fun handleBotMessageEvent(json: JSONObject) {
             //在线时长不足，忽略传入的消息，避免响应用户在上线前很久时所发的命令
             if(!online || System.currentTimeMillis() - onlineTimePoint < TIME_TO_WAIT_ONLINE) return
             val group = json.getLong("group_id")
             val qq = json.getLong("user_id")
-            val robotMessage = transform(OnebotMessage(json.getJSONArray("message")))
+            val robotMessage = json["message"].let {
+                when(it) {
+                    is String -> RobotMultipartMessage.of(it)
+                    is JSONArray -> transform(OnebotMessage(it))
+                    else -> throw Exception("Unknown message type")
+                }
+            }
             when(json.getStr("message_type")) {
                 "private" -> {
                     if(group != null && !contactManager.memberToGroupCache.containsKey(qq)) {
@@ -198,8 +208,9 @@ class OnebotFramework(
         val url = "${onebotProperties.urlPrefix}/get_status"
         val onlineBeforeFlush = online
         online = try {
-            val res = HttpUtil.post(url, "{}", HTTP_REQUEST_TIMEOUT).let { JSONUtil.parseObj(it) }
-            res.getByPath("data.online") as Boolean
+            HttpUtil.post(url, "{}", HTTP_REQUEST_TIMEOUT).toJsonWrapper().run {
+                getBool("data.online")
+            }
         } catch(t: Throwable) {
             false
         }
@@ -208,7 +219,7 @@ class OnebotFramework(
                 //此前不在线，现在在线，更新上线时间点
                 log.info("QQ已在线，${TIME_TO_WAIT_ONLINE / 1000L}秒后开始处理消息")
                 onlineTimePoint = System.currentTimeMillis()
-                RobotStarter.globalThreadPool.submit {
+                RobotStarter.globalInstantThreadPool.submit {
                     Thread.sleep(TIME_TO_WAIT_ONLINE)
                     log.info("已开始处理消息")
                 }

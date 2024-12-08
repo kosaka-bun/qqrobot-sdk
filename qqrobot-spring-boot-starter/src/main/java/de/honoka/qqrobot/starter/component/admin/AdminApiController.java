@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.starter.component.admin;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.starter.RobotBasicProperties;
@@ -9,12 +10,11 @@ import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
 import de.honoka.qqrobot.starter.component.logger.entity.ExceptionRecord;
 import de.honoka.qqrobot.starter.component.logger.entity.UsageLog;
-import de.honoka.sdk.spring.starter.core.web.ApiResponse;
 import de.honoka.sdk.util.code.ActionUtils;
 import de.honoka.sdk.util.system.SystemInfoBean;
 import de.honoka.sdk.util.text.TextUtils;
+import de.honoka.sdk.util.web.ApiResponse;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,12 +60,12 @@ public class AdminApiController {
     public ApiResponse<?> login(@RequestBody Map<String, String> params) {
         String username = params.get("username");
         String password = params.get("password");
-        if(!ObjectUtils.allNotNull(username, password)) {
+        if(!ObjectUtil.isAllNotEmpty(username, password)) {
             return ApiResponse.fail("用户名或密码不能为空");
         }
         //判断用户名密码
         boolean checkPassed = username.equals(LOGIN_USERNAME) &&
-                password.equals(adminProperties.getPassword());
+            password.equals(adminProperties.getPassword());
         //若未登录，且密码正确，添加登录状态
         //回应是否已登录，以及密码是否正确
         if(checkPassed) {

@@ -1,10 +1,10 @@
 package de.honoka.qqrobot.framework.impl.tester.server;
 
+import cn.hutool.core.io.IoUtil;
 import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
-import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,14 +24,13 @@ public class TesterServerWebApi {
 
     @SneakyThrows
     @RequestMapping("/image")
-    public synchronized void getImage(@RequestParam String name,
-                                      HttpServletResponse response) {
+    public synchronized void getImage(@RequestParam String name, HttpServletResponse response) {
         response.setContentType("image/png");
         OutputStream os = response.getOutputStream();
         String path = testerProperties.getImagePath() + File.separator +
                 name + ".png";
         try(InputStream is = Files.newInputStream(Paths.get(path))) {
-            byte[] bytes = IOUtils.toByteArray(is);
+            byte[] bytes = IoUtil.readBytes(is, false);
             os.write(bytes);
         }
     }

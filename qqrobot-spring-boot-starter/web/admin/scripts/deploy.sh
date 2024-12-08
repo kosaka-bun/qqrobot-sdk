@@ -15,5 +15,3 @@ npm run build:prod
 mv dist "$TARGET_DIR"
 cd "$TARGET_DIR"
 mv dist admin
-
-git add admin

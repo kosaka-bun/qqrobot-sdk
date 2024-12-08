@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.framework.impl.mirai;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -28,7 +29,6 @@ import net.mamoe.mirai.message.MessageReceipt;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.BotConfiguration;
 import net.mamoe.mirai.utils.ExternalResource;
-import org.apache.commons.lang3.ObjectUtils;
 import org.jsoup.Jsoup;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -88,7 +88,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
     public void init() {
         Long qq = basicProperties.getQq();
         String password = basicProperties.getPassword();
-        if(!ObjectUtils.allNotNull(qq, password)) {
+        if(!ObjectUtil.isAllNotEmpty(qq, password)) {
             throw new RuntimeException("QQ号或密码不能为空");
         }
         boolean redirectLogs = miraiProperties.getRedirectLogs();

@@ -15,7 +15,7 @@
 #### qqrobot-spring-boot-starter 2.0.0
 - 适配Spring Boot 3.2.5。
 - 适配qqrobot-framework-api 2.0.0。
-- 适配honoka-spring-boot-starter 2.0.0。
+- 适配honoka-spring-boot-starter 1.0.0。
 - 实现对OneBot 11标准的支持。
 
 #### file-receiver 1.0.0

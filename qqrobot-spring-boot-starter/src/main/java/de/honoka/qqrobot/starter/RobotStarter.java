@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -16,9 +17,15 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class RobotStarter {
 
-    //用于执行杂类任务（非即时任务）
+    //用于执行非即时任务（多而密集，但不需要尽快完成）
     public static final ThreadPoolExecutor globalThreadPool = new ThreadPoolExecutor(
-        3, 20, 60, TimeUnit.SECONDS,
-        new LinkedBlockingQueue<>(3), new ThreadPoolExecutor.AbortPolicy()
+        3, 10, 10, TimeUnit.SECONDS,
+        new LinkedBlockingQueue<>(10), new ThreadPoolExecutor.AbortPolicy()
+    );
+    
+    //用于执行即时任务（大部分时候都少而不密集，需要尽快完成）
+    public static final ThreadPoolExecutor globalInstantThreadPool = new ThreadPoolExecutor(
+        1, 20, 60, TimeUnit.SECONDS,
+        new SynchronousQueue<>(), new ThreadPoolExecutor.AbortPolicy()
     );
 }

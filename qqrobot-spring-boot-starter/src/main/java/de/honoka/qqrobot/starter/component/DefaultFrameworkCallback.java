@@ -25,7 +25,7 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
      */
     @Override
     public void onPrivateMsg(long qq, RobotMultipartMessage msg) {
-        RobotStarter.globalThreadPool.submit(() -> {
+        RobotStarter.globalInstantThreadPool.submit(() -> {
             //回复信息
             RobotMultipartMessage reply = messageExecutor.executeMsg(null, qq, msg);
             if(reply != null) {
@@ -43,7 +43,7 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
     public void onGroupMsg(long group, long qq, RobotMultipartMessage msg) {
         //若机器人被禁言，则不响应此消息
         if(framework.isMuted(group)) return;
-        RobotStarter.globalThreadPool.submit(() -> {
+        RobotStarter.globalInstantThreadPool.submit(() -> {
             //回复信息
             RobotMultipartMessage reply = messageExecutor.executeMsg(group, qq, msg);
             if(reply != null) {

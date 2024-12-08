@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.starter.component;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
@@ -15,7 +16,6 @@ import de.honoka.qqrobot.starter.component.session.SessionManager;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -104,13 +104,13 @@ public class MessageExecutor {
         if(msg.getFirst().getType().equals(RobotMessageType.TEXT)) {
             RobotMessage<String> part = (RobotMessage<String>) msg.getFirst();
             String str = part.getContent();
-            str = StringUtils.stripStart(str, null);
+            str = StrUtil.trimStart(str);
             part.setContent(str);
         }
         if(msg.messageList.get(msg.messageList.size() - 1).getType().equals(RobotMessageType.TEXT)) {
             RobotMessage<String> part = (RobotMessage<String>) msg.messageList.get(msg.messageList.size() - 1);
             String str = part.getContent();
-            str = StringUtils.stripEnd(str, null);
+            str = StrUtil.trimEnd(str);
             part.setContent(str);
         }
         //进行简繁转换

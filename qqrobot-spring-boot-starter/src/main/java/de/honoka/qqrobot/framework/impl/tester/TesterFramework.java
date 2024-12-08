@@ -1,5 +1,7 @@
 package de.honoka.qqrobot.framework.impl.tester;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.BaseFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
@@ -17,8 +19,6 @@ import jakarta.annotation.Resource;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -55,7 +55,7 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
     public synchronized void boot() {
         File imagePath = new File(testerProperties.getImagePath());
         if(imagePath.exists()) {
-            FileUtils.forceDelete(imagePath);
+            FileUtil.del(imagePath);
         }
         frameworkCallback.onStartup();
         log.info("\nTester框架启动完成\n请访问 {} 进行测试", testerConfig.getTesterUrl());
@@ -104,9 +104,9 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
                     if(name == null) {
                         name = UUID.randomUUID().toString();
                         imageNameMap.put(inputStream.hashCode(), name);
-                        byte[] bytes = IOUtils.toByteArray(inputStream);
+                        byte[] bytes = IoUtil.readBytes(inputStream, false);
                         String path = Paths.get(testerProperties.getImagePath(), name + ".png").toString();
-                        FileUtils.touch(new File(path));
+                        FileUtil.touch(new File(path));
                         try(OutputStream os = Files.newOutputStream(Paths.get(path))) {
                             os.write(bytes);
                         }

@@ -1,7 +1,45 @@
-target/
-build/
-
-.idea/
 .gradle/
+build/
+target/
+gradle-build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-/image-receiver/src/test/http/*
+/file-receiver/src/test/http/*
+/qqrobot-spring-boot-starter/src/main/resources/web/*
+!/qqrobot-spring-boot-starter/src/main/resources/web/.gitkeep
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store

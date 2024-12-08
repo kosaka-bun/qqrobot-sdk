@@ -1,5 +1,7 @@
 package de.honoka.qqrobot.framework.impl.tester.server;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import de.honoka.qqrobot.framework.api.Framework;
@@ -14,8 +16,6 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.Getter;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -88,12 +88,12 @@ public class TesterServerConnection {
         long qq = msgData.get("qq").getAsLong();
         String username = msgData.get("name").getAsString();
         JsonObject resData = res.getData();
-        if(StringUtils.equalsIgnoreCase(username, "robot")) {
+        if(StrUtil.equalsIgnoreCase(username, "robot")) {
             resData.addProperty("status", false);
             resData.addProperty("message", "不能使用Robot作为用户名");
             return res;
         }
-        if(!ObjectUtils.allNotNull(qq, username) || username.isEmpty()) {
+        if(!ObjectUtil.isAllNotEmpty(qq, username) || username.isEmpty()) {
             resData.addProperty("status", false);
             resData.addProperty("message", "账号和用户名不能为空");
             return res;
