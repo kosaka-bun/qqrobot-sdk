@@ -1,13 +1,11 @@
-package de.honoka.qqrobot.framework.impl.mirai.config;
+package de.honoka.qqrobot.framework.config.property;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Getter
-@Setter
 @ConfigurationProperties("honoka.qqrobot.mirai")
+@Data
 public class MiraiProperties {
 
     /**

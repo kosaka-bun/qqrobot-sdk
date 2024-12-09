@@ -21,8 +21,7 @@ public class ExceptionRecordDao {
 
     @SneakyThrows
     public List<ExceptionRecord> readException(int maxSize) {
-        String sql = "select * from `exception_record` " +
-                "order by `datetime` desc limit ?";
+        String sql = "select * from `exception_record` order by `datetime` desc limit ?";
         try(Connection connection = loggerServer.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, maxSize);
@@ -39,19 +38,17 @@ public class ExceptionRecordDao {
     @SneakyThrows
     private ExceptionRecord parseRecord(ResultSet resultSet) {
         return new ExceptionRecord()
-                .setId(resultSet.getInt("id"))
-                .setDatetime(resultSet.getTimestamp("datetime"))
-                .setExceptionText(resultSet.getString("exceptionText"));
+            .setId(resultSet.getInt("id"))
+            .setDatetime(resultSet.getTimestamp("datetime"))
+            .setExceptionText(resultSet.getString("exceptionText"));
     }
 
     @SneakyThrows
     public void insert(ExceptionRecord record) {
-        String sql = "insert into `exception_record` (`datetime`, `exceptionText`) " +
-                "values (?, ?)";
+        String sql = "insert into `exception_record` (`datetime`, `exceptionText`) values (?, ?)";
         try(Connection connection = loggerServer.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setTimestamp(1, new Timestamp(
-                    record.getDatetime().getTime()));
+            statement.setTimestamp(1, new Timestamp(record.getDatetime().getTime()));
             statement.setString(2, record.getExceptionText());
             statement.execute();
         }

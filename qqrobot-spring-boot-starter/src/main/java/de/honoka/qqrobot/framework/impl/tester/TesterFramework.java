@@ -8,7 +8,7 @@ import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.framework.config.TesterConfig;
-import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
+import de.honoka.qqrobot.framework.config.property.TesterProperties;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterMessage;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterMessageType;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterRobotMessage;

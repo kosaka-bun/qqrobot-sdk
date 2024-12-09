@@ -1,15 +1,13 @@
-package de.honoka.qqrobot.framework.impl.tester.config;
+package de.honoka.qqrobot.framework.config.property;
 
 import de.honoka.sdk.util.file.FileUtils;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.nio.file.Paths;
 
-@Getter
-@Setter
 @ConfigurationProperties("honoka.qqrobot.tester")
+@Data
 public class TesterProperties {
 
     public static final String WEB_PREFIX = "/tester-framework";

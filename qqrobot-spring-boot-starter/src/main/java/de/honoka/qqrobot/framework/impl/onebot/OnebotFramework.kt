@@ -10,14 +10,14 @@ import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.BaseFramework
 import de.honoka.qqrobot.framework.api.model.RobotMessageType.*
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
+import de.honoka.qqrobot.framework.config.property.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
-import de.honoka.qqrobot.framework.impl.onebot.config.*
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
 import de.honoka.qqrobot.starter.RobotStarter
 import de.honoka.qqrobot.starter.config.property.RobotBasicProperties
 import de.honoka.sdk.util.kotlin.code.json.toJsonWrapper
+import de.honoka.sdk.util.kotlin.code.log
 import jakarta.annotation.PreDestroy
-import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.web.socket.*
@@ -41,8 +41,6 @@ class OnebotFramework(
 
     companion object {
 
-        private val log = LoggerFactory.getLogger(OnebotFramework::class.java)
-        
         const val TIME_TO_WAIT_ONLINE = 5000L
         
         const val HTTP_REQUEST_TIMEOUT = 3000

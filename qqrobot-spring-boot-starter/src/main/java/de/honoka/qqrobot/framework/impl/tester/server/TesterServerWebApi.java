@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.framework.impl.tester.server;
 
 import cn.hutool.core.io.IoUtil;
-import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
+import de.honoka.qqrobot.framework.config.property.TesterProperties;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
@@ -22,8 +22,8 @@ public class TesterServerWebApi {
     @Resource
     private TesterProperties testerProperties;
 
-    @SneakyThrows
     @RequestMapping("/image")
+    @SneakyThrows
     public synchronized void getImage(@RequestParam String name, HttpServletResponse response) {
         response.setContentType("image/png");
         OutputStream os = response.getOutputStream();

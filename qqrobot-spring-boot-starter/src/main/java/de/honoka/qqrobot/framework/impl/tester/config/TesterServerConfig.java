@@ -1,6 +1,8 @@
-package de.honoka.qqrobot.framework.impl.tester.server;
+package de.honoka.qqrobot.framework.impl.tester.config;
 
-import de.honoka.qqrobot.framework.impl.tester.config.TesterProperties;
+import de.honoka.qqrobot.framework.config.property.TesterProperties;
+import de.honoka.qqrobot.framework.impl.tester.server.TesterServer;
+import de.honoka.qqrobot.framework.impl.tester.server.TesterServerConnection;
 import jakarta.annotation.Resource;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;

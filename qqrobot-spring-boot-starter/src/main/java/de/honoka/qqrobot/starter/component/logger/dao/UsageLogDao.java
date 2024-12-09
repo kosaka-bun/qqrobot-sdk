@@ -33,9 +33,7 @@ public class UsageLogDao {
     @SneakyThrows
     public List<UsageLog> selectPage(int page, int pageSize) {
         int offset = (page - 1) * pageSize;
-        String sql = "select * from `usage_log` " +
-                "order by `datetime` desc " +
-                "limit ? offset ?";
+        String sql = "select * from `usage_log` order by `datetime` desc limit ? offset ?";
         try(Connection connection = loggerServer.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, pageSize);
@@ -53,24 +51,22 @@ public class UsageLogDao {
     @SneakyThrows
     public UsageLog parseLog(ResultSet resultSet) {
         return new UsageLog()
-                .setId(resultSet.getInt("id"))
-                .setQq(resultSet.getLong("qq"))
-                .setDatetime(resultSet.getTimestamp("datetime"))
-                .setGroupName(resultSet.getString("groupName"))
-                .setUsername(resultSet.getString("username"))
-                .setMsg(resultSet.getString("msg"))
-                .setReply(resultSet.getString("reply"));
+            .setId(resultSet.getInt("id"))
+            .setQq(resultSet.getLong("qq"))
+            .setDatetime(resultSet.getTimestamp("datetime"))
+            .setGroupName(resultSet.getString("groupName"))
+            .setUsername(resultSet.getString("username"))
+            .setMsg(resultSet.getString("msg"))
+            .setReply(resultSet.getString("reply"));
     }
 
     @SneakyThrows
     public void insert(UsageLog log) {
-        String sql = "insert into `usage_log` (`datetime`, `qq`, " +
-                "`groupName`, `username`, `msg`, `reply`) values (" +
-                "?, ?, ?, ?, ?, ?)";
+        String sql = "insert into `usage_log` (`datetime`, `qq`, `groupName`, `username`, " +
+            "`msg`, `reply`) values (?, ?, ?, ?, ?, ?)";
         try(Connection connection = loggerServer.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setTimestamp(1, new Timestamp(
-                    log.getDatetime().getTime()));
+            statement.setTimestamp(1, new Timestamp(log.getDatetime().getTime()));
             statement.setLong(2, log.getQq());
             statement.setString(3, log.getGroupName());
             statement.setString(4, log.getUsername());

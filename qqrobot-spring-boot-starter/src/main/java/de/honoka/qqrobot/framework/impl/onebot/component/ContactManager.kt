@@ -3,23 +3,17 @@ package de.honoka.qqrobot.framework.impl.onebot.component
 import cn.hutool.http.HttpUtil
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
+import de.honoka.qqrobot.framework.config.property.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.OnebotFramework
-import de.honoka.qqrobot.framework.impl.onebot.config.OnebotProperties
-import de.honoka.qqrobot.framework.impl.onebot.config.urlPrefix
 import de.honoka.qqrobot.starter.RobotStarter
+import de.honoka.sdk.util.kotlin.code.log
 import jakarta.annotation.PostConstruct
-import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
 @Component
 class ContactManager(private val onebotProperties: OnebotProperties) {
-    
-    companion object {
-        
-        private val log = LoggerFactory.getLogger(ContactManager::class.java)
-    }
     
     data class Contact(val name: String)
     
