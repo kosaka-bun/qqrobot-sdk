@@ -1,13 +1,11 @@
 package de.honoka.qqrobot.starter.config.property;
 
 import de.honoka.qqrobot.framework.FrameworkEnum;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Getter
-@Setter
 @ConfigurationProperties("honoka.qqrobot")
+@Data
 public class RobotBasicProperties {
 
     private Long qq;
@@ -46,11 +44,6 @@ public class RobotBasicProperties {
     private boolean defaultEnabled = true;
 
     /**
-     * 使用哪个框架作为实现（默认为tester）
-     */
-    private FrameworkEnum framework = FrameworkEnum.TESTER;
-
-    /**
      * 消息发送失败时是否重发消息
      */
     private boolean resendOnSendFailed = false;
@@ -59,4 +52,15 @@ public class RobotBasicProperties {
      * 重新登录时是否发送测试消息
      */
     private boolean sendTestMessageOnRelogin = false;
+    
+    private Framework framework = new Framework();
+    
+    @Data
+    public static class Framework {
+        
+        /**
+         * 使用哪个框架作为实现（默认为tester）
+         */
+        private FrameworkEnum impl = FrameworkEnum.TESTER;
+    }
 }

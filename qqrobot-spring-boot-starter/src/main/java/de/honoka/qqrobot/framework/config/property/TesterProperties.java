@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.nio.file.Paths;
 
-@ConfigurationProperties("honoka.qqrobot.tester")
+@ConfigurationProperties("honoka.qqrobot.framework.tester")
 @Data
 public class TesterProperties {
 

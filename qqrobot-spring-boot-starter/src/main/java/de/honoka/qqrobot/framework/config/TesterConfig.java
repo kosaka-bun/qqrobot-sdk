@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableConfigurationProperties(TesterProperties.class)
 @ComponentScan("de.honoka.qqrobot.framework.impl.tester")
-@ConditionalOnProperty(prefix = "honoka.qqrobot", name = "framework", havingValue = "tester", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "honoka.qqrobot.framework", name = "impl", havingValue = "tester", matchIfMissing = true)
 @Configuration
 @Data
 public class TesterConfig {

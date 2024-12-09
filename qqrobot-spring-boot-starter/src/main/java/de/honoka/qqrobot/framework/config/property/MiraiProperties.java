@@ -4,7 +4,7 @@ import lombok.Data;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("honoka.qqrobot.mirai")
+@ConfigurationProperties("honoka.qqrobot.framework.mirai")
 @Data
 public class MiraiProperties {
 

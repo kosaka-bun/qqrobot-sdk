@@ -1,12 +1,10 @@
 package de.honoka.qqrobot.starter.config.property;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Getter
-@Setter
 @ConfigurationProperties("honoka.qqrobot.admin")
+@Data
 public class AdminProperties {
 
     public static final String WEB_PREFIX = "/admin";

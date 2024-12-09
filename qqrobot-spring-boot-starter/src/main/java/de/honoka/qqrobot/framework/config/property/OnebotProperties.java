@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.nio.file.Paths;
 
-@ConfigurationProperties("honoka.qqrobot.onebot")
+@ConfigurationProperties("honoka.qqrobot.framework.onebot")
 @Data
 public class OnebotProperties {
     

@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration
 
 @EnableConfigurationProperties(OnebotProperties::class)
 @ComponentScan("de.honoka.qqrobot.framework.impl.onebot")
-@ConditionalOnProperty(prefix = "honoka.qqrobot", name = ["framework"], havingValue = "onebot")
+@ConditionalOnProperty(prefix = "honoka.qqrobot.framework", name = ["impl"], havingValue = "onebot")
 @Configuration
 class OnebotConfig

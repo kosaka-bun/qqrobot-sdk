@@ -196,15 +196,20 @@ class OnebotFramework(
         reboot()
     }
 
+    @Suppress("LoggingSimilarMessage")
     @Scheduled(cron = "5/10 * * * * ?")
     @Synchronized
     fun checkIsOnline() {
+        val onlineBeforeFlush = online
         if(!started || webSocketSession?.isOpen != true) {
             online = false
+            if(onlineBeforeFlush) {
+                //此前在线，现在不在线
+                log.info("QQ已离线")
+            }
             return
         }
         val url = "${onebotProperties.urlPrefix}/get_status"
-        val onlineBeforeFlush = online
         online = try {
             HttpUtil.post(url, "{}", HTTP_REQUEST_TIMEOUT).toJsonWrapper().run {
                 getBool("data.online")
