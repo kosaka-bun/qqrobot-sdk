@@ -48,11 +48,12 @@ subprojects {
         kotlin(rootProject)
         //仅用于避免libs.versions.toml中产生version变量未使用的提示
         libs.versions.kotlin.coroutines
-        compileOnly(libs.lombok.also {
+        libs.lombok.let {
+            compileOnly(it)
             annotationProcessor(it)
             testCompileOnly(it)
             testAnnotationProcessor(it)
-        })
+        }
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
     }

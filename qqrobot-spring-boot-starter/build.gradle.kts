@@ -17,20 +17,21 @@ dependencyManagement {
 }
 
 dependencies {
+    implementationApi("de.honoka.sdk:honoka-spring-boot-starter:1.0.1-dev")
+    implementationApi("de.honoka.qqrobot:qqrobot-framework-api:2.0.0")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
-    implementation("org.springframework.boot:spring-boot-configuration-processor".also {
-        annotationProcessor(it)
-    })
-    implementationApi("de.honoka.sdk:honoka-spring-boot-starter:1.0.1-dev")
-    implementationApi("de.honoka.qqrobot:qqrobot-framework-api:2.0.0")
     compileOnly(libs.mirai.core)
     compileOnly(libs.mirai.console.compiler.annotations)
     implementation("com.github.houbb:opencc4j:1.6.0")
     implementation("org.hibernate.validator:hibernate-validator")
     implementation("com.h2database:h2:2.1.214")
+    "org.springframework.boot:spring-boot-configuration-processor".let {
+        implementation(it)
+        annotationProcessor(it)
+    }
 }
 
 tasks {

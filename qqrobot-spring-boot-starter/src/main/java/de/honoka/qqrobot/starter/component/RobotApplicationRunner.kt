@@ -24,6 +24,12 @@ class RobotApplicationRunner(
     }
     
     fun bootFramework() {
-        if(basicProperties.isAutoBoot) framework.boot()
+        if(!basicProperties.isAutoBoot) return
+        runCatching {
+            framework.boot()
+        }.onFailure {
+            framework.stop()
+            throw it
+        }
     }
 }
