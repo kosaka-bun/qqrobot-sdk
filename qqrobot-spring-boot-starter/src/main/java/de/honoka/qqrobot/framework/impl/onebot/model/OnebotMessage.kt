@@ -8,20 +8,12 @@ import java.io.File
 @Suppress("MemberVisibilityCanBePrivate")
 class OnebotMessage(messageJson: JSONArray? = null) : AutoCloseable {
 
-    data class Part(
-        
-        var type: String? = null,
-        
-        var data: JSONObject? = null
-    )
+    data class Part(var type: String? = null, var data: JSONObject? = null)
     
-    val parts: MutableList<Part> = run {
-        messageJson ?: return@run ArrayList<Part>()
-        messageJson.toList(Part::class.java)
-    }
+    val parts: MutableList<Part> = messageJson?.run { toList(Part::class.java) } ?: arrayListOf()
     
     val first: Part?
-        get() = if(parts.isEmpty()) null else parts[0]
+        get() = parts.firstOrNull()
     
     private val externalResources: MutableList<String> = ArrayList()
     
@@ -68,7 +60,7 @@ class OnebotMessage(messageJson: JSONArray? = null) : AutoCloseable {
     
     fun toJson(): JSONArray = JSONArray(parts)
     
-    fun toRawString(): String = StringBuilder().run {
+    fun toRawString(): String = buildString {
         parts.forEach {
             val str = when(it.type) {
                 "text" -> it.data?.getStr("text")
@@ -79,15 +71,16 @@ class OnebotMessage(messageJson: JSONArray? = null) : AutoCloseable {
             }
             str?.let { append(str) }
         }
-        toString()
     }
     
     override fun toString(): String = toJson().toString()
     
-    override fun close() = externalResources.forEach {
-        val file = File(it)
-        runCatching {
-            if(file.exists()) file.delete()
+    override fun close() {
+        externalResources.forEach {
+            val file = File(it)
+            runCatching {
+                if(file.exists()) file.delete()
+            }
         }
     }
 }

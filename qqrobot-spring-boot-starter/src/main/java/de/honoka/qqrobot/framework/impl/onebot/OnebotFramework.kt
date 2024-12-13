@@ -15,8 +15,8 @@ import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
 import de.honoka.qqrobot.starter.RobotStarter
 import de.honoka.qqrobot.starter.config.property.RobotBasicProperties
-import de.honoka.sdk.util.kotlin.code.json.toJsonWrapper
 import de.honoka.sdk.util.kotlin.code.log
+import de.honoka.sdk.util.kotlin.text.toJsonWrapper
 import jakarta.annotation.PreDestroy
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component

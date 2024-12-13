@@ -17,7 +17,7 @@ class RobotApplicationRunner(
     override fun run(args: ApplicationArguments) {
         runCatching {
             bootFramework()
-        }.onFailure {
+        }.getOrElse {
             log.error("", it)
             exitProcess(1)
         }
@@ -27,7 +27,7 @@ class RobotApplicationRunner(
         if(!basicProperties.isAutoBoot) return
         runCatching {
             framework.boot()
-        }.onFailure {
+        }.getOrElse {
             framework.stop()
             throw it
         }
