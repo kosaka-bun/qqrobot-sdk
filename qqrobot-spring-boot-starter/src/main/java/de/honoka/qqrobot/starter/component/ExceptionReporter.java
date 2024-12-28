@@ -5,7 +5,7 @@ import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
 import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
-import de.honoka.sdk.util.code.ActionUtils;
+import de.honoka.sdk.util.basic.ActionUtils;
 import de.honoka.sdk.util.text.ExceptionUtils;
 import de.honoka.sdk.util.various.ImageUtils;
 import jakarta.annotation.Resource;

@@ -17,7 +17,7 @@ dependencyManagement {
 }
 
 dependencies {
-    implementationApi("de.honoka.sdk:honoka-spring-boot-starter:1.0.1-dev")
+    implementationApi("de.honoka.sdk:honoka-spring-boot-starter:1.0.2-dev")
     implementationApi("de.honoka.qqrobot:qqrobot-framework-api:2.0.0")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-aop")
