@@ -4,7 +4,7 @@ import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
-import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
+import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import de.honoka.sdk.util.basic.ActionUtils;
 import de.honoka.sdk.util.text.ExceptionUtils;
 import de.honoka.sdk.util.various.ImageUtils;
@@ -55,7 +55,7 @@ public class ExceptionReporter {
             //region 判断是否需要报告异常，若不需要，则跳出
             String exceptionText = ExceptionUtils.transfer(t);
             //配置为不报告
-            if(!basicProperties.isReportException()) return;
+            if(!basicProperties.getReportException()) return;
             //将信息拆分成行
             String[] rows = exceptionText.split("\n");
             //如果该异常已经发生过则不予报告

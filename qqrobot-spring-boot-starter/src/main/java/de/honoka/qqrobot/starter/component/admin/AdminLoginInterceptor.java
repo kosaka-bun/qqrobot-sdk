@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component.admin;
 
-import de.honoka.qqrobot.starter.config.property.AdminProperties;
+import de.honoka.qqrobot.starter.config.AdminProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;

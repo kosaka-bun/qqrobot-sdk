@@ -10,11 +10,11 @@ import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.BaseFramework
 import de.honoka.qqrobot.framework.api.model.RobotMessageType.*
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
-import de.honoka.qqrobot.framework.config.property.OnebotProperties
+import de.honoka.qqrobot.framework.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
-import de.honoka.qqrobot.starter.RobotStarter
-import de.honoka.qqrobot.starter.config.property.RobotBasicProperties
+import de.honoka.qqrobot.starter.config.RobotBasicProperties
+import de.honoka.qqrobot.starter.util.GlobalThreadPools
 import de.honoka.sdk.util.kotlin.basic.log
 import de.honoka.sdk.util.kotlin.text.toJsonWrapper
 import jakarta.annotation.PreDestroy
@@ -56,7 +56,7 @@ class OnebotFramework(
              * 这条语句在synchronized方法中，checkIsOnline也是一个synchronized方法，不采用
              * 异步将会导致循环等待。
              */
-            RobotStarter.globalThreadPool.submit {
+            GlobalThreadPools.pool.submit {
                 checkIsOnline()
                 if(online) frameworkCallback.onStartup()
             }
@@ -124,7 +124,7 @@ class OnebotFramework(
         
         override fun afterConnectionClosed(session: WebSocketSession, closeStatus: CloseStatus) {
             log.info("WebSocket连接已断开")
-            RobotStarter.globalThreadPool.submit {
+            GlobalThreadPools.pool.submit {
                 frameworkCallback.onShutdown()
                 if(started) {
                     //不直接使用reboot，以确保不会和自动重连任务相冲突，导致执行两次重启
@@ -222,7 +222,7 @@ class OnebotFramework(
                 //此前不在线，现在在线，更新上线时间点
                 log.info("QQ已在线，${TIME_TO_WAIT_ONLINE / 1000L}秒后开始处理消息")
                 onlineTimePoint = System.currentTimeMillis()
-                RobotStarter.globalInstantThreadPool.submit {
+                GlobalThreadPools.instantPool.submit {
                     Thread.sleep(TIME_TO_WAIT_ONLINE)
                     log.info("已开始处理消息")
                 }
@@ -348,7 +348,7 @@ class OnebotFramework(
                 if(retcode != 0) throw Exception("retcode = $retcode，errMsg = $errMsg")
             } catch(t: Throwable) {
                 log.error("\n消息发送失败！已尝试次数：$i\n要发送的内容：\n${message.toRawString()}", t)
-                if(!basicProperties.isResendOnSendFailed) break
+                if(!basicProperties.resendOnSendFailed) break
                 continue
             }
             if(i > 1) log.info("\n消息重发成功：\n${message.toRawString()}")

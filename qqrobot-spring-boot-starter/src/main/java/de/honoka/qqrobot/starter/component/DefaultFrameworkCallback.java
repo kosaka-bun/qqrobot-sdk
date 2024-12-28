@@ -3,9 +3,9 @@ package de.honoka.qqrobot.starter.component;
 import de.honoka.qqrobot.framework.api.Framework;
 import de.honoka.qqrobot.framework.api.FrameworkCallback;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
-import de.honoka.qqrobot.starter.RobotStarter;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import de.honoka.qqrobot.starter.config.ConditionalBeansConfig;
+import de.honoka.qqrobot.starter.util.GlobalThreadPools;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 
@@ -25,7 +25,7 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
      */
     @Override
     public void onPrivateMsg(long qq, RobotMultipartMessage msg) {
-        RobotStarter.globalInstantThreadPool.submit(() -> {
+        GlobalThreadPools.instantPool.submit(() -> {
             //回复信息
             RobotMultipartMessage reply = messageExecutor.executeMsg(null, qq, msg);
             if(reply != null) {
@@ -43,7 +43,7 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
     public void onGroupMsg(long group, long qq, RobotMultipartMessage msg) {
         //若机器人被禁言，则不响应此消息
         if(framework.isMuted(group)) return;
-        RobotStarter.globalInstantThreadPool.submit(() -> {
+        GlobalThreadPools.instantPool.submit(() -> {
             //回复信息
             RobotMultipartMessage reply = messageExecutor.executeMsg(group, qq, msg);
             if(reply != null) {

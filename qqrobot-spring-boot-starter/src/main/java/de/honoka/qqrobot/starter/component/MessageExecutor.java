@@ -5,14 +5,14 @@ import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
-import de.honoka.qqrobot.starter.RobotStarter;
 import de.honoka.qqrobot.starter.command.CommandInvoker;
 import de.honoka.qqrobot.starter.common.ConstantMessage;
 import de.honoka.qqrobot.starter.common.annotation.RobotController;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
 import de.honoka.qqrobot.starter.component.session.RobotSession;
 import de.honoka.qqrobot.starter.component.session.SessionManager;
-import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
+import de.honoka.qqrobot.starter.config.RobotBasicProperties;
+import de.honoka.qqrobot.starter.util.GlobalThreadPools;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.Getter;
@@ -141,7 +141,7 @@ public class MessageExecutor {
         //内部类中需要局部变量未被更改才能调用
         RobotMultipartMessage replyCopy = (RobotMultipartMessage) Objects.requireNonNull(reply).clone();
         //在新线程中，忽略异常地进行结束操作
-        RobotStarter.globalThreadPool.submit(() -> {
+        GlobalThreadPools.pool.submit(() -> {
             //记录消息处理的相关信息
             robotLogger.logMsgExecution(group, qq, msg, replyCopy);
         });

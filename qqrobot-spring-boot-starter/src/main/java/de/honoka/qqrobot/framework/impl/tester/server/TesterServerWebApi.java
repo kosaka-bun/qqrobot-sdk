@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.framework.impl.tester.server;
 
 import cn.hutool.core.io.IoUtil;
-import de.honoka.qqrobot.framework.config.property.TesterProperties;
+import de.honoka.qqrobot.framework.config.TesterProperties;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;

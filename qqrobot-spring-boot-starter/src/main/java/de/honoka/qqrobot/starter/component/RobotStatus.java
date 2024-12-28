@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component;
 
-import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
+import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -19,6 +19,6 @@ public class RobotStatus {
     private boolean enabled;
 
     public RobotStatus(RobotBasicProperties basicProperties) {
-        enabled = basicProperties.isDefaultEnabled();
+        enabled = basicProperties.getDefaultEnabled();
     }
 }

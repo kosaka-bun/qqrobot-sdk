@@ -5,7 +5,7 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.common.ConstantMessage;
 import de.honoka.qqrobot.starter.common.annotation.Command;
 import de.honoka.qqrobot.starter.component.session.RobotSession;
-import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
+import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import lombok.Getter;
 import lombok.SneakyThrows;
 

@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component.admin;
 
-import de.honoka.qqrobot.starter.config.property.AdminProperties;
+import de.honoka.qqrobot.starter.config.AdminProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 

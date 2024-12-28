@@ -7,8 +7,8 @@ import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
 import de.honoka.qqrobot.starter.component.logger.entity.ExceptionRecord;
 import de.honoka.qqrobot.starter.component.logger.entity.UsageLog;
-import de.honoka.qqrobot.starter.config.property.AdminProperties;
-import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
+import de.honoka.qqrobot.starter.config.AdminProperties;
+import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import de.honoka.sdk.util.basic.ActionUtils;
 import de.honoka.sdk.util.system.SystemInfoBean;
 import de.honoka.sdk.util.text.TextUtils;
@@ -95,20 +95,20 @@ public class AdminApiController {
     public ApiResponse<?> mainInfo() {
         Map<String, Object> data = new HashMap<>();
         data.put("system_info", new SystemInfoBean());
-        data.put("will_send_test_message_on_relogin", basicProperties.isSendTestMessageOnRelogin());
-        data.put("will_resend_on_send_failed", basicProperties.isResendOnSendFailed());
+        data.put("will_send_test_message_on_relogin", basicProperties.getSendTestMessageOnRelogin());
+        data.put("will_resend_on_send_failed", basicProperties.getResendOnSendFailed());
         return ApiResponse.success(null, data);
     }
 
     @GetMapping("/switch/resend_on_failed")
     public ApiResponse<?> switchWillResendOnSendFailed() {
-        basicProperties.setResendOnSendFailed(!basicProperties.isResendOnSendFailed());
+        basicProperties.setResendOnSendFailed(!basicProperties.getResendOnSendFailed());
         return ApiResponse.success(null);
     }
 
     @GetMapping("/switch/send_test_message")
     public ApiResponse<?> switchWillSendTestMessageOnRelogin() {
-        basicProperties.setSendTestMessageOnRelogin(!basicProperties.isSendTestMessageOnRelogin());
+        basicProperties.setSendTestMessageOnRelogin(!basicProperties.getSendTestMessageOnRelogin());
         return ApiResponse.success(null);
     }
 

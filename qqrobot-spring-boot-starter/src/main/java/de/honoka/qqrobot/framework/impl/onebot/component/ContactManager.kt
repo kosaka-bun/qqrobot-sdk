@@ -3,9 +3,9 @@ package de.honoka.qqrobot.framework.impl.onebot.component
 import cn.hutool.http.HttpUtil
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
-import de.honoka.qqrobot.framework.config.property.OnebotProperties
+import de.honoka.qqrobot.framework.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.OnebotFramework
-import de.honoka.qqrobot.starter.RobotStarter
+import de.honoka.qqrobot.starter.util.GlobalThreadPools
 import de.honoka.sdk.util.kotlin.basic.log
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
@@ -31,7 +31,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
     
     @PostConstruct
     private fun init() {
-        RobotStarter.globalThreadPool.submit {
+        GlobalThreadPools.pool.submit {
             flush()
             log.info("读取了${friendCache.size}个好友信息")
             log.info("读取了${groupCache.size}个群信息")

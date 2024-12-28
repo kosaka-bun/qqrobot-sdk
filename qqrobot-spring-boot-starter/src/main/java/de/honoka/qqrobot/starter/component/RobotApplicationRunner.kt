@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.component
 
 import de.honoka.qqrobot.framework.api.Framework
-import de.honoka.qqrobot.starter.config.property.RobotBasicProperties
+import de.honoka.qqrobot.starter.config.RobotBasicProperties
 import de.honoka.sdk.util.kotlin.basic.log
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -24,7 +24,7 @@ class RobotApplicationRunner(
     }
     
     fun bootFramework() {
-        if(!basicProperties.isAutoBoot) return
+        if(!basicProperties.autoBoot) return
         runCatching {
             framework.boot()
         }.getOrElse {

@@ -28,10 +28,7 @@ dependencies {
     compileOnly(libs.mirai.console.compiler.annotations)
     implementation("com.github.houbb:opencc4j:1.6.0")
     implementation("com.h2database:h2:2.1.214")
-    "org.springframework.boot:spring-boot-configuration-processor".let {
-        implementation(it)
-        annotationProcessor(it)
-    }
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 tasks {

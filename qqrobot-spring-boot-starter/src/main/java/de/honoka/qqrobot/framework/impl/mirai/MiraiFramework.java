@@ -10,10 +10,10 @@ import de.honoka.qqrobot.framework.BaseFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
-import de.honoka.qqrobot.framework.config.property.MiraiProperties;
+import de.honoka.qqrobot.framework.config.MiraiProperties;
 import de.honoka.qqrobot.framework.impl.mirai.component.MiraiEventListener;
 import de.honoka.qqrobot.framework.impl.mirai.model.MiraiMessage;
-import de.honoka.qqrobot.starter.config.property.RobotBasicProperties;
+import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import de.honoka.sdk.util.file.FileUtils;
 import de.honoka.sdk.util.text.TextUtils;
 import jakarta.annotation.PostConstruct;
@@ -289,7 +289,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
                 System.err.println("要发送的内容：\n" + msg.contentToString());
                 e.printStackTrace();
                 //是否需要重发
-                if(!basicProperties.isResendOnSendFailed()) break;
+                if(!basicProperties.getResendOnSendFailed()) break;
                 continue;
             }
             //发送成功，不再继续尝试

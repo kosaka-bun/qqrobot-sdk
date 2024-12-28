@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.framework.impl.tester.config;
 
-import de.honoka.qqrobot.framework.config.property.TesterProperties;
+import de.honoka.qqrobot.framework.config.TesterProperties;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServer;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServerConnection;
 import jakarta.annotation.Resource;
