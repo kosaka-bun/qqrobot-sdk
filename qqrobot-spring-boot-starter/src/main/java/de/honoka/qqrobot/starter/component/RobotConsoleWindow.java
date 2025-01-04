@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component;
 
-import de.honoka.qqrobot.framework.api.Framework;
+import de.honoka.qqrobot.framework.api.RobotFramework;
 import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import de.honoka.sdk.util.basic.ThrowsRunnable;
 import de.honoka.sdk.util.gui.ConsoleWindow;
@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @Getter
@@ -87,9 +88,10 @@ public class RobotConsoleWindow {
         }
         //创建并显示窗口
         try {
-            consoleWindow = ConsoleWindow.Builder.of(name).setOnExit(() -> {
-                onExit.accept(context);
-            }).setScreenZoomScale(screenZoomScale).build();
+            consoleWindow = ConsoleWindow.Builder.of(name)
+                .setScreenZoomScale(screenZoomScale)
+                .setOnExit(() -> onExit.accept(context))
+                .build();
             consoleWindow.setAutoScroll(true);
         } catch(Throwable t) {
             //若不能加载窗口，则直接以控制台方式运行
@@ -100,12 +102,15 @@ public class RobotConsoleWindow {
         //启动应用
         startApplication();
         //添加托盘图标菜单项
-        Framework<?> framework = context.getBean(Framework.class);
+        RobotFramework<?> framework = context.getBean(RobotFramework.class);
         RobotBasicProperties basicProperties = context.getBean(RobotBasicProperties.class);
         consoleWindow.addTrayIconMenuItem("重新登录", true, framework::reboot);
         consoleWindow.addTrayIconMenuItem("发送测试消息", false, () -> {
             String time = TextUtils.getSimpleDateFormat().format(new Date());
-            framework.sendGroupMsg(basicProperties.getDevelopingGroup(), time + "\n测试消息");
+            framework.sendGroupMsg(
+                Objects.requireNonNull(basicProperties.getDevelopingGroup()),
+                time + "\n测试消息"
+            );
         });
     }
 

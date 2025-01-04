@@ -8,7 +8,7 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
  * 机器人服务框架必须提供的方法
  * @param <M> 表示平台的消息格式
  */
-public interface Framework<M> {
+public interface RobotFramework<M> {
 
     /**
      * 启动框架

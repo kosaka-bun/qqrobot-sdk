@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.framework;
 
-import de.honoka.qqrobot.framework.api.Framework;
-import de.honoka.qqrobot.framework.api.FrameworkCallback;
+import de.honoka.qqrobot.framework.api.RobotFramework;
+import de.honoka.qqrobot.framework.api.RobotFrameworkCallback;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import jakarta.annotation.Resource;
@@ -9,14 +9,14 @@ import lombok.Getter;
 
 import java.util.Objects;
 
-public abstract class BaseFramework<M> implements Framework<M> {
+public abstract class BaseFramework<M> implements RobotFramework<M> {
     
     @Resource
     protected RobotBasicProperties basicProperties;
     
     @Getter
     @Resource
-    protected FrameworkCallback frameworkCallback;
+    protected RobotFrameworkCallback frameworkCallback;
     
     public void sendMsgToAdmin(RobotMultipartMessage message) {
         long qq = Objects.requireNonNull(basicProperties.getAdminQq());

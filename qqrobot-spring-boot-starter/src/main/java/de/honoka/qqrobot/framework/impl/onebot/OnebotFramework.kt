@@ -13,7 +13,6 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
 import de.honoka.qqrobot.framework.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
-import de.honoka.qqrobot.starter.config.RobotBasicProperties
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
 import de.honoka.sdk.util.kotlin.basic.log
 import de.honoka.sdk.util.kotlin.text.toJsonWrapper
@@ -34,7 +33,6 @@ import kotlin.io.path.Path
  */
 @Component
 class OnebotFramework(
-    private val basicProperties: RobotBasicProperties,
     private val onebotProperties: OnebotProperties,
     private val contactManager: ContactManager
 ) : BaseFramework<OnebotMessage>() {

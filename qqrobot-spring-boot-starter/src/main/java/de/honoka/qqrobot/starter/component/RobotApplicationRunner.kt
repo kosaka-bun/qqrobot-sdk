@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component
 
-import de.honoka.qqrobot.framework.api.Framework
+import de.honoka.qqrobot.framework.api.RobotFramework
 import de.honoka.qqrobot.starter.config.RobotBasicProperties
 import de.honoka.sdk.util.kotlin.basic.log
 import org.springframework.boot.ApplicationArguments
@@ -11,7 +11,7 @@ import kotlin.system.exitProcess
 @Component
 class RobotApplicationRunner(
     private val basicProperties: RobotBasicProperties,
-    private val framework: Framework<*>
+    private val framework: RobotFramework<*>
 ) : ApplicationRunner {
     
     override fun run(args: ApplicationArguments) {

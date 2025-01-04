@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component.logger;
 
-import de.honoka.qqrobot.framework.api.Framework;
+import de.honoka.qqrobot.framework.api.RobotFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
@@ -23,7 +23,7 @@ public class DefaultRobotLogger implements RobotLogger {
 
     @Lazy
     @Resource
-    private Framework<?> framework;
+    private RobotFramework<?> framework;
 
     @Resource
     private ExceptionRecordDao exceptionRecordDao;

@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component;
 
-import de.honoka.qqrobot.framework.api.Framework;
+import de.honoka.qqrobot.framework.api.RobotFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
@@ -26,7 +26,7 @@ public class ExceptionReporter {
 
     @Lazy
     @Resource
-    private Framework<?> framework;
+    private RobotFramework<?> framework;
 
     /**
      * 异常信息记录表，只记录第一行

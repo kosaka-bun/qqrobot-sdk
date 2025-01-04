@@ -5,7 +5,7 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 /**
  * 框架回调
  */
-public interface FrameworkCallback {
+public interface RobotFrameworkCallback {
 	
 	/**
 	 * 收到私聊消息

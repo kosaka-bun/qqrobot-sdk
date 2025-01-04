@@ -53,9 +53,6 @@ import java.util.Objects;
 public class MiraiFramework extends BaseFramework<MiraiMessage> {
 
     @Resource
-    private RobotBasicProperties basicProperties;
-
-    @Resource
     private MiraiProperties miraiProperties;
 
     /**
@@ -81,14 +78,18 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
 
         private BotConfiguration conf;
     }
-
+    
+    public RobotBasicProperties getBasicProperties() {
+        return basicProperties;
+    }
+    
     /**
      * 获取配置对象中的信息，构建框架
      */
     @PostConstruct
     public void init() {
-        Long qq = basicProperties.getQq();
-        String password = basicProperties.getPassword();
+        Long qq = Objects.requireNonNull(basicProperties.getQq());
+        String password = Objects.requireNonNull(basicProperties.getPassword());
         if(!ObjectUtil.isAllNotEmpty(qq, password)) {
             throw new RuntimeException("QQ号或密码不能为空");
         }

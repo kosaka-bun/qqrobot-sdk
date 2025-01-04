@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component.session;
 
-import de.honoka.qqrobot.framework.api.Framework;
+import de.honoka.qqrobot.framework.api.RobotFramework;
 import de.honoka.sdk.util.basic.ThrowsConsumer;
 import jakarta.annotation.Resource;
 import lombok.AccessLevel;
@@ -22,7 +22,7 @@ public class SessionManager {
     @Getter(AccessLevel.PACKAGE)
     @Lazy
     @Resource
-    private Framework<?> framework;
+    private RobotFramework<?> framework;
 
     /**
      * 当前会话列表

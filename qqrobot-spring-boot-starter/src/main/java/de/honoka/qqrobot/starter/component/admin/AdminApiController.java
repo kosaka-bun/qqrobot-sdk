@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.component.admin;
 
 import cn.hutool.core.util.ObjectUtil;
-import de.honoka.qqrobot.framework.api.Framework;
+import de.honoka.qqrobot.framework.api.RobotFramework;
 import de.honoka.qqrobot.starter.component.RobotConsoleWindow;
 import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
@@ -51,7 +51,7 @@ public class AdminApiController {
 
     @Lazy
     @Resource
-    private Framework<?> framework;
+    private RobotFramework<?> framework;
 
     //endregion
 

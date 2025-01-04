@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.component;
 
-import de.honoka.qqrobot.framework.api.Framework;
-import de.honoka.qqrobot.framework.api.FrameworkCallback;
+import de.honoka.qqrobot.framework.api.RobotFramework;
+import de.honoka.qqrobot.framework.api.RobotFrameworkCallback;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import de.honoka.qqrobot.starter.config.ConditionalBeansConfig;
@@ -10,7 +10,7 @@ import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 
 @ConditionalComponent(ConditionalBeansConfig.class)
-public class DefaultFrameworkCallback implements FrameworkCallback {
+public class DefaultFrameworkCallback implements RobotFrameworkCallback {
 
     @Lazy
     @Resource
@@ -18,7 +18,7 @@ public class DefaultFrameworkCallback implements FrameworkCallback {
 
     @Lazy
     @Resource
-    private Framework<?> framework;
+    private RobotFramework<?> framework;
 
     /**
      * 收到私聊消息
