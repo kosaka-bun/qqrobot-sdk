@@ -1,8 +1,6 @@
 package de.honoka.qqrobot.framework.impl.tester.config;
 
 import de.honoka.qqrobot.framework.config.TesterProperties;
-import de.honoka.qqrobot.framework.impl.tester.server.TesterServer;
-import de.honoka.qqrobot.framework.impl.tester.server.TesterServerConnection;
 import jakarta.annotation.Resource;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -22,11 +20,6 @@ public class TesterServerConfig implements WebMvcConfigurer {
     @Bean
     public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
-    }
-
-    @Bean
-    public TesterServerConnection testerServerConnection(TesterServer server) {
-        return new TesterServerConnection(server);
     }
 
     @Override

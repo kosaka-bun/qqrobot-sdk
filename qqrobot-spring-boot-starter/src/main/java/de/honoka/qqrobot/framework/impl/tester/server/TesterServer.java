@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.framework.impl.tester.server;
 
-import de.honoka.qqrobot.framework.api.RobotFramework;
 import de.honoka.qqrobot.framework.config.TesterProperties;
+import de.honoka.qqrobot.framework.impl.tester.TesterFramework;
 import de.honoka.sdk.util.concurrent.ThreadPoolUtils;
 import jakarta.annotation.Resource;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class TesterServer {
 
     @Lazy
     @Resource
-    private RobotFramework framework;
+    private TesterFramework framework;
 
     @Resource
     private TesterProperties testerProperties;

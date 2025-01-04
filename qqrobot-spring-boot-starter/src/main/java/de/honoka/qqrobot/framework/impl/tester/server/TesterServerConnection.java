@@ -5,22 +5,25 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import de.honoka.qqrobot.framework.AbstractRobotFramework;
 import de.honoka.qqrobot.framework.config.TesterProperties;
+import de.honoka.qqrobot.framework.impl.tester.TesterFramework;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterMessage;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterMessageType;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterRobotMessage;
+import jakarta.annotation.Resource;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-@ServerEndpoint(TesterProperties.WEB_PREFIX + "/server")
 @Getter
+@ServerEndpoint(TesterProperties.WEB_PREFIX + "/server")
+@Component
 public class TesterServerConnection {
 
     private static TesterServer testerServer;
@@ -28,14 +31,12 @@ public class TesterServerConnection {
     private Session session;
 
     private JSONObject data;
-
-    @SuppressWarnings("unused")
-    public TesterServerConnection() {}
-
-    public TesterServerConnection(TesterServer server) {
-        testerServer = server;
+    
+    @Resource
+    public void setTesterServer(TesterServer testerServer) {
+        TesterServerConnection.testerServer = testerServer;
     }
-
+    
     public void sendMessage(TesterMessage message) {
         try {
             this.session.getBasicRemote().sendText(JSONUtil.toJsonStr(message));
@@ -148,7 +149,6 @@ public class TesterServerConnection {
         return res;
     }
 
-    @SuppressWarnings("unchecked")
     private void onGroupMessage(TesterMessage message) {
         //收到消息，发送回执
         JSONObject resData = new JSONObject();
@@ -175,7 +175,7 @@ public class TesterServerConnection {
             }
         });
         //处理消息
-        AbstractRobotFramework<TesterRobotMessage> framework = (AbstractRobotFramework<TesterRobotMessage>) testerServer.getFramework();
+        TesterFramework framework = testerServer.getFramework();
         framework.getFrameworkCallback().onGroupMsg(
             testerServer.getTesterProperties().getGroupNumber(),
             data.getLong("qq"),
@@ -183,7 +183,6 @@ public class TesterServerConnection {
         );
     }
 
-    @SuppressWarnings("unchecked")
     private void onPrivateMessage(TesterMessage message) {
         //收到消息，发送回执
         JSONObject resData = new JSONObject();
@@ -195,7 +194,7 @@ public class TesterServerConnection {
         );
         //处理消息
         JSONArray content = message.getData().getJSONArray("content");
-        AbstractRobotFramework<TesterRobotMessage> framework = (AbstractRobotFramework<TesterRobotMessage>) testerServer.getFramework();
+        TesterFramework framework = testerServer.getFramework();
         framework.getFrameworkCallback().onPrivateMsg(
             data.getLong("qq"),
             framework.typedTransform(TesterRobotMessage.of(content))
