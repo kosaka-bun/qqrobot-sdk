@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.config
 
 import de.honoka.qqrobot.starter.component.admin.AdminLoginInterceptor
-import de.honoka.sdk.spring.starter.core.context.ApplicationContextHolder.springBean
+import de.honoka.sdk.spring.starter.core.context.springBean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
@@ -29,7 +29,7 @@ class AdminWebConfig : WebMvcConfigurer {
     
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.run {
-            addResourceHandler(AdminProperties.WEB_PREFIX + "/**").run {
+            addResourceHandler("${AdminProperties.WEB_PREFIX}/**").run {
                 addResourceLocations("classpath:/web/admin/")
             }
         }

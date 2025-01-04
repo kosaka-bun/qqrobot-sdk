@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @EnableScheduling
 @ComponentScan("de.honoka.qqrobot.starter", "de.honoka.qqrobot.framework.config")
 @EnableConfigurationProperties(RobotBasicProperties::class, AdminProperties::class)
-@Configuration
+@Configuration("qqrobotStarterMainConfig")
 class MainConfig
 
 @ConfigurationProperties("honoka.qqrobot")
