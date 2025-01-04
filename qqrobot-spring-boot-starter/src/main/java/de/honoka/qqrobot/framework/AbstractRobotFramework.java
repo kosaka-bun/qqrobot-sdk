@@ -9,7 +9,7 @@ import lombok.Getter;
 
 import java.util.Objects;
 
-public abstract class BaseFramework<M> implements RobotFramework<M> {
+public abstract class AbstractRobotFramework<M> implements RobotFramework {
     
     @Resource
     protected RobotBasicProperties basicProperties;
@@ -17,6 +17,21 @@ public abstract class BaseFramework<M> implements RobotFramework<M> {
     @Getter
     @Resource
     protected RobotFrameworkCallback frameworkCallback;
+    
+    public abstract M typedTransform(Long group, long qq, RobotMultipartMessage message);
+    
+    public abstract RobotMultipartMessage typedTransform(M message);
+    
+    @Override
+    public final Object transform(Long group, long qq, RobotMultipartMessage message) {
+        return typedTransform(group, qq, message);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public final RobotMultipartMessage transform(Object message) {
+        return typedTransform((M) message);
+    }
     
     public void sendMsgToAdmin(RobotMultipartMessage message) {
         long qq = Objects.requireNonNull(basicProperties.getAdminQq());

@@ -6,9 +6,8 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 
 /**
  * 机器人服务框架必须提供的方法
- * @param <M> 表示平台的消息格式
  */
-public interface RobotFramework<M> {
+public interface RobotFramework {
 
     /**
      * 启动框架
@@ -28,12 +27,12 @@ public interface RobotFramework<M> {
     /**
      * 将统一消息格式转换为平台消息格式（group和qq参数用于提供给需要提前上传文件的框架）
      */
-    M transform(Long group, long qq, RobotMultipartMessage message);
+    Object transform(Long group, long qq, RobotMultipartMessage message);
 
     /**
      * 使平台支持的多部分消息转换为统一消息格式
      */
-    RobotMultipartMessage transform(M message);
+    RobotMultipartMessage transform(Object message);
 
     /**
      * 向指定QQ发送一条私聊消息

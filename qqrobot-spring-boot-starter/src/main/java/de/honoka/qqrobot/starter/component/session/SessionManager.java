@@ -22,7 +22,7 @@ public class SessionManager {
     @Getter(AccessLevel.PACKAGE)
     @Lazy
     @Resource
-    private RobotFramework<?> framework;
+    private RobotFramework framework;
 
     /**
      * 当前会话列表

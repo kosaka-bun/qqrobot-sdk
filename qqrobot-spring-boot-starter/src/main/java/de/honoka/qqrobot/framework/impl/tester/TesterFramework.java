@@ -3,7 +3,7 @@ package de.honoka.qqrobot.framework.impl.tester;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSONObject;
-import de.honoka.qqrobot.framework.BaseFramework;
+import de.honoka.qqrobot.framework.AbstractRobotFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
@@ -32,7 +32,7 @@ import java.util.UUID;
 @Slf4j
 @Getter
 @Component
-public class TesterFramework extends BaseFramework<TesterRobotMessage> {
+public class TesterFramework extends AbstractRobotFramework<TesterRobotMessage> {
 
     @Resource
     private TesterProperties testerProperties;
@@ -75,7 +75,7 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
 
     @SneakyThrows
     @Override
-    public TesterRobotMessage transform(Long group, long qq, RobotMultipartMessage message) {
+    public TesterRobotMessage typedTransform(Long group, long qq, RobotMultipartMessage message) {
         if(message == null || message.isEmpty()) return null;
         TesterRobotMessage testerRobotMessage = new TesterRobotMessage();
         for(RobotMessage<?> part : message.messageList) {
@@ -118,7 +118,7 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
     }
 
     @Override
-    public RobotMultipartMessage transform(TesterRobotMessage message) {
+    public RobotMultipartMessage typedTransform(TesterRobotMessage message) {
         RobotMultipartMessage multipartMessage = new RobotMultipartMessage();
         for(TesterRobotMessage.Part part : message.getParts()) {
             if(part.getType().equals(TesterRobotMessage.PartType.AT)) {
@@ -137,7 +137,7 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
             if(qqOfConnection != qq) continue;
             JSONObject data = new JSONObject();
             data.set("name", "Robot");
-            data.set("content", transform(null, qq, message).toJsonArray());
+            data.set("content", typedTransform(null, qq, message).toJsonArray());
             connection.sendMessage(
                 new TesterMessage(null)
                     .setType(TesterMessageType.PRIVATE_MESSAGE)
@@ -151,7 +151,7 @@ public class TesterFramework extends BaseFramework<TesterRobotMessage> {
         for(TesterServerConnection connection : testerServer.getConnections()) {
             JSONObject data = new JSONObject();
             data.set("name", "Robot");
-            data.set("content", transform(group, 0, message).toJsonArray());
+            data.set("content", typedTransform(group, 0, message).toJsonArray());
             connection.sendMessage(
                 new TesterMessage(null)
                     .setType(TesterMessageType.GROUP_MESSAGE)

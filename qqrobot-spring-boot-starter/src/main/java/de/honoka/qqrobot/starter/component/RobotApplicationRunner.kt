@@ -11,7 +11,7 @@ import kotlin.system.exitProcess
 @Component
 class RobotApplicationRunner(
     private val basicProperties: RobotBasicProperties,
-    private val framework: RobotFramework<*>
+    private val framework: RobotFramework
 ) : ApplicationRunner {
     
     override fun run(args: ApplicationArguments) {

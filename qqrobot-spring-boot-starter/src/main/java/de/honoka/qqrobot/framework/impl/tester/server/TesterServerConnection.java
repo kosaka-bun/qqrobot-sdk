@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import de.honoka.qqrobot.framework.BaseFramework;
+import de.honoka.qqrobot.framework.AbstractRobotFramework;
 import de.honoka.qqrobot.framework.config.TesterProperties;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterMessage;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterMessageType;
@@ -175,11 +175,11 @@ public class TesterServerConnection {
             }
         });
         //处理消息
-        BaseFramework<TesterRobotMessage> framework = (BaseFramework<TesterRobotMessage>) testerServer.getFramework();
+        AbstractRobotFramework<TesterRobotMessage> framework = (AbstractRobotFramework<TesterRobotMessage>) testerServer.getFramework();
         framework.getFrameworkCallback().onGroupMsg(
             testerServer.getTesterProperties().getGroupNumber(),
             data.getLong("qq"),
-            framework.transform(TesterRobotMessage.of(content))
+            framework.typedTransform(TesterRobotMessage.of(content))
         );
     }
 
@@ -195,10 +195,10 @@ public class TesterServerConnection {
         );
         //处理消息
         JSONArray content = message.getData().getJSONArray("content");
-        BaseFramework<TesterRobotMessage> framework = (BaseFramework<TesterRobotMessage>) testerServer.getFramework();
+        AbstractRobotFramework<TesterRobotMessage> framework = (AbstractRobotFramework<TesterRobotMessage>) testerServer.getFramework();
         framework.getFrameworkCallback().onPrivateMsg(
             data.getLong("qq"),
-            framework.transform(TesterRobotMessage.of(content))
+            framework.typedTransform(TesterRobotMessage.of(content))
         );
     }
 }

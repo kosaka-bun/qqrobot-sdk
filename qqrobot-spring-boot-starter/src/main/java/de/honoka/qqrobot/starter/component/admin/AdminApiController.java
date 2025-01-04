@@ -51,7 +51,7 @@ public class AdminApiController {
 
     @Lazy
     @Resource
-    private RobotFramework<?> framework;
+    private RobotFramework framework;
 
     //endregion
 

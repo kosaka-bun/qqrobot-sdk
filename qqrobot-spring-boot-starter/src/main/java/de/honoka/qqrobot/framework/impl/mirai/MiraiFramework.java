@@ -6,7 +6,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import de.honoka.qqrobot.framework.BaseFramework;
+import de.honoka.qqrobot.framework.AbstractRobotFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
@@ -50,7 +50,7 @@ import java.util.Objects;
 @Slf4j
 @Getter
 @Component
-public class MiraiFramework extends BaseFramework<MiraiMessage> {
+public class MiraiFramework extends AbstractRobotFramework<MiraiMessage> {
 
     @Resource
     private MiraiProperties miraiProperties;
@@ -190,7 +190,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
 
     @SneakyThrows
     @Override
-    public MiraiMessage transform(Long group, long qq, RobotMultipartMessage message) {
+    public MiraiMessage typedTransform(Long group, long qq, RobotMultipartMessage message) {
         if(message == null || message.isEmpty()) return null;
         MessageChainBuilder builder = new MessageChainBuilder();
         List<ExternalResource> externalResources = new ArrayList<>();
@@ -236,7 +236,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
     }
 
     @Override
-    public RobotMultipartMessage transform(MiraiMessage message) {
+    public RobotMultipartMessage typedTransform(MiraiMessage message) {
         MessageChain miraiMultiPartMsg = message.getMessageChain();
         RobotMultipartMessage multipartMessage = new RobotMultipartMessage();
         for(SingleMessage sm : miraiMultiPartMsg) {
@@ -256,7 +256,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
         //若不存在，不予发送
         if(contact == null) return;
         //发送消息
-        MiraiMessage msgAndRes = transform(null, qq, message);
+        MiraiMessage msgAndRes = typedTransform(null, qq, message);
         sendMessage(contact, msgAndRes);
     }
 
@@ -268,7 +268,7 @@ public class MiraiFramework extends BaseFramework<MiraiMessage> {
         //机器人在该群被禁言，不予发送
         if(isMuted(group)) return;
         //发送消息
-        MiraiMessage msgAndRes = transform(group, 0, message);
+        MiraiMessage msgAndRes = typedTransform(group, 0, message);
         sendMessage(groupObj, msgAndRes);
     }
 

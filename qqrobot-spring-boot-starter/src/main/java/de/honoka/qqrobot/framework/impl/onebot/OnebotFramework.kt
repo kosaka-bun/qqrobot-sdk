@@ -7,7 +7,7 @@ import cn.hutool.http.HttpUtil
 import cn.hutool.json.JSONArray
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
-import de.honoka.qqrobot.framework.BaseFramework
+import de.honoka.qqrobot.framework.AbstractRobotFramework
 import de.honoka.qqrobot.framework.api.model.RobotMessageType.*
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
 import de.honoka.qqrobot.framework.config.OnebotProperties
@@ -35,7 +35,7 @@ import kotlin.io.path.Path
 class OnebotFramework(
     private val onebotProperties: OnebotProperties,
     private val contactManager: ContactManager
-) : BaseFramework<OnebotMessage>() {
+) : AbstractRobotFramework<OnebotMessage>() {
 
     companion object {
 
@@ -81,7 +81,7 @@ class OnebotFramework(
             val robotMessage = json["message"].let {
                 when(it) {
                     is String -> RobotMultipartMessage.of(it)
-                    is JSONArray -> transform(OnebotMessage(it))
+                    is JSONArray -> typedTransform(OnebotMessage(it))
                     else -> throw Exception("Unknown message type")
                 }
             }
@@ -232,7 +232,7 @@ class OnebotFramework(
     }
     
     //group与qq参数均未使用
-    override fun transform(group: Long?, qq: Long, message: RobotMultipartMessage): OnebotMessage {
+    override fun typedTransform(group: Long?, qq: Long, message: RobotMultipartMessage): OnebotMessage {
         val onebotMessage = OnebotMessage()
         val remoteMode = onebotProperties.fileReceiverPort != null
         message.messageList.forEach {
@@ -275,9 +275,11 @@ class OnebotFramework(
         return onebotMessage
     }
     
-    private fun transform(message: RobotMultipartMessage) = transform(null, 0, message)
+    private fun typedTransform(message: RobotMultipartMessage): OnebotMessage = run {
+        typedTransform(null, 0, message)
+    }
 
-    override fun transform(onebotMessage: OnebotMessage): RobotMultipartMessage {
+    override fun typedTransform(onebotMessage: OnebotMessage): RobotMultipartMessage {
         val message = RobotMultipartMessage()
         onebotMessage.parts.forEach {
             when(it.type) {
@@ -318,12 +320,12 @@ class OnebotFramework(
     
     override fun sendPrivateMsg(qq: Long, message: RobotMultipartMessage) {
         val contact = contactManager.searchContact(qq) ?: return
-        sendMessage(contact[0], qq, transform(message))
+        sendMessage(contact[0], qq, typedTransform(message))
     }
     
     override fun sendGroupMsg(group: Long, message: RobotMultipartMessage) {
         if(!contactManager.containsGroup(group) || isMuted(group)) return
-        sendMessage(group, null, transform(message))
+        sendMessage(group, null, typedTransform(message))
     }
     
     private fun sendMessage(group: Long?, qq: Long?, message: OnebotMessage) {

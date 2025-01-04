@@ -18,7 +18,7 @@ public class DefaultFrameworkCallback implements RobotFrameworkCallback {
 
     @Lazy
     @Resource
-    private RobotFramework<?> framework;
+    private RobotFramework framework;
 
     /**
      * 收到私聊消息

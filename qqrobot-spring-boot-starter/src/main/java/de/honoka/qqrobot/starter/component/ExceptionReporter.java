@@ -26,7 +26,7 @@ public class ExceptionReporter {
 
     @Lazy
     @Resource
-    private RobotFramework<?> framework;
+    private RobotFramework framework;
 
     /**
      * 异常信息记录表，只记录第一行

@@ -102,7 +102,7 @@ public class RobotConsoleWindow {
         //启动应用
         startApplication();
         //添加托盘图标菜单项
-        RobotFramework<?> framework = context.getBean(RobotFramework.class);
+        RobotFramework framework = context.getBean(RobotFramework.class);
         RobotBasicProperties basicProperties = context.getBean(RobotBasicProperties.class);
         consoleWindow.addTrayIconMenuItem("重新登录", true, framework::reboot);
         consoleWindow.addTrayIconMenuItem("发送测试消息", false, () -> {

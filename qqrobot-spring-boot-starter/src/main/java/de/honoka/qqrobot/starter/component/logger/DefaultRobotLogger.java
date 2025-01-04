@@ -23,7 +23,7 @@ public class DefaultRobotLogger implements RobotLogger {
 
     @Lazy
     @Resource
-    private RobotFramework<?> framework;
+    private RobotFramework framework;
 
     @Resource
     private ExceptionRecordDao exceptionRecordDao;

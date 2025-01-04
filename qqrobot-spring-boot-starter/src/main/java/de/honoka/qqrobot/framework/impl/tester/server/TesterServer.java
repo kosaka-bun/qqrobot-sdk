@@ -26,7 +26,7 @@ public class TesterServer {
 
     @Lazy
     @Resource
-    private RobotFramework<?> framework;
+    private RobotFramework framework;
 
     @Resource
     private TesterProperties testerProperties;
