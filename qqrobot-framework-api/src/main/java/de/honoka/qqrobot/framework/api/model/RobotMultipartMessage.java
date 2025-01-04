@@ -8,11 +8,11 @@ import lombok.experimental.Accessors;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+@Setter
+@Getter
 @Accessors(chain = true)
 public class RobotMultipartMessage implements Cloneable {
 
-    @Getter
-    @Setter
     public ArrayList<RobotMessage<?>> messageList = new ArrayList<>();
 
     public RobotMultipartMessage() {}

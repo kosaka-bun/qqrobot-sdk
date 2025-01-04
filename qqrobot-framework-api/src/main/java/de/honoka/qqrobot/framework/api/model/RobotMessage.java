@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-@Data
 @Accessors(chain = true)
+@Data
 public class RobotMessage<C> {
 
     private RobotMessageType type;

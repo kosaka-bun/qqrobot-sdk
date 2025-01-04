@@ -5,19 +5,18 @@ import de.honoka.qqrobot.framework.api.FrameworkCallback;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import jakarta.annotation.Resource;
+import lombok.Getter;
 
 import java.util.Objects;
 
-public abstract class BaseFramework<M> extends Framework<M> {
+public abstract class BaseFramework<M> implements Framework<M> {
     
     @Resource
     protected RobotBasicProperties basicProperties;
     
+    @Getter
     @Resource
-    @Override
-    protected void setFrameworkCallback(FrameworkCallback frameworkCallback) {
-        super.setFrameworkCallback(frameworkCallback);
-    }
+    protected FrameworkCallback frameworkCallback;
     
     public void sendMsgToAdmin(RobotMultipartMessage message) {
         long qq = Objects.requireNonNull(basicProperties.getAdminQq());

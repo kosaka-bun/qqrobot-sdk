@@ -21,7 +21,7 @@ public class TesterServer {
     private List<TesterServerConnection> connections;
 
     private final ThreadPoolExecutor executor = ThreadPoolUtils.newEagerThreadPool(
-        1, 3, 10, TimeUnit.SECONDS
+        1, 2, 10, TimeUnit.SECONDS
     );
 
     @Lazy
