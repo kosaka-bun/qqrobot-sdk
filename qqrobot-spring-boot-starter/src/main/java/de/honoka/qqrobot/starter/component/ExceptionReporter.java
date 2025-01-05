@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component;
 
-import de.honoka.qqrobot.framework.api.RobotFramework;
+import de.honoka.qqrobot.framework.ExtendedRobotFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.component.logger.RobotLogger;
@@ -9,12 +9,14 @@ import de.honoka.sdk.util.basic.ActionUtils;
 import de.honoka.sdk.util.text.ExceptionUtils;
 import de.honoka.sdk.util.various.ImageUtils;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class ExceptionReporter {
 
@@ -26,7 +28,7 @@ public class ExceptionReporter {
 
     @Lazy
     @Resource
-    private RobotFramework framework;
+    private ExtendedRobotFramework framework;
 
     /**
      * 异常信息记录表，只记录第一行
@@ -45,7 +47,7 @@ public class ExceptionReporter {
      */
     public void sendExceptionToDevelopingGroup(Throwable t) {
         //首先将信息写入控制台
-        t.printStackTrace();
+        log.error("", t);
         try {
             //只发送和记录最根本的错误信息
             while(t.getCause() != null) t = t.getCause();
@@ -66,8 +68,8 @@ public class ExceptionReporter {
             //报告
             exceptionList.add(rows[0]);
             RobotMultipartMessage reply = RobotMultipartMessage.of("出现了问题，堆栈信息如下：\n");
-            reply.add(RobotMessage.image(ImageUtils.textToImageBySize(exceptionText, 3500)));
-            framework.sendGroupMsg(basicProperties.getDevelopingGroup(), reply);
+            reply.add(RobotMessage.image(ImageUtils.textToImageByLength(exceptionText, 120)));
+            framework.sendMsgToDevelopingGroup(reply);
         } catch(Exception ex) {
             ex.printStackTrace();
         }

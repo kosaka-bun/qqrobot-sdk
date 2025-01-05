@@ -55,9 +55,10 @@ public class CommandInvoker {
     private RobotBasicProperties basicProperties;
 
     //私有，仅在内部构造实例，外部获取实例需调用静态方法
-    private CommandInvoker(List<String> commandName, boolean mustInvokeByAdmin,
-                           boolean noPrefix, int argsNum, Method method,
-                           Object controller) {
+    private CommandInvoker(
+        List<String> commandName, boolean mustInvokeByAdmin, boolean noPrefix,
+        int argsNum, Method method, Object controller
+    ) {
         this.commandName = commandName;
         this.mustInvokeByAdmin = mustInvokeByAdmin;
         this.noPrefix = noPrefix;

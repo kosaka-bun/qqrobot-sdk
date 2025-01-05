@@ -6,7 +6,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import de.honoka.qqrobot.framework.AbstractRobotFramework;
+import de.honoka.qqrobot.framework.TypedRobotFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
@@ -50,7 +50,7 @@ import java.util.Objects;
 @Slf4j
 @Getter
 @Component
-public class MiraiFramework extends AbstractRobotFramework<MiraiMessage> {
+public class MiraiFramework extends TypedRobotFramework<MiraiMessage> {
 
     @Resource
     private MiraiProperties miraiProperties;

@@ -3,7 +3,7 @@ package de.honoka.qqrobot.framework.impl.tester;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSONObject;
-import de.honoka.qqrobot.framework.AbstractRobotFramework;
+import de.honoka.qqrobot.framework.TypedRobotFramework;
 import de.honoka.qqrobot.framework.api.model.RobotMessage;
 import de.honoka.qqrobot.framework.api.model.RobotMessageType;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
@@ -32,7 +32,7 @@ import java.util.UUID;
 @Slf4j
 @Getter
 @Component
-public class TesterFramework extends AbstractRobotFramework<TesterRobotMessage> {
+public class TesterFramework extends TypedRobotFramework<TesterRobotMessage> {
 
     @Resource
     private TesterProperties testerProperties;

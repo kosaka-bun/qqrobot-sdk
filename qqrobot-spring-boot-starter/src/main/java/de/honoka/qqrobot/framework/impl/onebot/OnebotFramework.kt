@@ -7,7 +7,7 @@ import cn.hutool.http.HttpUtil
 import cn.hutool.json.JSONArray
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
-import de.honoka.qqrobot.framework.AbstractRobotFramework
+import de.honoka.qqrobot.framework.TypedRobotFramework
 import de.honoka.qqrobot.framework.api.model.RobotMessageType.*
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
 import de.honoka.qqrobot.framework.config.OnebotProperties
@@ -35,7 +35,7 @@ import kotlin.io.path.Path
 class OnebotFramework(
     private val onebotProperties: OnebotProperties,
     private val contactManager: ContactManager
-) : AbstractRobotFramework<OnebotMessage>() {
+) : TypedRobotFramework<OnebotMessage>() {
 
     companion object {
 
