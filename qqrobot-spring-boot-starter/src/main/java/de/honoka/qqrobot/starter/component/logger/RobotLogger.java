@@ -1,7 +1,5 @@
 package de.honoka.qqrobot.starter.component.logger;
 
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
-
 /**
  * 由用户自行实现的日志记录器
  */
@@ -15,5 +13,5 @@ public interface RobotLogger {
     /**
      * 记录消息处理的相关信息
      */
-    void logMsgExecution(Long group, long qq, RobotMultipartMessage msg, RobotMultipartMessage reply);
+    void logMsgExecution(Long group, long qq, String msg, String reply);
 }

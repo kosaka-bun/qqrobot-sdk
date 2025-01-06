@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 消息处理器，按相应的逻辑统一地处理各类消息
@@ -114,10 +113,10 @@ public class MessageExecutor {
             part.setContent(str);
         }
         //进行简繁转换
-        for(RobotMessage<?> part0 : msg.messageList) {
-            if(!part0.getType().equals(RobotMessageType.TEXT)) continue;
-            RobotMessage<String> part = (RobotMessage<String>) part0;
-            part.setContent(ZhConverterUtil.toSimple(part.getContent()));
+        for(RobotMessage<?> part : msg.messageList) {
+            if(!part.getType().equals(RobotMessageType.TEXT)) continue;
+            RobotMessage<String> stringPart = (RobotMessage<String>) part;
+            stringPart.setContent(ZhConverterUtil.toSimple(stringPart.getContent()));
         }
         //判断发送消息的qq是否在会话列表内
         RobotSession session = sessionManager.getCurrentSession(group, qq);
@@ -136,20 +135,21 @@ public class MessageExecutor {
         }
         //若不处于会话当中，则进行命令匹配
         //处理消息
-        RobotMultipartMessage reply = executeMsg0(group, qq, msg);
-        //结束操作，用于对消息进行一些记录或分析
-        //内部类中需要局部变量未被更改才能调用
-        RobotMultipartMessage replyCopy = (RobotMultipartMessage) Objects.requireNonNull(reply).clone();
+        RobotMultipartMessage reply = doExecuteMsg(group, qq, msg);
         //在新线程中，忽略异常地进行结束操作
         GlobalThreadPools.pool.submit(() -> {
             //记录消息处理的相关信息
-            robotLogger.logMsgExecution(group, qq, msg, replyCopy);
+            String replyStr = null;
+            if(reply != null) {
+                replyStr = reply.contentToString();
+            }
+            robotLogger.logMsgExecution(group, qq, msg.contentToString(), replyStr);
         });
         return reply;
     }
 
     @SuppressWarnings("unchecked")
-    private RobotMultipartMessage executeMsg0(Long group, long qq, RobotMultipartMessage msg) {
+    private RobotMultipartMessage doExecuteMsg(Long group, long qq, RobotMultipartMessage msg) {
         RobotMultipartMessage reply = null;
         //是否找到了对应的命令
         boolean foundCommand = false;
@@ -217,7 +217,7 @@ public class MessageExecutor {
                 reply = RobotMultipartMessage.of(wrongCommandMsg);
             }
         } catch(Throwable t) {
-            reporter.sendExceptionToDevelopingGroup(t);
+            reporter.report(t);
             //找到了命令但没有正确处理
             if(foundCommand) reply = RobotMultipartMessage.of(ConstantMessage.ERROR);
         }

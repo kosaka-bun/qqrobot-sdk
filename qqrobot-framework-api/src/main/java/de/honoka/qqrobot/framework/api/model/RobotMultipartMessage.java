@@ -2,18 +2,18 @@ package de.honoka.qqrobot.framework.api.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 @Setter
 @Getter
 @Accessors(chain = true)
-public class RobotMultipartMessage implements Cloneable {
+public class RobotMultipartMessage {
 
-    public ArrayList<RobotMessage<?>> messageList = new ArrayList<>();
+    public List<RobotMessage<?>> messageList = new ArrayList<>();
 
     public RobotMultipartMessage() {}
 
@@ -49,8 +49,7 @@ public class RobotMultipartMessage implements Cloneable {
      * 移除不必要的空串部分
      */
     public void removeEmptyPart() {
-        for(Iterator<RobotMessage<?>> iterator = messageList.iterator();
-            iterator.hasNext(); ) {
+        for(Iterator<RobotMessage<?>> iterator = messageList.iterator(); iterator.hasNext(); ) {
             RobotMessage<?> part = iterator.next();
             if(part.getContent() == null) {
                 iterator.remove();
@@ -91,15 +90,5 @@ public class RobotMultipartMessage implements Cloneable {
     @Override
     public String toString() {
         return contentToString();
-    }
-
-    @SuppressWarnings("unchecked")
-    @SneakyThrows
-    @Override
-    public Object clone() {
-        RobotMultipartMessage clone = (RobotMultipartMessage) super.clone();
-        ArrayList<RobotMessage<?>> listCopy = (ArrayList<RobotMessage<?>>)
-                messageList.clone();
-        return clone.setMessageList(listCopy);
     }
 }
