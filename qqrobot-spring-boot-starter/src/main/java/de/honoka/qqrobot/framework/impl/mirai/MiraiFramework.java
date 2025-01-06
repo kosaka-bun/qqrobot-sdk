@@ -188,6 +188,7 @@ public class MiraiFramework extends TypedRobotFramework<MiraiMessage> {
         reboot();
     }
 
+    @SuppressWarnings("resource")
     @SneakyThrows
     @Override
     public MiraiMessage typedTransform(Long group, long qq, RobotMultipartMessage message) {
@@ -256,8 +257,7 @@ public class MiraiFramework extends TypedRobotFramework<MiraiMessage> {
         //若不存在，不予发送
         if(contact == null) return;
         //发送消息
-        MiraiMessage msgAndRes = typedTransform(null, qq, message);
-        sendMessage(contact, msgAndRes);
+        sendMessage(contact, typedTransform(null, qq, message));
     }
 
     @Override
@@ -268,46 +268,43 @@ public class MiraiFramework extends TypedRobotFramework<MiraiMessage> {
         //机器人在该群被禁言，不予发送
         if(isMuted(group)) return;
         //发送消息
-        MiraiMessage msgAndRes = typedTransform(group, 0, message);
-        sendMessage(groupObj, msgAndRes);
+        sendMessage(groupObj, typedTransform(group, 0, message));
     }
 
+    @SneakyThrows
     private void sendMessage(Contact contact, MiraiMessage msgAndRes) {
         if(msgAndRes == null) return;
-        MessageChain msg = msgAndRes.getMessageChain();
-        List<ExternalResource> externalResources = msgAndRes.getExternalResources();
-        DateFormat dateFormat = TextUtils.getSimpleDateFormat();
-        //当消息未成功发送时多次尝试
-        for(int tryTimes = 0; tryTimes < 3; tryTimes++) {
-            //尝试发送
-            try {
-                contact.sendMessage(msg);
-            } catch(Exception e) {
-                //未发送成功，重试
-                //报告错误
-                System.err.println(dateFormat.format(new Date()));
-                System.err.println("消息发送失败！已尝试次数：" + (tryTimes + 1));
-                System.err.println("要发送的内容：\n" + msg.contentToString());
-                e.printStackTrace();
-                //是否需要重发
-                if(!basicProperties.getResendOnSendFailed()) break;
-                continue;
+        try(msgAndRes) {
+            MessageChain msg = msgAndRes.getMessageChain();
+            DateFormat dateFormat = TextUtils.getSimpleDateFormat();
+            //当消息未成功发送时多次尝试
+            Throwable throwable = null;
+            for(int tryTimes = 0; tryTimes < 3; tryTimes++) {
+                //尝试发送
+                try {
+                    contact.sendMessage(msg);
+                } catch(Throwable t) {
+                    throwable = t;
+                    //未发送成功，重试
+                    //报告错误
+                    System.err.println(dateFormat.format(new Date()));
+                    System.err.println("消息发送失败！已尝试次数：" + (tryTimes + 1));
+                    System.err.println("要发送的内容：\n" + msg.contentToString());
+                    t.printStackTrace();
+                    //是否需要重发
+                    if(!basicProperties.getResendOnSendFailed()) break;
+                    continue;
+                }
+                throwable = null;
+                //发送成功，不再继续尝试
+                //若非第一次尝试发送
+                if(tryTimes > 0) {
+                    System.out.println(dateFormat.format(new Date()));
+                    System.out.println("消息重发成功：\n" + msg.contentToString());
+                }
+                break;
             }
-            //发送成功，不再继续尝试
-            //若非第一次尝试发送
-            if(tryTimes > 0) {
-                System.out.println(dateFormat.format(new Date()));
-                System.out.println("消息重发成功：\n" + msg.contentToString());
-            }
-            break;
-        }
-        //关闭资源
-        for(ExternalResource res : externalResources) {
-            try {
-                res.close();
-            } catch(Throwable t) {
-                //ignore
-            }
+            if(throwable != null) throw throwable;
         }
     }
 

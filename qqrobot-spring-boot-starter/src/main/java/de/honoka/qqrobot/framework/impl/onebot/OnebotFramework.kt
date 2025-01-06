@@ -14,6 +14,7 @@ import de.honoka.qqrobot.framework.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
+import de.honoka.sdk.util.kotlin.basic.exception
 import de.honoka.sdk.util.kotlin.basic.log
 import de.honoka.sdk.util.kotlin.text.toJsonWrapper
 import jakarta.annotation.PreDestroy
@@ -331,30 +332,35 @@ class OnebotFramework(
     private fun sendMessage(group: Long?, qq: Long?, message: OnebotMessage) {
         val apiName = if(qq == null) "send_group_msg" else "send_private_msg"
         val url = "${onebotProperties.urlPrefix}/$apiName"
-        for(i in 1..3) {
-            try {
-                val res = HttpUtil.post(
-                    url,
-                    JSONObject().let {
-                        it["group_id"] = group
-                        it["user_id"] = qq
-                        it["message"] = message.parts
-                        it.toString()
-                    },
-                    HTTP_REQUEST_TIMEOUT
-                ).let { JSONUtil.parseObj(it) }
-                val retcode = res.getInt("retcode")
-                val errMsg = res.getStr("message")
-                if(retcode != 0) throw Exception("retcode = $retcode，errMsg = $errMsg")
-            } catch(t: Throwable) {
-                log.error("\n消息发送失败！已尝试次数：$i\n要发送的内容：\n${message.toRawString()}", t)
-                if(!basicProperties.resendOnSendFailed) break
-                continue
+        message.use { m ->
+            var throwable: Throwable? = null
+            for(i in 1..3) {
+                try {
+                    val res = HttpUtil.post(
+                        url,
+                        JSONObject().let {
+                            it["group_id"] = group
+                            it["user_id"] = qq
+                            it["message"] = m.parts
+                            it.toString()
+                        },
+                        HTTP_REQUEST_TIMEOUT
+                    ).let { JSONUtil.parseObj(it) }
+                    val retcode = res.getInt("retcode")
+                    val errMsg = res.getStr("message")
+                    if(retcode != 0) exception("retcode = $retcode，errMsg = $errMsg")
+                } catch(t: Throwable) {
+                    throwable = t
+                    log.error("\n消息发送失败！已尝试次数：$i\n要发送的内容：\n${m.toRawString()}", t)
+                    if(!basicProperties.resendOnSendFailed) break
+                    continue
+                }
+                throwable = null
+                if(i > 1) log.info("\n消息重发成功：\n${m.toRawString()}")
+                break
             }
-            if(i > 1) log.info("\n消息重发成功：\n${message.toRawString()}")
-            break
+            throwable?.let { throw it }
         }
-        message.close()
     }
 
     override fun getGroupName(group: Long): String = contactManager.groupCache[group]?.name ?: "【未知】"

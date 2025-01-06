@@ -132,9 +132,11 @@ public class TesterFramework extends TypedRobotFramework<TesterRobotMessage> {
 
     @Override
     public void sendPrivateMsg(long qq, RobotMultipartMessage message) {
+        boolean found = false;
         for(TesterServerConnection connection : testerServer.getConnections()) {
             long qqOfConnection = connection.getData().getLong("qq");
             if(qqOfConnection != qq) continue;
+            found = true;
             JSONObject data = new JSONObject();
             data.set("name", "Robot");
             data.set("content", typedTransform(null, qq, message).toJsonArray());
@@ -144,10 +146,15 @@ public class TesterFramework extends TypedRobotFramework<TesterRobotMessage> {
                     .setData(data)
             );
         }
+        if(found) return;
+        throw new RuntimeException("User " + qq + " is not online.");
     }
     
     @Override
     public void sendGroupMsg(long group, RobotMultipartMessage message) {
+        if(testerServer.getConnections().isEmpty()) {
+            throw new RuntimeException("No users online.");
+        }
         for(TesterServerConnection connection : testerServer.getConnections()) {
             JSONObject data = new JSONObject();
             data.set("name", "Robot");

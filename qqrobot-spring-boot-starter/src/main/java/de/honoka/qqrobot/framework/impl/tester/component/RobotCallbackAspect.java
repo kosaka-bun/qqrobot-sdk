@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
@@ -44,7 +45,7 @@ public class RobotCallbackAspect {
         );
     }
     
-    @Before("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.sendPrivateMsg(..))")
+    @AfterReturning("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.sendPrivateMsg(..))")
     public void logSendPrivateMessage(JoinPoint joinPoint) {
         long qq = (long) joinPoint.getArgs()[0];
         Object msg = joinPoint.getArgs()[1];
@@ -54,7 +55,7 @@ public class RobotCallbackAspect {
         );
     }
 
-    @Before("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.sendGroupMsg(..))")
+    @AfterReturning("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.sendGroupMsg(..))")
     public void logSendGroupMessage(JoinPoint joinPoint) {
         Long group = (Long) joinPoint.getArgs()[0];
         Object msg = joinPoint.getArgs()[1];
@@ -64,7 +65,7 @@ public class RobotCallbackAspect {
         );
     }
 
-    @Before("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.reply(..))")
+    @AfterReturning("execution(* de.honoka.qqrobot.framework.impl.tester.TesterFramework.reply(..))")
     public void logReplyMessage(JoinPoint joinPoint) {
         Long group = (Long) joinPoint.getArgs()[0];
         long qq = (long) joinPoint.getArgs()[1];
