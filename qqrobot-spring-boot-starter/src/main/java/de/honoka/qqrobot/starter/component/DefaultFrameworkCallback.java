@@ -3,9 +3,9 @@ package de.honoka.qqrobot.starter.component;
 import de.honoka.qqrobot.framework.api.RobotFramework;
 import de.honoka.qqrobot.framework.api.RobotFrameworkCallback;
 import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
-import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import de.honoka.qqrobot.starter.config.ConditionalBeansConfig;
 import de.honoka.qqrobot.starter.util.GlobalThreadPools;
+import de.honoka.sdk.spring.starter.core.context.ConditionalComponent;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 

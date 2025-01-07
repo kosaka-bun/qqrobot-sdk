@@ -2,12 +2,12 @@ package de.honoka.qqrobot.starter.component.logger;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import de.honoka.qqrobot.framework.api.RobotFramework;
-import de.honoka.qqrobot.starter.common.annotation.ConditionalComponent;
 import de.honoka.qqrobot.starter.component.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.component.logger.dao.UsageLogDao;
 import de.honoka.qqrobot.starter.component.logger.entity.ExceptionRecord;
 import de.honoka.qqrobot.starter.component.logger.entity.UsageLog;
 import de.honoka.qqrobot.starter.config.ConditionalBeansConfig;
+import de.honoka.sdk.spring.starter.core.context.ConditionalComponent;
 import de.honoka.sdk.util.various.Retrier;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;

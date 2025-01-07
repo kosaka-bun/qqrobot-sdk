@@ -143,9 +143,10 @@ public class CommandInvoker {
                 //若从此方法上获取到了Command注解，则此方法是一个命令方法
                 //将该方法的信息加入命令列表中
                 List<String> commandName = Arrays.asList(command.value());
-                CommandInvoker invoker = new CommandInvoker(commandName,
-                        command.admin(), command.noPrefix(), command.argsNum(),
-                        method, controller);
+                CommandInvoker invoker = new CommandInvoker(
+                    commandName, command.admin(), command.noPrefix(),
+                    command.argsCount(), method, controller
+                );
                 invoker.basicProperties = basicProperties;
                 invokers.add(invoker);
             }

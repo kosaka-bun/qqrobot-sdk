@@ -22,7 +22,7 @@ class ExceptionReporter(
     private val robotLogger: RobotLogger
 ) {
     
-    private val scheduledTask = ScheduledTask("1m", action = ::doTask)
+    private val scheduledTask = ScheduledTask("10s", action = ::doTask)
     
     private val exceptionQueue = LinkedBlockingQueue<Throwable>()
     
@@ -37,9 +37,13 @@ class ExceptionReporter(
     private fun doTask() {
         val throwable = exceptionQueue.take()
         val reply = RobotMultipartMessage.of("出现了问题，堆栈信息如下：\n").apply {
-            val image = ImageUtils.textToImageByLength(
-                ExceptionUtil.stacktraceToString(throwable, -1), 120
-            )
+            val text = ExceptionUtil.stacktraceToString(throwable).run {
+                val lines = lines().run {
+                    if(size < 20) this else subList(0, 20)
+                }
+                lines.joinToString("\n")
+            }
+            val image = ImageUtils.textToImageByLength(text, 120)
             add(RobotMessage.image(image))
         }
         framework.sendMsgToDevelopingGroup(reply)

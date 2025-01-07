@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER })
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-@Component
 @Qualifier
+@Component
+@Inherited
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER })
 public @interface RobotController {}
