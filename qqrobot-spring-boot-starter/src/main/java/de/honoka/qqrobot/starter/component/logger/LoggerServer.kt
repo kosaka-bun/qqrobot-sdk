@@ -1,25 +1,26 @@
 package de.honoka.qqrobot.starter.component.logger
 
 import cn.hutool.core.io.FileUtil
-import de.honoka.sdk.util.file.FileUtils
+import de.honoka.qqrobot.starter.config.LoggerProperties
 import de.honoka.sdk.util.kotlin.basic.log
 import jakarta.annotation.PostConstruct
-import org.h2.Driver
-import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.sql.Connection
 import java.sql.DriverManager
-import kotlin.io.path.Path
 
 @EnableConfigurationProperties(LoggerProperties::class)
 @Component
 class LoggerServer(private val loggerProperties: LoggerProperties) {
     
     val connection: Connection
-        get() = DriverManager.getConnection(loggerProperties.jdbcUrl).apply {
-            autoCommit = true
+        get() {
+            Class.forName(loggerProperties.databaseDriver.name)
+            val c = DriverManager.getConnection(loggerProperties.jdbcUrl).apply {
+                autoCommit = true
+            }
+            return c
         }
     
     @PostConstruct
@@ -41,11 +42,3 @@ class LoggerServer(private val loggerProperties: LoggerProperties) {
         }
     }
 }
-
-@ConfigurationProperties("honoka.qqrobot.logger")
-class LoggerProperties(
-    
-    var databaseDriver: Class<*> = Driver::class.java,
-    
-    var jdbcUrl: String = "jdbc:h2:${Path(FileUtils.getMainClasspath(), "qqrobot", "log")}"
-)

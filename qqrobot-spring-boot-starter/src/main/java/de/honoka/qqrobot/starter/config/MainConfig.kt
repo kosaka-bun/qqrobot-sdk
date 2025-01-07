@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 
 @EnableScheduling
 @ComponentScan("de.honoka.qqrobot.starter", "de.honoka.qqrobot.framework.config")
-@EnableConfigurationProperties(RobotBasicProperties::class, AdminProperties::class)
+@EnableConfigurationProperties(RobotBasicProperties::class)
 @Configuration("qqrobotStarterMainConfig")
 class MainConfig
 
@@ -72,19 +72,4 @@ data class RobotBasicProperties(
          */
         var impl: FrameworkEnum = FrameworkEnum.TESTER
     )
-}
-
-@ConfigurationProperties("honoka.qqrobot.admin")
-data class AdminProperties(
-    
-    /**
-     * 后台管理界面的登录密码
-     */
-    var password: String = "123456"
-) {
-    
-    companion object {
-        
-        const val WEB_PREFIX = "/admin"
-    }
 }
