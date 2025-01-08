@@ -10,7 +10,11 @@ import org.springframework.stereotype.Component
  * 系统会话列表的管理器
  */
 @Component
-class SessionManager(@Lazy internal val framework: RobotFramework) {
+class SessionManager(
+    @Lazy
+    @get:JvmSynthetic
+    internal val framework: RobotFramework
+) {
     
     /**
      * 当前会话列表
@@ -27,7 +31,7 @@ class SessionManager(@Lazy internal val framework: RobotFramework) {
     fun openSession(group: Long?, qq: Long, configurer: RobotSession.Action.() -> Unit) {
         //检查是否有存在的会话
         getCurrentSession(group, qq)?.let { return }
-        val session = RobotSession(group, qq, this).apply {
+        val session = RobotSession.of(group, qq, this).apply {
             action = RobotSession.Action()
             action.configurer()
         }
@@ -59,6 +63,7 @@ class SessionManager(@Lazy internal val framework: RobotFramework) {
         }
     }
     
+    @JvmSynthetic
     internal fun closeSession(session: RobotSession) {
         sessions.remove(session)
     }
