@@ -13,6 +13,8 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
 import de.honoka.qqrobot.framework.config.MiraiProperties;
 import de.honoka.qqrobot.framework.impl.mirai.component.MiraiEventListener;
 import de.honoka.qqrobot.framework.impl.mirai.model.MiraiMessage;
+import de.honoka.qqrobot.starter.common.NoContactException;
+import de.honoka.qqrobot.starter.common.RobotMutedException;
 import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import de.honoka.sdk.util.file.FileUtils;
 import de.honoka.sdk.util.text.TextUtils;
@@ -255,7 +257,9 @@ public class MiraiFramework extends TypedRobotFramework<MiraiMessage> {
         //查找此用户
         Contact contact = getPrivateContact(qq);
         //若不存在，不予发送
-        if(contact == null) return;
+        if(contact == null) {
+            throw new NoContactException(qq, null);
+        }
         //发送消息
         sendMessage(contact, typedTransform(null, qq, message));
     }
@@ -264,9 +268,13 @@ public class MiraiFramework extends TypedRobotFramework<MiraiMessage> {
     public void sendGroupMsg(long group, RobotMultipartMessage message) {
         //若群对象不存在，不予发送
         Group groupObj = miraiApi.getGroup(group);
-        if(groupObj == null) return;
+        if(groupObj == null) {
+            throw new NoContactException(null, group);
+        }
         //机器人在该群被禁言，不予发送
-        if(isMuted(group)) return;
+        if(isMuted(group)) {
+            throw new RobotMutedException(group);
+        }
         //发送消息
         sendMessage(groupObj, typedTransform(group, 0, message));
     }

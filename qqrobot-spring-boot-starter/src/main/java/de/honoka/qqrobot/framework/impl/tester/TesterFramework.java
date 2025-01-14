@@ -14,6 +14,8 @@ import de.honoka.qqrobot.framework.impl.tester.model.TesterMessageType;
 import de.honoka.qqrobot.framework.impl.tester.model.TesterRobotMessage;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServer;
 import de.honoka.qqrobot.framework.impl.tester.server.TesterServerConnection;
+import de.honoka.qqrobot.starter.common.NoContactException;
+import de.honoka.qqrobot.starter.common.RobotMutedException;
 import jakarta.annotation.Resource;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -147,13 +149,13 @@ public class TesterFramework extends TypedRobotFramework<TesterRobotMessage> {
             );
         }
         if(found) return;
-        throw new RuntimeException("User " + qq + " is not online.");
+        throw new NoContactException(qq, null);
     }
     
     @Override
     public void sendGroupMsg(long group, RobotMultipartMessage message) {
         if(testerServer.getConnections().isEmpty()) {
-            throw new RuntimeException("No users online.");
+            throw new RobotMutedException(group);
         }
         for(TesterServerConnection connection : testerServer.getConnections()) {
             JSONObject data = new JSONObject();

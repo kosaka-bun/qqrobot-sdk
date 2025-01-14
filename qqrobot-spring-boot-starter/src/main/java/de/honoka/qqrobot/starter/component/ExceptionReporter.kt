@@ -58,15 +58,15 @@ class ExceptionReporter(
     
     private fun doReport(t: Throwable) {
         val cause = ExceptionUtil.getRootCause(t)
-        runCatching {
-            robotLogger.logException(cause)
-        }
-        if(!basicProperties.reportException) return
         synchronized(this) {
             val clazz = cause::class
             if(exceptionCache.containsKey(clazz)) return
             exceptionCache.put(clazz, Unit)
         }
+        runCatching {
+            robotLogger.logException(cause)
+        }
+        if(!basicProperties.reportException) return
         exceptionQueue.offer(cause)
     }
 }

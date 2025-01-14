@@ -67,12 +67,12 @@ class RobotSession private constructor(
     }
     
     inline fun waitForReply(
-        prompt: String? = null,
+        prompt: String,
         promptOnInvalidValue: String = "提供的参数有误，请重新输入",
         resultPredicate: (String) -> Boolean = { true },
         timeout: Int = 60
     ): String {
-        reply(prompt!!)
+        reply(prompt)
         var result: String
         while(true) {
             try {

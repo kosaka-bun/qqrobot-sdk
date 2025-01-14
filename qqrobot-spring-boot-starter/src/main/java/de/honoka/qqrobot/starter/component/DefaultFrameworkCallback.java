@@ -7,8 +7,10 @@ import de.honoka.qqrobot.starter.config.ConditionalBeansConfig;
 import de.honoka.qqrobot.starter.util.GlobalThreadPools;
 import de.honoka.sdk.spring.starter.core.context.ConditionalComponent;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 
+@Slf4j
 @ConditionalComponent(ConditionalBeansConfig.class)
 public class DefaultFrameworkCallback implements RobotFrameworkCallback {
 
@@ -31,7 +33,11 @@ public class DefaultFrameworkCallback implements RobotFrameworkCallback {
             if(reply != null) {
                 reply.removeEmptyPart();
                 if(reply.isEmpty()) return;
-                framework.reply(null, qq, reply);
+                try {
+                    framework.reply(null, qq, reply);
+                } catch(Throwable t) {
+                    log.error("", t);
+                }
             }
         });
     }
@@ -49,7 +55,11 @@ public class DefaultFrameworkCallback implements RobotFrameworkCallback {
             if(reply != null) {
                 reply.removeEmptyPart();
                 if(reply.isEmpty()) return;
-                framework.reply(group, qq, reply);
+                try {
+                    framework.reply(group, qq, reply);
+                } catch(Throwable t) {
+                    log.error("", t);
+                }
             }
         });
     }

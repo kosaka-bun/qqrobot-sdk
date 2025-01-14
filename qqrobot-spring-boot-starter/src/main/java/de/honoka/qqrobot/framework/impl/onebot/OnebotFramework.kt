@@ -13,6 +13,8 @@ import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
 import de.honoka.qqrobot.framework.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
+import de.honoka.qqrobot.starter.common.NoContactException
+import de.honoka.qqrobot.starter.common.RobotMutedException
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
 import de.honoka.sdk.util.kotlin.basic.exception
 import de.honoka.sdk.util.kotlin.basic.log
@@ -320,12 +322,13 @@ class OnebotFramework(
     }
     
     override fun sendPrivateMsg(qq: Long, message: RobotMultipartMessage) {
-        val contact = contactManager.searchContact(qq) ?: return
+        val contact = contactManager.searchContact(qq) ?: throw NoContactException(qq)
         sendMessage(contact[0], qq, typedTransform(message))
     }
     
     override fun sendGroupMsg(group: Long, message: RobotMultipartMessage) {
-        if(!contactManager.containsGroup(group) || isMuted(group)) return
+        if(!contactManager.containsGroup(group)) throw NoContactException(group = group)
+        if(isMuted(group)) throw RobotMutedException(group)
         sendMessage(group, null, typedTransform(message))
     }
     
