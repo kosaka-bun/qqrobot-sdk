@@ -2,7 +2,7 @@ package de.honoka.qqrobot.starter.component;
 
 import de.honoka.qqrobot.framework.api.RobotFramework;
 import de.honoka.qqrobot.framework.api.RobotFrameworkCallback;
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.config.ConditionalBeansConfig;
 import de.honoka.qqrobot.starter.util.GlobalThreadPools;
 import de.honoka.sdk.spring.starter.core.context.ConditionalComponent;

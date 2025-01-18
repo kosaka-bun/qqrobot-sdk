@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.framework.impl.tester.component;
 
 import cn.hutool.core.util.StrUtil;
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;

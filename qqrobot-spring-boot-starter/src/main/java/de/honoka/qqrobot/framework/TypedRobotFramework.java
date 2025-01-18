@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.framework;
 
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 
 public abstract class TypedRobotFramework<M> extends ExtendedRobotFramework {
     

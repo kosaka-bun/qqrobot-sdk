@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.component.session
 
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage
 import java.io.Closeable
 import java.util.concurrent.TimeUnit
 

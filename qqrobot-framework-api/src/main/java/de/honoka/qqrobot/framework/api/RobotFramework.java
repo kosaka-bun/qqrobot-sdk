@@ -1,8 +1,8 @@
 package de.honoka.qqrobot.framework.api;
 
-import de.honoka.qqrobot.framework.api.model.RobotMessage;
-import de.honoka.qqrobot.framework.api.model.RobotMessageType;
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.message.RobotMessage;
+import de.honoka.qqrobot.framework.api.message.RobotMessageType;
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 
 /**
  * 机器人服务框架必须提供的方法

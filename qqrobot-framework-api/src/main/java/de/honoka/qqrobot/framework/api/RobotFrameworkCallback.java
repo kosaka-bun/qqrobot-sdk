@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.framework.api;
 
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 
 /**
  * 框架回调

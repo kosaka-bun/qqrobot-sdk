@@ -3,8 +3,8 @@ package de.honoka.qqrobot.starter.component
 import cn.hutool.cache.impl.TimedCache
 import cn.hutool.core.exceptions.ExceptionUtil
 import de.honoka.qqrobot.framework.ExtendedRobotFramework
-import de.honoka.qqrobot.framework.api.model.RobotMessage
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
+import de.honoka.qqrobot.framework.api.message.RobotMessage
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage
 import de.honoka.qqrobot.starter.component.logger.RobotLogger
 import de.honoka.qqrobot.starter.config.RobotBasicProperties
 import de.honoka.qqrobot.starter.util.GlobalThreadPools

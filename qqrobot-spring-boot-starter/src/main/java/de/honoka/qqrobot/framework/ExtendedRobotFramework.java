@@ -2,7 +2,7 @@ package de.honoka.qqrobot.framework;
 
 import de.honoka.qqrobot.framework.api.RobotFramework;
 import de.honoka.qqrobot.framework.api.RobotFrameworkCallback;
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import jakarta.annotation.Resource;
 import lombok.Getter;

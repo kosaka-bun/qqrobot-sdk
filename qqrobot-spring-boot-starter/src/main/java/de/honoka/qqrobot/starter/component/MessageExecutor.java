@@ -2,9 +2,9 @@ package de.honoka.qqrobot.starter.component;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
-import de.honoka.qqrobot.framework.api.model.RobotMessage;
-import de.honoka.qqrobot.framework.api.model.RobotMessageType;
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage;
+import de.honoka.qqrobot.framework.api.message.RobotMessage;
+import de.honoka.qqrobot.framework.api.message.RobotMessageType;
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.command.CommandInvoker;
 import de.honoka.qqrobot.starter.common.ConstantMessage;
 import de.honoka.qqrobot.starter.common.annotation.RobotController;

@@ -8,8 +8,8 @@ import cn.hutool.json.JSONArray
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.TypedRobotFramework
-import de.honoka.qqrobot.framework.api.model.RobotMessageType.*
-import de.honoka.qqrobot.framework.api.model.RobotMultipartMessage
+import de.honoka.qqrobot.framework.api.message.RobotMessageType.*
+import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage
 import de.honoka.qqrobot.framework.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
 import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage

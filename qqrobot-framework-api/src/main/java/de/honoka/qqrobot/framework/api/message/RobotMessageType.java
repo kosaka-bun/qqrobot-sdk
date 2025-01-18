@@ -1,4 +1,4 @@
-package de.honoka.qqrobot.framework.api.model;
+package de.honoka.qqrobot.framework.api.message;
 
 public enum RobotMessageType {
 
