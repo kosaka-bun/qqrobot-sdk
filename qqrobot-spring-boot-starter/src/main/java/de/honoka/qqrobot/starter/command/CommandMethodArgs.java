@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.command;
 
 import de.honoka.qqrobot.framework.api.message.RobotMessage;
-import de.honoka.qqrobot.framework.api.message.RobotMessageType;
+import de.honoka.qqrobot.framework.api.message.RobotMessageTypes;
 import lombok.Getter;
 
 /**
@@ -73,7 +73,7 @@ public class CommandMethodArgs {
         ensureIndexValid(index);
         Object arg = args[index];
         if(arg instanceof RobotMessage<?> message) {
-            if(message.getType().equals(RobotMessageType.AT)) {
+            if(message.getContent() instanceof RobotMessageTypes.At) {
                 return (RobotMessage<Long>) message;
             }
         }

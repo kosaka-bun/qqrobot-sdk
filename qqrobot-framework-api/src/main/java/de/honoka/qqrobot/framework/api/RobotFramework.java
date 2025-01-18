@@ -1,7 +1,6 @@
 package de.honoka.qqrobot.framework.api;
 
 import de.honoka.qqrobot.framework.api.message.RobotMessage;
-import de.honoka.qqrobot.framework.api.message.RobotMessageType;
 import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 
 /**
@@ -40,7 +39,7 @@ public interface RobotFramework {
     void sendPrivateMsg(long qq, RobotMultipartMessage message);
 
     default void sendPrivateMsg(long qq, String text) {
-        sendPrivateMsg(qq, RobotMultipartMessage.of(RobotMessageType.TEXT, text));
+        sendPrivateMsg(qq, RobotMultipartMessage.of(text));
     }
 
     /**
@@ -49,7 +48,7 @@ public interface RobotFramework {
     void sendGroupMsg(long group, RobotMultipartMessage message);
 
     default void sendGroupMsg(long group, String text) {
-        sendGroupMsg(group, RobotMultipartMessage.of(RobotMessageType.TEXT, text));
+        sendGroupMsg(group, RobotMultipartMessage.of(text));
     }
 
     /**
@@ -59,14 +58,14 @@ public interface RobotFramework {
         if(group == null) {
             sendPrivateMsg(qq, message);
         } else {
-            message.messageList.add(0, new RobotMessage<>(RobotMessageType.AT, qq));
-            message.messageList.add(1, new RobotMessage<>(RobotMessageType.TEXT, "\n"));
+            message.messageList.add(0, RobotMessage.at(qq));
+            message.messageList.add(1, RobotMessage.text("\n"));
             sendGroupMsg(group, message);
         }
     }
 
     default void reply(Long group, long qq, String text) {
-        reply(group, qq, RobotMultipartMessage.of(RobotMessageType.TEXT, text));
+        reply(group, qq, RobotMultipartMessage.of(text));
     }
 
     /**

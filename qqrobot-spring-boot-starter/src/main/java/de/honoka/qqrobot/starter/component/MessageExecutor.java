@@ -3,7 +3,6 @@ package de.honoka.qqrobot.starter.component;
 import cn.hutool.core.util.StrUtil;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import de.honoka.qqrobot.framework.api.message.RobotMessage;
-import de.honoka.qqrobot.framework.api.message.RobotMessageType;
 import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 import de.honoka.qqrobot.starter.command.CommandInvoker;
 import de.honoka.qqrobot.starter.common.ConstantMessage;
@@ -100,13 +99,13 @@ public class MessageExecutor {
         //移除空串部分
         msg.removeEmptyPart();
         //处理信息前先去掉信息左右两侧的空格
-        if(msg.getFirst().getType().equals(RobotMessageType.TEXT)) {
+        if(msg.getFirst().getContent() instanceof String) {
             RobotMessage<String> part = (RobotMessage<String>) msg.getFirst();
             String str = part.getContent();
             str = StrUtil.trimStart(str);
             part.setContent(str);
         }
-        if(msg.messageList.get(msg.messageList.size() - 1).getType().equals(RobotMessageType.TEXT)) {
+        if(msg.messageList.get(msg.messageList.size() - 1).getContent() instanceof String) {
             RobotMessage<String> part = (RobotMessage<String>) msg.messageList.get(msg.messageList.size() - 1);
             String str = part.getContent();
             str = StrUtil.trimEnd(str);
@@ -114,7 +113,7 @@ public class MessageExecutor {
         }
         //进行简繁转换
         for(RobotMessage<?> part : msg.messageList) {
-            if(!part.getType().equals(RobotMessageType.TEXT)) continue;
+            if(!(part.getContent() instanceof String)) continue;
             RobotMessage<String> stringPart = (RobotMessage<String>) part;
             stringPart.setContent(ZhConverterUtil.toSimple(stringPart.getContent()));
         }
@@ -157,7 +156,7 @@ public class MessageExecutor {
             //判断是否由起始字符开始，由起始字符开始，则去除起始字符
             //noPrefix：这个命令是否是不含起始字符的命令
             boolean noPrefix = true;
-            if(msg.getFirst().getType().equals(RobotMessageType.TEXT)) {
+            if(msg.getFirst().getContent() instanceof String) {
                 RobotMessage<String> part = (RobotMessage<String>) msg.getFirst();
                 if(part.getContent().startsWith(basicProperties.getCommandPrefix())) {
                     part.setContent(part.getContent().substring(basicProperties.getCommandPrefix().length()));
@@ -170,7 +169,7 @@ public class MessageExecutor {
             //获取并检查命令名
             List<Object> parts = new ArrayList<>();
             for(RobotMessage<?> part : msg.messageList) {
-                if(part.getType().equals(RobotMessageType.TEXT)) {
+                if(part.getContent() instanceof String) {
                     parts.addAll(Arrays.asList(((String) part.getContent()).split(" ")));
                 } else {
                     parts.add(part);

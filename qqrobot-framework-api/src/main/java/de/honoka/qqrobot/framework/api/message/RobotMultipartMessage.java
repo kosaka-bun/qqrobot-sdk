@@ -23,21 +23,17 @@ public class RobotMultipartMessage {
         return multipartMessage;
     }
 
-    public static <C> RobotMultipartMessage of(RobotMessageType type, C content) {
-        return of(new RobotMessage<>(type, content));
-    }
-
     public static RobotMultipartMessage of(String text) {
-        return of(new RobotMessage<>(RobotMessageType.TEXT, text));
+        return of(RobotMessage.text(text));
     }
 
-    public <C> RobotMultipartMessage add(RobotMessageType type, C content) {
-        messageList.add(new RobotMessage<>(type, content));
+    public RobotMultipartMessage add(RobotMessage<?> message) {
+        messageList.add(message);
         return this;
     }
-
-    public <C> RobotMultipartMessage add(RobotMessage<C> message) {
-        messageList.add(message);
+    
+    public RobotMultipartMessage add(String text) {
+        add(RobotMessage.text(text));
         return this;
     }
 
@@ -53,7 +49,7 @@ public class RobotMultipartMessage {
             RobotMessage<?> part = iterator.next();
             if(part.getContent() == null) {
                 iterator.remove();
-            } else if(part.getType().equals(RobotMessageType.TEXT)) {
+            } else if(part.getContent() instanceof String) {
                 if(part.getContent().equals("")) {
                     iterator.remove();
                 }
@@ -68,20 +64,17 @@ public class RobotMultipartMessage {
     public String contentToString() {
         StringBuilder sb = new StringBuilder();
         for(RobotMessage<?> message : messageList) {
-            switch(message.getType()) {
-                case TEXT:
-                    sb.append(message.getContent());
-                    break;
-                case IMAGE:
-                    sb.append("【图片】");
-                    break;
-                case AT:
-                    sb.append("@").append(message.getContent())
-                            .append(" ");
-                    break;
-                case FILE:
-                    sb.append("【文件】");
-                    break;
+            Object content = message.getContent();
+            if(content instanceof String) {
+                sb.append(message.getContent());
+            } else if(content instanceof RobotMessageTypes.Image) {
+                sb.append("【图片】");
+            } else if(content instanceof RobotMessageTypes.At) {
+                sb.append("@").append(message.getContent()).append(" ");
+            } else if(content instanceof RobotMessageTypes.File) {
+                sb.append("【文件】");
+            } else {
+                sb.append("【未知消息内容部分】");
             }
         }
         return sb.toString();

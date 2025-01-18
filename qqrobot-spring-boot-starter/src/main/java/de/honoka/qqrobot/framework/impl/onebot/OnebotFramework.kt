@@ -8,7 +8,8 @@ import cn.hutool.json.JSONArray
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.TypedRobotFramework
-import de.honoka.qqrobot.framework.api.message.RobotMessageType.*
+import de.honoka.qqrobot.framework.api.message.RobotMessage
+import de.honoka.qqrobot.framework.api.message.RobotMessageTypes
 import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage
 import de.honoka.qqrobot.framework.config.OnebotProperties
 import de.honoka.qqrobot.framework.impl.onebot.component.ContactManager
@@ -239,34 +240,31 @@ class OnebotFramework(
         val onebotMessage = OnebotMessage()
         val remoteMode = onebotProperties.fileReceiverPort != null
         message.messageList.forEach {
-            when(it.type) {
-                TEXT -> {
-                    val str = it.content as String?
-                    if(str?.isNotEmpty() == true) onebotMessage.addTextPart(str)
+            when(val content = it.content) {
+                is String -> {
+                    if(content.isNotEmpty()) onebotMessage.addTextPart(content)
                 }
-                AT -> onebotMessage.addAtPart(it.content as Long)
-                IMAGE -> {
-                    val `in` = it.content as InputStream
+                is RobotMessageTypes.At -> onebotMessage.addAtPart(content.qq)
+                is RobotMessageTypes.Image -> {
                     val fileName = "${IdUtil.getSnowflakeNextId()}.png"
                     val path = if(remoteMode) {
-                        uploadFileToReceiver(`in`, "uploadImage", fileName)
+                        uploadFileToReceiver(content.content, "uploadImage", fileName)
                     } else {
                         Path(onebotProperties.imagePath, fileName).toString().run {
-                            writeResouceToFile(`in`, this)
+                            writeResouceToFile(content.content, this)
                             this
                         }
                     }
                     onebotMessage.addImagePart(path, !remoteMode)
                 }
-                FILE -> {
-                    val `in` = it.content as InputStream
+                is RobotMessageTypes.File -> {
                     val fileName = "${IdUtil.getSnowflakeNextId()}.bin"
                     val displayFileName = it.others["fileName"] as String? ?: fileName
                     val path = if(remoteMode) {
-                        uploadFileToReceiver(`in`, "uploadFile", displayFileName)
+                        uploadFileToReceiver(content.content, "uploadFile", displayFileName)
                     } else {
                         Path(onebotProperties.fileToUploadPath, fileName).toString().run {
-                            writeResouceToFile(it.content as InputStream, this)
+                            writeResouceToFile(content.content, this)
                             this
                         }
                     }
@@ -286,8 +284,8 @@ class OnebotFramework(
         val message = RobotMultipartMessage()
         onebotMessage.parts.forEach {
             when(it.type) {
-                "text" -> message.add(TEXT, it.data?.getStr("text"))
-                "at" -> message.add(AT, it.data?.getLong("qq"))
+                "text" -> message.add(it.data?.getStr("text"))
+                "at" -> message.add(RobotMessage.at(it.data!!.getLong("qq")))
             }
         }
         return message

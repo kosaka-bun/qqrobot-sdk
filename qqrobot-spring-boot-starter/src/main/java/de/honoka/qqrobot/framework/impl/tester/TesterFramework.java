@@ -5,7 +5,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSONObject;
 import de.honoka.qqrobot.framework.TypedRobotFramework;
 import de.honoka.qqrobot.framework.api.message.RobotMessage;
-import de.honoka.qqrobot.framework.api.message.RobotMessageType;
+import de.honoka.qqrobot.framework.api.message.RobotMessageTypes;
 import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage;
 import de.honoka.qqrobot.framework.config.TesterConfig;
 import de.honoka.qqrobot.framework.config.TesterProperties;
@@ -81,39 +81,38 @@ public class TesterFramework extends TypedRobotFramework<TesterRobotMessage> {
         if(message == null || message.isEmpty()) return null;
         TesterRobotMessage testerRobotMessage = new TesterRobotMessage();
         for(RobotMessage<?> part : message.messageList) {
-            switch(part.getType()) {
-                case TEXT:
-                    if(part.getContent() == null || part.getContent().equals("")) continue;
-                    testerRobotMessage.add(TesterRobotMessage.PartType.TEXT, (String) part.getContent());
-                    break;
-                case AT:
-                    if(group == null) break;
-                    long atQq = (Long) part.getContent();
-                    TesterRobotMessage.Part at = new TesterRobotMessage.Part(
-                        TesterRobotMessage.PartType.AT, "@" + getNickOrCard(group, atQq) + " "
-                    );
-                    at.setExtras(new JSONObject());
-                    at.getExtras().set("qq", part.getContent());
-                    testerRobotMessage.add(at);
-                    break;
-                case IMAGE:
-                    InputStream inputStream = (InputStream) part.getContent();
-                    String name = imageNameMap.get(inputStream.hashCode());
-                    if(name == null) {
-                        name = UUID.randomUUID().toString();
-                        imageNameMap.put(inputStream.hashCode(), name);
-                        byte[] bytes = IoUtil.readBytes(inputStream, false);
-                        String path = Paths.get(testerProperties.getImagePath(), name + ".png").toString();
-                        FileUtil.touch(new File(path));
-                        try(OutputStream os = Files.newOutputStream(Paths.get(path))) {
-                            os.write(bytes);
-                        }
+            Object content = part.getContent();
+            if(content instanceof String) {
+                if(part.getContent() == null || part.getContent().equals("")) continue;
+                testerRobotMessage.add(TesterRobotMessage.PartType.TEXT, (String) part.getContent());
+            }
+            if(content instanceof RobotMessageTypes.At) {
+                if(group == null) break;
+                long atQq = (Long) part.getContent();
+                TesterRobotMessage.Part at = new TesterRobotMessage.Part(
+                    TesterRobotMessage.PartType.AT, "@" + getNickOrCard(group, atQq) + " "
+                );
+                at.setExtras(new JSONObject());
+                at.getExtras().set("qq", part.getContent());
+                testerRobotMessage.add(at);
+            }
+            if(content instanceof RobotMessageTypes.Image) {
+                InputStream inputStream = (InputStream) part.getContent();
+                String name = imageNameMap.get(inputStream.hashCode());
+                if(name == null) {
+                    name = UUID.randomUUID().toString();
+                    imageNameMap.put(inputStream.hashCode(), name);
+                    byte[] bytes = IoUtil.readBytes(inputStream, false);
+                    String path = Paths.get(testerProperties.getImagePath(), name + ".png").toString();
+                    FileUtil.touch(new File(path));
+                    try(OutputStream os = Files.newOutputStream(Paths.get(path))) {
+                        os.write(bytes);
                     }
-                    testerRobotMessage.add(TesterRobotMessage.PartType.IMAGE, name);
-                    break;
-                case FILE:
-                    testerRobotMessage.add(TesterRobotMessage.PartType.TEXT, "【文件】");
-                    break;
+                }
+                testerRobotMessage.add(TesterRobotMessage.PartType.IMAGE, name);
+            }
+            if(content instanceof RobotMessageTypes.File) {
+                testerRobotMessage.add(TesterRobotMessage.PartType.TEXT, "【文件】");
             }
         }
         return testerRobotMessage;
@@ -124,9 +123,9 @@ public class TesterFramework extends TypedRobotFramework<TesterRobotMessage> {
         RobotMultipartMessage multipartMessage = new RobotMultipartMessage();
         for(TesterRobotMessage.Part part : message.getParts()) {
             if(part.getType().equals(TesterRobotMessage.PartType.AT)) {
-                multipartMessage.add(RobotMessageType.AT, part.getExtras().getLong("qq"));
+                multipartMessage.add(RobotMessage.at(part.getExtras().getLong("qq")));
             } else {
-                multipartMessage.add(RobotMessageType.TEXT, part.getContent());
+                multipartMessage.add(part.getContent());
             }
         }
         return multipartMessage;

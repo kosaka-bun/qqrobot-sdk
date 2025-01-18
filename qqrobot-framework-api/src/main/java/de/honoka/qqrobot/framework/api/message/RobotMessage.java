@@ -11,30 +11,27 @@ import java.util.Map;
 @Data
 public class RobotMessage<C> {
 
-    private RobotMessageType type;
-
     private C content;
 
     private Map<String, Object> others = new HashMap<>();
 
-    public RobotMessage(RobotMessageType type, C content) {
-        this.type = type;
+    private RobotMessage(C content) {
         this.content = content;
     }
 
     public static RobotMessage<String> text(String text) {
-        return new RobotMessage<>(RobotMessageType.TEXT, text);
+        return new RobotMessage<>(text);
     }
 
-    public static RobotMessage<Long> at(long qq) {
-        return new RobotMessage<>(RobotMessageType.AT, qq);
+    public static RobotMessage<RobotMessageTypes.At> at(long qq) {
+        return new RobotMessage<>(new RobotMessageTypes.At(qq));
     }
 
-    public static RobotMessage<InputStream> image(InputStream image) {
-        return new RobotMessage<>(RobotMessageType.IMAGE, image);
+    public static RobotMessage<RobotMessageTypes.Image> image(InputStream image) {
+        return new RobotMessage<>(new RobotMessageTypes.Image(image));
     }
 
-    public static RobotMessage<InputStream> file(InputStream file) {
-        return new RobotMessage<>(RobotMessageType.FILE, file);
+    public static RobotMessage<RobotMessageTypes.File> file(InputStream file) {
+        return new RobotMessage<>(new RobotMessageTypes.File(file));
     }
 }
