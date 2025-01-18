@@ -4,7 +4,5 @@ enum class FrameworkEnum {
     
     TESTER,
     
-    MIRAI,
-    
     ONEBOT
 }
