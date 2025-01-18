@@ -28,51 +28,41 @@ public class CommandMethodArgs {
         this.qq = qq;
         this.args = args;
     }
-
-    public static class WrongNumberParameterException extends RuntimeException {
-
-        public WrongNumberParameterException() {
-        }
-
-        public WrongNumberParameterException(String message) {
-            super(message);
-        }
-    }
-
-    public static class WrongAtParameterException extends RuntimeException {
-
-        public WrongAtParameterException() {}
-
-        public WrongAtParameterException(String message) {
-            super(message);
-        }
+    
+    private void ensureIndexValid(int index) {
+        if(index < args.length) return;
+        throw new CommandExceptions.IndexOutOfBoundsException(index, args.length - 1);
     }
 
     public int getInt(int index) {
+        ensureIndexValid(index);
         try {
             return Integer.parseInt((String) args[index]);
-        } catch (NumberFormatException e) {
-            throw new WrongNumberParameterException((String) args[index]);
+        } catch(NumberFormatException e) {
+            throw new CommandExceptions.WrongNumberParameterException((String) args[index]);
         }
     }
 
     public double getDouble(int index) {
+        ensureIndexValid(index);
         try {
             return Double.parseDouble((String) args[index]);
-        } catch (NumberFormatException e) {
-            throw new WrongNumberParameterException((String) args[index]);
+        } catch(NumberFormatException e) {
+            throw new CommandExceptions.WrongNumberParameterException((String) args[index]);
         }
     }
 
     public long getLong(int index) {
+        ensureIndexValid(index);
         try {
             return Long.parseLong((String) args[index]);
-        } catch (NumberFormatException e) {
-            throw new WrongNumberParameterException((String) args[index]);
+        } catch(NumberFormatException e) {
+            throw new CommandExceptions.WrongNumberParameterException((String) args[index]);
         }
     }
 
     public String getString(int index) {
+        ensureIndexValid(index);
         Object arg = args[index];
         if(arg instanceof String) return (String) arg;
         else return arg.toString();
@@ -80,12 +70,13 @@ public class CommandMethodArgs {
 
     @SuppressWarnings("unchecked")
     public RobotMessage<Long> getAt(int index) {
+        ensureIndexValid(index);
         Object arg = args[index];
         if(arg instanceof RobotMessage<?> message) {
             if(message.getType().equals(RobotMessageType.AT)) {
                 return (RobotMessage<Long>) message;
             }
         }
-        throw new WrongAtParameterException();
+        throw new CommandExceptions.WrongAtParameterException();
     }
 }

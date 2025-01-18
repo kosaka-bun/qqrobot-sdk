@@ -85,8 +85,9 @@ public class CommandInvoker {
         CommandMethodArgs argsObject = new CommandMethodArgs(group, qq, args);
         Object[] methodArgs = new Object[parameterTypes.length];
         for(int i = 0; i < parameterTypes.length; i++) {
-            if(parameterTypes[i].equals(CommandMethodArgs.class))
+            if(parameterTypes[i].equals(CommandMethodArgs.class)) {
                 methodArgs[i] = argsObject;
+            }
         }
         //调用
         try {
@@ -105,10 +106,12 @@ public class CommandInvoker {
                 //noinspection AssignmentToCatchBlockParameter
                 t = t.getCause();
             }
-            if(t instanceof CommandMethodArgs.WrongNumberParameterException) {
+            if(t instanceof CommandExceptions.WrongNumberParameterException) {
                 return RobotMultipartMessage.of("你提供的参数有误，应当提供数字");
-            } else if(t instanceof CommandMethodArgs.WrongAtParameterException) {
+            } else if(t instanceof CommandExceptions.WrongAtParameterException) {
                 return RobotMultipartMessage.of("你提供的参数有误，应当提供一个At");
+            } else if(t instanceof CommandExceptions.IndexOutOfBoundsException) {
+                return RobotMultipartMessage.of(ConstantMessage.PARAMETER_NOT_ENOUGH);
             } else if(t instanceof RobotSession.TimeoutException) {
                 return RobotMultipartMessage.of("会话已超时关闭");
             }
@@ -120,16 +123,16 @@ public class CommandInvoker {
      * 提供包含命令方法的类，提取所有合格的命令方法，组装为调用器，返回调用器列表
      */
     @SneakyThrows
-    public static List<CommandInvoker> getInvokers(List<Object> controllers,
-            RobotBasicProperties basicProperties) {
+    public static List<CommandInvoker> getInvokers(
+        List<Object> controllers, RobotBasicProperties basicProperties
+    ) {
         List<CommandInvoker> invokers = new ArrayList<>();
         //遍历每个命令控制器类
         for(Object controller : controllers) {
             Class<?> controllerClass = controller.getClass();
             //判断是否是cglib代理的类，若是则获取原始的类
             try {
-                controllerClass = (Class<?>) controllerClass.getMethod(
-                        "getTargetClass").invoke(controller);
+                controllerClass = (Class<?>) controllerClass.getMethod("getTargetClass").invoke(controller);
             } catch(Throwable t) {
                 //ignore
             }
