@@ -30,7 +30,7 @@ data class OnebotProperties(
      *
      * 发送图片或文件前，需要先将InputStream中的数据写出到文件中，才能被OneBot服务使用。
      */
-    var cachePath: String = Path(FileUtils.getMainClasspath(), "cache").run {
+    var cachePath: String = Path(FileUtils.getMainClasspath(), "qqrobot/onebot/cache").run {
         normalize().toString()
     }
 ) {

@@ -45,7 +45,7 @@ class OnebotFramework(
 
         const val TIME_TO_WAIT_ONLINE = 5000L
         
-        const val HTTP_REQUEST_TIMEOUT = 3000
+        const val HTTP_REQUEST_TIMEOUT = 10 * 1000
     }
     
     inner class WebSocketHandlerImpl : WebSocketHandler {
@@ -198,7 +198,6 @@ class OnebotFramework(
         reboot()
     }
 
-    @Suppress("LoggingSimilarMessage")
     @Scheduled(cron = "5/10 * * * * ?")
     @Synchronized
     fun checkIsOnline() {

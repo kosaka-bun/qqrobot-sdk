@@ -18,7 +18,7 @@ public class RobotCallbackAspect {
     
     @Before(
         "execution(* de.honoka.qqrobot.starter.component.DefaultFrameworkCallback.onPrivateMsg" +
-            "(long, de.honoka.qqrobot.framework.api.model.RobotMultipartMessage)" +
+            "(long, de.honoka.qqrobot.framework.api.message.RobotMultipartMessage)" +
             ")"
     )
     public void logPrivateMessage(JoinPoint joinPoint) {
@@ -32,7 +32,7 @@ public class RobotCallbackAspect {
 
     @Before(
         "execution(* de.honoka.qqrobot.starter.component.DefaultFrameworkCallback.onGroupMsg" +
-            "(long, long, de.honoka.qqrobot.framework.api.model.RobotMultipartMessage)" +
+            "(long, long, de.honoka.qqrobot.framework.api.message.RobotMultipartMessage)" +
             ")"
     )
     public void logGroupMessage(JoinPoint joinPoint) {

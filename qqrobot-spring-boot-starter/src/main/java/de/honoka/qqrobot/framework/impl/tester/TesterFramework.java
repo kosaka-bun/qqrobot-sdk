@@ -83,21 +83,21 @@ public class TesterFramework extends TypedRobotFramework<TesterRobotMessage> {
         for(RobotMessage<?> part : message.messageList) {
             Object content = part.getContent();
             if(content instanceof String) {
-                if(part.getContent() == null || part.getContent().equals("")) continue;
-                testerRobotMessage.add(TesterRobotMessage.PartType.TEXT, (String) part.getContent());
+                if(content.equals("")) continue;
+                testerRobotMessage.add(TesterRobotMessage.PartType.TEXT, (String) content);
             }
             if(content instanceof RobotMessageTypes.At) {
                 if(group == null) break;
-                long atQq = (Long) part.getContent();
+                long atQq = ((RobotMessageTypes.At) content).getQq();
                 TesterRobotMessage.Part at = new TesterRobotMessage.Part(
                     TesterRobotMessage.PartType.AT, "@" + getNickOrCard(group, atQq) + " "
                 );
                 at.setExtras(new JSONObject());
-                at.getExtras().set("qq", part.getContent());
+                at.getExtras().set("qq", atQq);
                 testerRobotMessage.add(at);
             }
             if(content instanceof RobotMessageTypes.Image) {
-                InputStream inputStream = (InputStream) part.getContent();
+                InputStream inputStream = ((RobotMessageTypes.Image) content).getContent();
                 String name = imageNameMap.get(inputStream.hashCode());
                 if(name == null) {
                     name = UUID.randomUUID().toString();
