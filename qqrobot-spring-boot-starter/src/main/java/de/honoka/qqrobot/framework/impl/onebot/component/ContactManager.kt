@@ -4,7 +4,6 @@ import cn.hutool.http.HttpUtil
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.framework.config.OnebotProperties
-import de.honoka.qqrobot.framework.impl.onebot.OnebotFramework
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
 import de.honoka.sdk.util.kotlin.basic.log
 import jakarta.annotation.PostConstruct
@@ -47,7 +46,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
     
     private fun readFriends() {
         val url = "${onebotProperties.urlPrefix}/get_friend_list"
-        val res = HttpUtil.post(url, "{}", OnebotFramework.HTTP_REQUEST_TIMEOUT).let {
+        val res = HttpUtil.post(url, "{}", 10 * 1000).let {
             JSONUtil.parseObj(it)
         }
         val friends = HashMap<Long, Contact>()
@@ -62,7 +61,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
     
     private fun readGroups() {
         val url = "${onebotProperties.urlPrefix}/get_group_list"
-        val res = HttpUtil.post(url, "{}", OnebotFramework.HTTP_REQUEST_TIMEOUT).let {
+        val res = HttpUtil.post(url, "{}", 5000).let {
             JSONUtil.parseObj(it)
         }
         val groupsJson = res.getJSONArray("data")
@@ -93,7 +92,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
                     it["group_id"] = group
                     it.toString()
                 },
-                OnebotFramework.HTTP_REQUEST_TIMEOUT + 30 * 1000
+                30 * 1000
             ).let { JSONUtil.parseObj(it) }
             val memberList = HashMap<Long, Contact>()
             res.getJSONArray("data").forEach {

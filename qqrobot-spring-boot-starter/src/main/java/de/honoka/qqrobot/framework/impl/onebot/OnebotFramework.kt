@@ -1,5 +1,6 @@
 package de.honoka.qqrobot.framework.impl.onebot
 
+import cn.hutool.core.exceptions.ExceptionUtil
 import cn.hutool.core.io.FileUtil
 import cn.hutool.core.io.IoUtil
 import cn.hutool.core.util.IdUtil
@@ -27,6 +28,7 @@ import org.springframework.web.socket.*
 import org.springframework.web.socket.client.standard.StandardWebSocketClient
 import java.io.File
 import java.io.InputStream
+import java.net.SocketTimeoutException
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.io.path.Path
 
@@ -44,8 +46,6 @@ class OnebotFramework(
     companion object {
 
         const val TIME_TO_WAIT_ONLINE = 5000L
-        
-        const val HTTP_REQUEST_TIMEOUT = 10 * 1000
     }
     
     inner class WebSocketHandlerImpl : WebSocketHandler {
@@ -212,7 +212,7 @@ class OnebotFramework(
         }
         val url = "${onebotProperties.urlPrefix}/get_status"
         online = try {
-            HttpUtil.post(url, "{}", HTTP_REQUEST_TIMEOUT).toJsonWrapper().run {
+            HttpUtil.post(url, "{}", 3000).toJsonWrapper().run {
                 getBool("data.online")
             }
         } catch(t: Throwable) {
@@ -309,7 +309,7 @@ class OnebotFramework(
         val content = IoUtil.readBytes(`in`)
         HttpUtil.createPost(url).run {
             form("file", content, fileName)
-            timeout(HTTP_REQUEST_TIMEOUT)
+            timeout(10 * 1000)
             val res = JSONUtil.parseObj(execute().body())
             if(res.getBool("status") != true) {
                 throw Exception("File receiver returns failed status: ${res.getStr("msg")}")
@@ -344,16 +344,23 @@ class OnebotFramework(
                             it["message"] = m.parts
                             it.toString()
                         },
-                        HTTP_REQUEST_TIMEOUT
+                        5000
                     ).let { JSONUtil.parseObj(it) }
                     val retcode = res.getInt("retcode")
                     val errMsg = res.getStr("message")
                     if(retcode != 0) exception("retcode = $retcode，errMsg = $errMsg")
                 } catch(t: Throwable) {
-                    throwable = t
-                    log.error("\n消息发送失败！已尝试次数：$i\n要发送的内容：\n${m.toRawString()}", t)
-                    if(!basicProperties.resendOnSendFailed) break
-                    continue
+                    when(ExceptionUtil.getRootCause(t)) {
+                        is SocketTimeoutException -> {
+                            log.warn("\n消息可能未发送成功\n要发送的内容：\n${m.toRawString()}", t)
+                        }
+                        else -> {
+                            throwable = t
+                            log.error("\n消息发送失败！已尝试次数：$i\n要发送的内容：\n${m.toRawString()}", t)
+                            if(!basicProperties.resendOnSendFailed) break
+                            continue
+                        }
+                    }
                 }
                 throwable = null
                 if(i > 1) log.info("\n消息重发成功：\n${m.toRawString()}")
