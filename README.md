@@ -18,7 +18,7 @@
 ## 使用
 本项目部署于：
 
-[![maven-repo](https://github-readme-stats.vercel.app/api/pin/?username=kosaka-bun&repo=maven-repo)](https://github.com/kosaka-bun/maven-repo)
+[![maven-repo](https://github-readme-stats.vercel.app/api/pin/?username=honoka-studio&repo=maven-repo)](https://github.com/honoka-studio/maven-repo)
 
 使用前请先阅读此仓库的文档，为你的Maven或Gradle添加依赖仓库。
 
