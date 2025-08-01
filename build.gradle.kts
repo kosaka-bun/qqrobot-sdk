@@ -3,7 +3,6 @@ import de.honoka.gradle.buildsrc.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.charset.StandardCharsets
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     java
     `java-library`
@@ -61,7 +60,7 @@ subprojects {
     }
 
     tasks {
-        compileJava {
+        withType<JavaCompile> {
             options.run {
                 encoding = StandardCharsets.UTF_8.name()
                 val compilerArgs = compilerArgs as MutableCollection<String>
@@ -81,7 +80,7 @@ subprojects {
             }
         }
 
-        test {
+        withType<Test> {
             useJUnitPlatform()
         }
     }
