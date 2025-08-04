@@ -5,6 +5,7 @@ gradle-build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+.kotlin/
 
 /file-receiver/src/test/http/*
 /qqrobot-spring-boot-starter/src/main/resources/web/*
@@ -42,4 +43,4 @@ bin/
 .vscode/
 
 ### Mac OS ###
-.DS_Store
+.DS_Store/
