@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
  */
 @Component
 class SessionManager(
-    @Lazy
+    @field:Lazy
     @get:JvmSynthetic
     internal val framework: RobotFramework
 ) {

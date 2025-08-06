@@ -1,7 +1,6 @@
 import de.honoka.gradle.buildsrc.MavenPublish.setupVersionAndPublishing
 import de.honoka.gradle.buildsrc.implementationApi
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin.spring)
 }
@@ -27,10 +26,4 @@ dependencies {
     implementation("com.github.houbb:opencc4j:1.6.0")
     implementation("com.h2database:h2:2.1.214")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
-}
-
-tasks {
-    compileKotlin {
-        dependsOn(":qqrobot-framework-api:publish")
-    }
 }

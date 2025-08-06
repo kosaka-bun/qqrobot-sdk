@@ -6,11 +6,11 @@ qqrobot-spring-boot-starter = "2.0.1-dev"
 file-receiver = "1.0.0"
 
 # dependencies version
-spring-boot = "3.2.5"
-mirai = "2.16.0"
-kotlin = "1.8.10"
-kotlin-coroutines = "1.6.4"
-lombok = "1.18.26"
+kotlin = "2.2.0"
+kotlin-coroutines = "1.10.2"
+lombok = "1.18.38"
+spring-boot = "3.5.4"
+mybatis-plus = "3.5.12"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -25,3 +25,5 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+mybatis-plus = { module = "com.baomidou:mybatis-plus-spring-boot3-starter", version.ref = "mybatis-plus" }
+mybatis-plus-jsqlparser = { module = "com.baomidou:mybatis-plus-jsqlparser", version.ref = "mybatis-plus" }

@@ -1,5 +1,6 @@
 import de.honoka.gradle.buildsrc.MavenPublish.defineCheckVersionOfProjectsTask
 import de.honoka.gradle.buildsrc.kotlin
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.charset.StandardCharsets
 
@@ -71,12 +72,9 @@ subprojects {
         }
         
         withType<KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = java.sourceCompatibility.toString()
-                freeCompilerArgs += listOf(
-                    "-Xjsr305=strict",
-                    "-Xjvm-default=all"
-                )
+            compilerOptions {
+                jvmTarget.set(JvmTarget.fromTarget(java.sourceCompatibility.toString()))
+                freeCompilerArgs.addAll("-Xjsr305=strict", "-Xjvm-default=all")
             }
         }
 
