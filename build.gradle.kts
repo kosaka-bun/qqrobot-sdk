@@ -1,6 +1,5 @@
 import de.honoka.gradle.buildsrc.MavenPublish.defineCheckVersionOfProjectsTask
 import de.honoka.gradle.buildsrc.kotlin
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.charset.StandardCharsets
 
@@ -9,13 +8,13 @@ plugins {
     `java-library`
     `maven-publish`
     alias(libs.plugins.dependency.management)
-    alias(libs.plugins.kotlin) apply false
+    alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.kapt)
     /*
      * Lombok Kotlin compiler plugin is an experimental feature.
      * See: https://kotlinlang.org/docs/components-stability.html.
      */
-    alias(libs.plugins.kotlin.lombok) apply false
+    alias(libs.plugins.kotlin.lombok)
 }
 
 group = "de.honoka.qqrobot"
@@ -35,8 +34,7 @@ subprojects {
     group = rootProject.group
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = sourceCompatibility
+        toolchain.languageVersion = JavaLanguageVersion.of(17)
         withSourcesJar()
     }
     
@@ -73,7 +71,6 @@ subprojects {
         
         withType<KotlinCompile> {
             compilerOptions {
-                jvmTarget.set(JvmTarget.fromTarget(java.sourceCompatibility.toString()))
                 freeCompilerArgs.addAll("-Xjsr305=strict", "-Xjvm-default=all")
             }
         }

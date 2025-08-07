@@ -1,1 +1,1 @@
-buildDir = File("./gradle-build")
+layout.buildDirectory = File("./gradle-build")
