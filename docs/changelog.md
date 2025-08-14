@@ -5,7 +5,7 @@
 - 更新Gradle版本为9.0.0。
 - 更新Kotlin版本为2.2.0。
 - 更新Kotlin Coroutines版本为1.10.2。
-- 移除buildSrc，引入honoka-basic-plugin。
+- 移除`buildSrc`，引入honoka-basic-plugin。
 - 引入kapt。
 
 #### qqrobot-framework-api 2.0.1

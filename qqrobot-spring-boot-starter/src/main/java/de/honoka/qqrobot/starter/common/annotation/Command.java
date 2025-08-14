@@ -2,13 +2,16 @@ package de.honoka.qqrobot.starter.common.annotation;
 
 import java.lang.annotation.*;
 
+/*
+ * @Inherited：该注解可以被子类所继承，即若父类中某方法被注解，那么子类所继承的那个方法也视为带有此注解
+ * 用于在对象被CGLIB代理后，getClass所获取到的类中的方法没有注解的问题。
+ *
+ * @Retention(RetentionPolicy.RUNTIME)：必须声明为runtime，否则获取Annotation时获取不到。
+ */
 /**
  * 所有含有此注解的方法均可作为命令使用
  */
-//该注解可以被子类所继承，即若父类中某方法被注解，那么子类所继承的那个方法也视为带有此注解
-//用于在对象被CGLIB代理后，getClass所获取到的类中的方法没有注解的问题
 @Inherited
-//必须声明为runtime，否则获取Annotation时获取不到
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Command {

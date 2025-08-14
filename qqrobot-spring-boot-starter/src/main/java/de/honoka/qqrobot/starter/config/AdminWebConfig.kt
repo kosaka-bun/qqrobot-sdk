@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Configuration
 class AdminWebConfig : WebMvcConfigurer {
     
-    private val excludePathPatterns = run {
+    private val excludePathPatterns: List<String> = run {
         val prefix = AdminProperties.WEB_PREFIX
         listOf(
             "$prefix/static/**",

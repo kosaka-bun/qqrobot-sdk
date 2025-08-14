@@ -1,12 +1,10 @@
 package de.honoka.qqrobot.starter.component.logger
 
-import cn.hutool.core.io.FileUtil
 import de.honoka.qqrobot.starter.config.LoggerProperties
 import de.honoka.sdk.util.kotlin.basic.log
 import jakarta.annotation.PostConstruct
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
-import java.nio.charset.StandardCharsets
 import java.sql.Connection
 import java.sql.DriverManager
 
@@ -15,12 +13,11 @@ import java.sql.DriverManager
 class LoggerServer(private val loggerProperties: LoggerProperties) {
     
     val connection: Connection
-        get() {
+        get() = run {
             Class.forName(loggerProperties.databaseDriver.name)
-            val c = DriverManager.getConnection(loggerProperties.jdbcUrl).apply {
+            DriverManager.getConnection(loggerProperties.jdbcUrl).apply {
                 autoCommit = true
             }
-            return c
         }
     
     @PostConstruct
@@ -30,10 +27,7 @@ class LoggerServer(private val loggerProperties: LoggerProperties) {
     }
     
     fun createTable() {
-        val sql = FileUtil.readString(
-            LoggerServer::class.java.getResource("/logger/table.sql"),
-            StandardCharsets.UTF_8
-        )
+        val sql = LoggerServer::class.java.getResource("/logger/table.sql")!!.readText()
         log.debug("\nExecute SQL: \n$sql")
         connection.use {
             it.createStatement().use { st ->

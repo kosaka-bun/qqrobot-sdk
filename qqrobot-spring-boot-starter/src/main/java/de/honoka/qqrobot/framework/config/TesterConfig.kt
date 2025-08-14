@@ -20,10 +20,10 @@ import kotlin.io.path.Path
 @Configuration
 class TesterConfig {
     
-    @Value("\${server.port:8080}")
+    @Value($$"${server.port:8080}")
     var serverPort = 0
     
-    @Value("\${server.servlet.context-path:}")
+    @Value($$"${server.servlet.context-path:}")
     var contextPath = "/"
     
     val testerUrl: String

@@ -9,8 +9,8 @@ import lombok.experimental.Accessors;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Accessors(chain = true)
+@Data
 public class TesterRobotMessage {
 
     private List<Part> parts = new ArrayList<>();

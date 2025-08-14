@@ -8,8 +8,11 @@ import java.util.concurrent.TimeUnit
  * 会话类，用于记录处于会话状态的qq号和群号，以及这些号码在进入会话状态以后发送的信息
  */
 class RobotSession private constructor(
+
     val group: Long?,
+
     val qq: Long,
+
     /**
      * 所属的会话管理器
      */

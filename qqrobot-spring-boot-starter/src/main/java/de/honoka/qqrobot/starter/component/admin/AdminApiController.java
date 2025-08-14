@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@CrossOrigin
 @RequestMapping(AdminProperties.WEB_PREFIX + "/api")
 @RestController
 public class AdminApiController {
@@ -119,9 +118,7 @@ public class AdminApiController {
     }
 
     @GetMapping("/usage_log")
-    public ApiResponse<?> getUsageLog(
-        @RequestParam(required = false, defaultValue = "1") int page
-    ) {
+    public ApiResponse<?> getUsageLog(@RequestParam(required = false, defaultValue = "1") int page) {
         int maxPage;
         //获取信息
         //计算最大页数
@@ -154,11 +151,11 @@ public class AdminApiController {
 
     @GetMapping("/action/send_test_message")
     public ApiResponse<?> sendTestMessage() {
+        //noinspection CodeBlock2Expr
         ActionUtils.doAction("发送测试消息", () -> {
             framework.sendGroupMsg(
-                    basicProperties.getDevelopingGroup(),
-                    TextUtils.getSimpleDateFormat().format(new Date()) +
-                            "\n测试消息"
+                Objects.requireNonNull(basicProperties.getDevelopingGroup()),
+                TextUtils.getSimpleDateFormat().format(new Date()) + "\n测试消息"
             );
         });
         return ApiResponse.success(null, null);

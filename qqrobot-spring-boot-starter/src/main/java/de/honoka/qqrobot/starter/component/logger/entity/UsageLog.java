@@ -6,8 +6,8 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.util.Date;
 
-@Data
 @Accessors(chain = true)
+@Data
 public class UsageLog implements Serializable {
 
     private Integer id;

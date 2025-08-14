@@ -10,7 +10,9 @@ class OnebotMessage(messageJson: JSONArray? = null) : AutoCloseable {
 
     data class Part(var type: String? = null, var data: JSONObject? = null)
     
-    val parts: MutableList<Part> = messageJson?.run { toList(Part::class.java) } ?: arrayListOf()
+    val parts: MutableList<Part> = run {
+        messageJson?.toList(Part::class.java) ?: arrayListOf()
+    }
     
     val first: Part?
         get() = parts.firstOrNull()

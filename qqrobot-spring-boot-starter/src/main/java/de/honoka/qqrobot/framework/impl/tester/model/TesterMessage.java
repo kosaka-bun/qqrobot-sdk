@@ -4,8 +4,8 @@ import cn.hutool.json.JSONObject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-@Data
 @Accessors(chain = true)
+@Data
 public class TesterMessage {
 
     private String id;

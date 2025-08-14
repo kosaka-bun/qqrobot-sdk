@@ -17,9 +17,9 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-@Getter
-@Setter
 @Accessors(chain = true)
+@Setter
+@Getter
 public class RobotConsoleWindow {
 
     @Getter(AccessLevel.NONE)
