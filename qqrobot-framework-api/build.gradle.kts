@@ -1,3 +1,5 @@
-import de.honoka.gradle.buildsrc.MavenPublish.setupVersionAndPublishing
+version = libs.versions.p.qqrobot.framework.api.get()
 
-setupVersionAndPublishing(libs.versions.qqrobot.framework.api.get())
+honoka.basic.publishing {
+    default()
+}

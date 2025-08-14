@@ -1,29 +1,32 @@
 [versions]
 # project modules version
-root = "2.0.1-dev"
-qqrobot-framework-api = "2.0.1-dev"
-qqrobot-spring-boot-starter = "2.0.1-dev"
-file-receiver = "1.0.0"
+p-root = "2.0.1-dev"
+p-qqrobot-framework-api = "2.0.1-dev"
+p-qqrobot-spring-boot-starter = "2.0.1-dev"
+p-file-receiver = "1.0.0"
+
+# gradle plugins version
+gp-honoka-basic = "1.0.2"
 
 # dependencies version
-kotlin = "2.2.0"
-kotlin-coroutines = "1.10.2"
-lombok = "1.18.38"
-spring-boot = "3.5.4"
-mybatis-plus = "3.5.12"
+d-qsbs-honoka-spring-boot-starter = "1.0.2-dev"
+d-qsbs-qqrobot-framework-api = "2.0.1-dev"
+d-fr-honoka-spring-boot-starter = "1.0.0"
+d-kotlin = "2.2.0"
+d-kotlin-coroutines = "1.10.2"
+d-lombok = "1.18.38"
+d-spring-boot = "3.5.4"
 
 [plugins]
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-kotlin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin" }
-kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
-kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
-dependency-management = "io.spring.dependency-management:1.1.6"
-spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+honoka-basic = { id = "de.honoka.gradle.plugin.basic", version.ref = "gp-honoka-basic" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "d-kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "d-kotlin" }
+kotlin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "d-kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "d-kotlin" }
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "d-kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "d-spring-boot" }
 
 [libraries]
-kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
-spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
-lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
-mybatis-plus = { module = "com.baomidou:mybatis-plus-spring-boot3-starter", version.ref = "mybatis-plus" }
-mybatis-plus-jsqlparser = { module = "com.baomidou:mybatis-plus-jsqlparser", version.ref = "mybatis-plus" }
+qsbs-honoka-spring-boot-starter = { module = "de.honoka.sdk:honoka-spring-boot-starter", version.ref = "d-qsbs-honoka-spring-boot-starter" }
+qsbs-qqrobot-framework-api = { module = "de.honoka.qqrobot:qqrobot-framework-api", version.ref = "d-qsbs-qqrobot-framework-api" }
+fr-honoka-spring-boot-starter = { module = "de.honoka.sdk:honoka-spring-boot-starter", version.ref = "d-fr-honoka-spring-boot-starter" }

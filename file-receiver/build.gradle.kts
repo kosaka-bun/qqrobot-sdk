@@ -1,17 +1,24 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.spring.boot)
+    /*
+     * 不能同时在plugins块中导入kotlin-spring与kotlin-jpa插件，否则Gradle将报告Plugin with
+     * id 'org.jetbrains.kotlin.plugin.spring' was already requested.
+     *
+     * kotlin-jpa插件在导入时会一并导入kotlin-spring插件。
+     */
     alias(libs.plugins.kotlin.jpa)
 }
 
-apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+version = libs.versions.p.file.receiver.get()
 
-version = libs.versions.file.receiver.get()
+honoka.basic.dependencies {
+    springBootBom()
+}
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("de.honoka.sdk:honoka-spring-boot-starter:1.0.0")
+    implementation(libs.fr.honoka.spring.boot.starter)
 }
 
 tasks {
