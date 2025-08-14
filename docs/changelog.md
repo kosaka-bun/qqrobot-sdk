@@ -1,5 +1,31 @@
 # 更新日志
 
+## 2.1.0
+#### 工程
+- 更新Gradle版本为9.0.0。
+- 更新Kotlin版本为2.2.0。
+- 更新Kotlin Coroutines版本为1.10.2。
+- 移除buildSrc，引入honoka-basic-plugin。
+- 引入kapt。
+
+#### qqrobot-framework-api 2.0.1
+- 引入了Kotlin。
+- 更改了部分类的命名与定义。
+- 将`model`包更名为`message`。
+- `RobotMessage`的`content`字段现在将存储`RobotMessageTypes`中所定义的类的实例。
+
+#### qqrobot-spring-boot-starter 2.0.1
+- 更新Spring Boot版本为3.5.4。
+- 适配honoka-spring-boot-starter 1.0.3版本。
+- 更改了部分类的包路径。
+- 更改了部分Spring Boot配置项的路径。
+- 适配qqrobot-framework-api 2.0.1版本，更改了大量类的定义。
+- 移除了Mirai实现。
+
+#### file-receiver 1.0.1
+- 更新Spring Boot版本为3.5.4。
+- 适配honoka-spring-boot-starter 1.0.3版本。
+
 ## 2.0.0
 #### 工程
 - 新增file-receiver项目，用于辅助qqrobot-spring-boot-starter的OneBot实现，在OneBot框架所在的操作系统中接受机器人应用要发送的图片内容。

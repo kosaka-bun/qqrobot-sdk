@@ -1,17 +1,17 @@
 [versions]
 # project modules version
-p-root = "2.0.1-dev"
-p-qqrobot-framework-api = "2.0.1-dev"
-p-qqrobot-spring-boot-starter = "2.0.1-dev"
-p-file-receiver = "1.0.0"
+p-root = "2.1.0"
+p-qqrobot-framework-api = "2.0.1"
+p-qqrobot-spring-boot-starter = "2.0.1"
+p-file-receiver = "1.0.1"
 
 # gradle plugins version
 gp-honoka-basic = "1.0.2"
 
 # dependencies version
-d-qsbs-honoka-spring-boot-starter = "1.0.2-dev"
-d-qsbs-qqrobot-framework-api = "2.0.1-dev"
-d-fr-honoka-spring-boot-starter = "1.0.0"
+d-qsbs-honoka-spring-boot-starter = "1.0.3"
+d-qsbs-qqrobot-framework-api = "2.0.1"
+d-fr-honoka-spring-boot-starter = "1.0.3"
 d-kotlin = "2.2.0"
 d-kotlin-coroutines = "1.10.2"
 d-lombok = "1.18.38"

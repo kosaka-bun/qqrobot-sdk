@@ -18,7 +18,6 @@ import de.honoka.qqrobot.framework.impl.onebot.model.OnebotMessage
 import de.honoka.qqrobot.starter.common.NoContactException
 import de.honoka.qqrobot.starter.common.RobotMutedException
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
-import de.honoka.sdk.util.kotlin.basic.exception
 import de.honoka.sdk.util.kotlin.basic.log
 import de.honoka.sdk.util.kotlin.text.toJsonWrapper
 import jakarta.annotation.PreDestroy
@@ -215,7 +214,7 @@ class OnebotFramework(
             HttpUtil.post(url, "{}", 3000).toJsonWrapper().run {
                 getBool("data.online")
             }
-        } catch(t: Throwable) {
+        } catch(_: Throwable) {
             false
         }
         if(online != onlineBeforeFlush) {
@@ -348,7 +347,7 @@ class OnebotFramework(
                     ).let { JSONUtil.parseObj(it) }
                     val retcode = res.getInt("retcode")
                     val errMsg = res.getStr("message")
-                    if(retcode != 0) exception("retcode = $retcode，errMsg = $errMsg")
+                    if(retcode != 0) error("retcode = $retcode，errMsg = $errMsg")
                 } catch(t: Throwable) {
                     when(ExceptionUtil.getRootCause(t)) {
                         is SocketTimeoutException -> {
