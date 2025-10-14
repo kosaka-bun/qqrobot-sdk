@@ -1,19 +1,23 @@
 name: Gradle CI
 
 env:
-  CI_BUILDERS_DOWNLOADER: https://mirrors.honoka.de/ci-builders/downloader.sh
-  CI_BUILDERS_VERSION: 1.0.0
-  ARTIFACT_NAME: maven-repo-changes
+  CIB_DOWNLOADER: https://mirrors.honoka.de/ci-builders/downloader.sh
+  CIB_VERSION: 1.0.2
+  CIB_GIT_INFO: ${{ secrets.CIB_GIT_INFO }}
 
 jobs:
-  publish:
+  gradle-ci:
+    name: Gradle CI
     runs-on: ubuntu-latest
+    env:
+      REMOTE_MAVEN_REPO_URL: ${{ secrets.REMOTE_MAVEN_REPO_URL }}
+      CIB_ARTIFACT_NAME: maven-repo-changes
     steps:
       - name: Download CI Builders
         run: |
           set -e
-          curl -L --fail -o download-builders.sh $CI_BUILDERS_DOWNLOADER
-          chmod +x download-builders.sh && ./download-builders.sh
+          curl -L --fail -o download-cib.sh $CIB_DOWNLOADER
+          chmod +x download-cib.sh && ./download-cib.sh
       - uses: actions/checkout@v4
         with:
           path: repo
@@ -27,17 +31,15 @@ jobs:
           # 它可以是maven、gradle或sbt之一
           cache: gradle
       - name: Build with Gradle and publish to Maven repository
-        env:
-          REMOTE_MAVEN_REPO_URL: ${{ secrets.REMOTE_MAVEN_REPO_URL }}
         run: |
           ./ci-builders/scripts/run.sh gradle-library publish
       - name: Upload the changes of Maven repository as artifact
         uses: actions/upload-artifact@v4
         with:
           # 指定要上传的目录在上传到当前Actions运行实例的Artifacts当中时要使用的名字
-          name: ${{ env.ARTIFACT_NAME }}
+          name: ${{ env.CIB_ARTIFACT_NAME }}
           # 要上传的目录路径（以workspace为相对路径起始点）
-          path: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.CIB_ARTIFACT_NAME }}
 
 on:
   push:
@@ -45,6 +47,7 @@ on:
       - dev
     paths-ignore:
       - 'docs/**'
+      - 'files/**'
       - '**/.gitignore'
       - 'LICENSE'
       - 'README.md'
