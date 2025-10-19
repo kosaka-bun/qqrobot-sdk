@@ -1,0 +1,20 @@
+package de.honoka.qqrobot.starter.framework.impl.tester.model;
+
+import cn.hutool.json.JSONObject;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Accessors(chain = true)
+@Data
+public class TesterMessage {
+
+    private String id;
+
+    private String type;
+
+    private JSONObject data = new JSONObject();
+
+    public TesterMessage(String id) {
+        this.id = id;
+    }
+}

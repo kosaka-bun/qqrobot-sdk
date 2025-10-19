@@ -2,10 +2,13 @@ plugins {
     alias(libs.plugins.kotlin.spring)
 }
 
-version = libs.versions.p.qqrobot.spring.boot.starter.get()
+honoka.basic.publishing.version = libs.versions.p.qqrobot.spring.boot.starter.get()
 
-honoka.basic.dependencies {
-    springBootBom()
+honoka.basic {
+    dependencies {
+        springBootBom()
+        springBootConfigProcessor()
+    }
 }
 
 dependencies {
@@ -14,16 +17,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    api(libs.qsbs.honoka.spring.boot.starter)
-    api(libs.qsbs.qqrobot.framework.api)
-    val configProcessor = "org.springframework.boot:spring-boot-configuration-processor:${
-        libs.versions.d.spring.boot.get()
-    }"
-    kapt(configProcessor)
+    api(libs.honoka.spring.boot.starter)
+    api(libs.qqrobot.framework.api)
     implementation("com.github.houbb:opencc4j:1.6.0")
     implementation("com.h2database:h2:2.1.214")
-}
-
-honoka.basic.publishing {
-    default()
 }

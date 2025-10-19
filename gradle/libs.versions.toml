@@ -1,32 +1,29 @@
 [versions]
 # project modules version
 p-root = "2.1.1-dev"
-p-qqrobot-framework-api = "2.0.1"
+p-qqrobot-framework-api = "2.0.2-dev"
 p-qqrobot-spring-boot-starter = "2.0.2-dev"
-p-file-receiver = "1.0.1"
+p-file-receiver = "1.0.2-dev"
 
 # gradle plugins version
-gp-honoka-basic = "1.0.3-dev"
+gp-honoka-basic = "1.1.0-dev"
 
 # dependencies version
-d-qsbs-honoka-spring-boot-starter = "1.0.4-dev"
-d-qsbs-qqrobot-framework-api = "2.0.1"
-d-fr-honoka-spring-boot-starter = "1.0.3"
-d-kotlin = "2.2.0"
+d-kotlin = "2.2.21"
 d-kotlin-coroutines = "1.10.2"
-d-lombok = "1.18.38"
-d-spring-boot = "3.5.4"
+d-lombok = "1.18.42"
+d-spring-boot = "3.5.9"
+d-honoka-spring-boot-starter = "1.1.0-dev"
+d-qqrobot-framework-api = "2.0.2-dev"
 
 [plugins]
-honoka-basic = { id = "de.honoka.gradle.plugin.basic", version.ref = "gp-honoka-basic" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "d-kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "d-kotlin" }
 kotlin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "d-kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "d-kotlin" }
-kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "d-kotlin" }
 spring-boot = { id = "org.springframework.boot", version.ref = "d-spring-boot" }
+honoka-basic = { id = "de.honoka.gradle.plugin.basic", version.ref = "gp-honoka-basic" }
 
 [libraries]
-qsbs-honoka-spring-boot-starter = { module = "de.honoka.sdk:honoka-spring-boot-starter", version.ref = "d-qsbs-honoka-spring-boot-starter" }
-qsbs-qqrobot-framework-api = { module = "de.honoka.qqrobot:qqrobot-framework-api", version.ref = "d-qsbs-qqrobot-framework-api" }
-fr-honoka-spring-boot-starter = { module = "de.honoka.sdk:honoka-spring-boot-starter", version.ref = "d-fr-honoka-spring-boot-starter" }
+honoka-spring-boot-starter = { module = "de.honoka.sdk:honoka-spring-boot-starter", version.ref = "d-honoka-spring-boot-starter" }
+qqrobot-framework-api = { module = "de.honoka.qqrobot:qqrobot-framework-api", version.ref = "d-qqrobot-framework-api" }

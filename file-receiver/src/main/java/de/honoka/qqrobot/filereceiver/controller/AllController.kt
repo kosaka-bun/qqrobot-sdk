@@ -17,15 +17,13 @@ import kotlin.io.path.Path
 class AllController(private val mainProperties: MainProperties) {
     
     @PostMapping("/uploadImage")
-    fun uploadImage(@RequestParam file: MultipartFile): ApiResponse<*> = run {
+    fun uploadImage(@RequestParam file: MultipartFile): ApiResponse<*> =
         ApiResponse.success(writeToFile("image", "png", file.inputStream))
-    }
-    
+
     @PostMapping("/uploadFile")
-    fun uploadFile(@RequestParam file: MultipartFile): ApiResponse<*> = run {
+    fun uploadFile(@RequestParam file: MultipartFile): ApiResponse<*> =
         ApiResponse.success(writeToFile("file", "bin", file.inputStream))
-    }
-    
+
     private fun writeToFile(subDir: String, fileExt: String, `in`: InputStream): String {
         val path = Path(
             mainProperties.filePathPrefix,

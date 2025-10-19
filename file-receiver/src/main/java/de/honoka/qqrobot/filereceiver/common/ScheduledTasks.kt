@@ -12,14 +12,16 @@ class ScheduledTasks(private val mainProperties: MainProperties) {
     private val subDirToCheckNameList = listOf("image", "file")
 
     @Scheduled(cron = "0 */10 * * * ?")
-    fun cleanReceivedFiles() = subDirToCheckNameList.forEach {
-        val dir = Path(mainProperties.filePathPrefix, it).toFile()
-        if(!dir.exists() || !dir.isDirectory) return@forEach
-        dir.listFiles()?.forEach { f ->
-            val createTime = FileUtils.getCreateTime(f).time
-            if(System.currentTimeMillis() - createTime > 9 * 1000L) {
-                runCatching {
-                    f.delete()
+    fun cleanReceivedFiles() {
+        subDirToCheckNameList.forEach {
+            val dir = Path(mainProperties.filePathPrefix, it).toFile()
+            if(!dir.exists() || !dir.isDirectory) return@forEach
+            dir.listFiles()?.forEach { f ->
+                val createTime = FileUtils.getCreateTime(f).time
+                if(System.currentTimeMillis() - createTime > 9 * 1000L) {
+                    runCatching {
+                        f.delete()
+                    }
                 }
             }
         }

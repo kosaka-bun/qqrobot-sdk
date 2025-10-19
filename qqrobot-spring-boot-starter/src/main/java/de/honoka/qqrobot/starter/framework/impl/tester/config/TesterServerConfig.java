@@ -1,0 +1,30 @@
+package de.honoka.qqrobot.starter.framework.impl.tester.config;
+
+import de.honoka.qqrobot.starter.framework.config.TesterProperties;
+import jakarta.annotation.Resource;
+import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
+
+@Getter
+@Configuration
+public class TesterServerConfig implements WebMvcConfigurer {
+
+    @Resource
+    private TesterProperties testerProperties;
+
+    @Override
+    public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(TesterProperties.WEB_PREFIX + "/**")
+                .addResourceLocations("classpath:/web/tester-framework/");
+    }
+
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
+    }
+}
