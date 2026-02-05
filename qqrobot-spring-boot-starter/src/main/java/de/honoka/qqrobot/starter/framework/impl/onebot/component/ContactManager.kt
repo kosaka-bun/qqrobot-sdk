@@ -5,7 +5,7 @@ import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
 import de.honoka.qqrobot.starter.framework.config.OnebotProperties
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
-import de.honoka.sdk.util.kotlin.lang.log
+import de.honoka.sdk.util.kotlin.various.log
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component

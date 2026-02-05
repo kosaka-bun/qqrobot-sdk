@@ -8,7 +8,7 @@ import de.honoka.qqrobot.starter.core.logger.RobotLogger
 import de.honoka.qqrobot.starter.framework.ExtendedRobotFramework
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
 import de.honoka.sdk.util.kotlin.concurrent.ScheduledTask
-import de.honoka.sdk.util.kotlin.lang.log
+import de.honoka.sdk.util.kotlin.various.log
 import org.springframework.stereotype.Component
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.reflect.KClass

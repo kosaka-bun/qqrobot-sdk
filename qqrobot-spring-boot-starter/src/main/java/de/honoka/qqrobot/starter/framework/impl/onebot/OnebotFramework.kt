@@ -18,8 +18,8 @@ import de.honoka.qqrobot.starter.framework.config.OnebotProperties
 import de.honoka.qqrobot.starter.framework.impl.onebot.component.ContactManager
 import de.honoka.qqrobot.starter.framework.impl.onebot.model.OnebotMessage
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
-import de.honoka.sdk.util.kotlin.lang.log
 import de.honoka.sdk.util.kotlin.text.toJsonWrapper
+import de.honoka.sdk.util.kotlin.various.log
 import jakarta.annotation.PreDestroy
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component

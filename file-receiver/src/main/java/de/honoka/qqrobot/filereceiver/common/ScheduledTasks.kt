@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.filereceiver.common
 
-import de.honoka.qqrobot.filereceiver.config.MainProperties
+import de.honoka.qqrobot.filereceiver.MainProperties
 import de.honoka.sdk.util.file.FileUtils
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component

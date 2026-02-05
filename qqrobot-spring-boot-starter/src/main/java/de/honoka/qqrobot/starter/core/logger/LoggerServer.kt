@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.core.logger
 
 import de.honoka.qqrobot.starter.config.LoggerProperties
-import de.honoka.sdk.util.kotlin.lang.log
+import de.honoka.sdk.util.kotlin.various.log
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component
 import java.sql.Connection

@@ -6,7 +6,7 @@ import de.honoka.qqrobot.starter.core.logger.dao.ExceptionRecordDao
 import de.honoka.qqrobot.starter.core.logger.dao.UsageLogDao
 import de.honoka.qqrobot.starter.core.logger.entity.ExceptionRecord
 import de.honoka.qqrobot.starter.core.logger.entity.UsageLog
-import de.honoka.sdk.util.kotlin.lang.tryBlock
+import de.honoka.sdk.util.kotlin.various.tryBlock
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component

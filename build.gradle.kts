@@ -41,7 +41,6 @@ projects.jvm {
 
         configs {
             java(17, project in projects.library)
-            javaTask()
             kotlin()
             kapt()
         }

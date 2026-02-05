@@ -2,7 +2,7 @@ package de.honoka.qqrobot.starter.core.session
 
 import cn.hutool.core.collection.ConcurrentHashSet
 import de.honoka.qqrobot.framework.api.RobotFramework
-import de.honoka.sdk.util.lang.ThrowsConsumer
+import de.honoka.sdk.util.various.ThrowsConsumer
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component
  */
 @Component
 class SessionManager(
-    @field:Lazy
-    @get:JvmSynthetic
+    @param:Lazy
+    @JvmSynthetic
     internal val framework: RobotFramework
 ) {
     
