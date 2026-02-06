@@ -1,6 +1,6 @@
 package de.honoka.qqrobot.starter.core;
 
-import de.honoka.qqrobot.starter.config.RobotBasicProperties;
+import de.honoka.qqrobot.starter.RobotBasicProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;

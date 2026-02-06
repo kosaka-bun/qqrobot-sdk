@@ -16,7 +16,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
     api(libs.honoka.spring.boot.starter)
     api(libs.qqrobot.framework.api)
     implementation("com.github.houbb:opencc4j:1.6.0")

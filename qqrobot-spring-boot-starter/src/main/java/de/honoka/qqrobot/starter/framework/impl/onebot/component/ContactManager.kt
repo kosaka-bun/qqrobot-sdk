@@ -3,7 +3,7 @@ package de.honoka.qqrobot.starter.framework.impl.onebot.component
 import cn.hutool.http.HttpUtil
 import cn.hutool.json.JSONObject
 import cn.hutool.json.JSONUtil
-import de.honoka.qqrobot.starter.framework.config.OnebotProperties
+import de.honoka.qqrobot.starter.framework.config.OneBotProperties
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
 import de.honoka.sdk.util.kotlin.various.log
 import jakarta.annotation.PostConstruct
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
 @Component
-class ContactManager(private val onebotProperties: OnebotProperties) {
+class ContactManager(private val oneBotProperties: OneBotProperties) {
     
     data class Contact(val name: String)
     
@@ -45,7 +45,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
     }
     
     private fun readFriends() {
-        val url = "${onebotProperties.urlPrefix}/get_friend_list"
+        val url = "${oneBotProperties.urlPrefix}/get_friend_list"
         val res = HttpUtil.post(url, "{}", 10 * 1000).let {
             JSONUtil.parseObj(it)
         }
@@ -60,7 +60,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
     }
     
     private fun readGroups() {
-        val url = "${onebotProperties.urlPrefix}/get_group_list"
+        val url = "${oneBotProperties.urlPrefix}/get_group_list"
         val res = HttpUtil.post(url, "{}", 5000).let {
             JSONUtil.parseObj(it)
         }
@@ -83,7 +83,7 @@ class ContactManager(private val onebotProperties: OnebotProperties) {
     }
     
     private fun readGroupMemberList(group: Long): ConcurrentHashMap<Long, Contact> {
-        val url = "${onebotProperties.urlPrefix}/get_group_member_list"
+        val url = "${oneBotProperties.urlPrefix}/get_group_member_list"
         val map = ConcurrentHashMap<Long, Contact>()
         runCatching {
             val res = HttpUtil.post(

@@ -6,7 +6,7 @@ import de.honoka.sdk.util.file.FileUtils
 import java.io.File
 
 @Suppress("MemberVisibilityCanBePrivate")
-class OnebotMessage(messageJson: JSONArray? = null) : AutoCloseable {
+class OneBotMessage(messageJson: JSONArray? = null) : AutoCloseable {
 
     data class Part(
 

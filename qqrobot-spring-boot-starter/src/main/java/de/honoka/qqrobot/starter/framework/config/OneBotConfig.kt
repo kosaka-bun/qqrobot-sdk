@@ -3,23 +3,21 @@ package de.honoka.qqrobot.starter.framework.config
 import de.honoka.sdk.util.file.FileUtils
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator
 import kotlin.io.path.Path
 
-@EnableConfigurationProperties(OnebotProperties::class)
 @ComponentScan(
     "de.honoka.qqrobot.starter.framework.impl.onebot",
     nameGenerator = FullyQualifiedAnnotationBeanNameGenerator::class
 )
 @ConditionalOnProperty(prefix = "honoka.qqrobot.framework", name = ["impl"], havingValue = "onebot")
 @Configuration
-class OnebotConfig
+class OneBotConfig
 
 @ConfigurationProperties("honoka.qqrobot.framework.onebot")
-data class OnebotProperties(
+data class OneBotProperties(
     
     var host: String? = null,
     

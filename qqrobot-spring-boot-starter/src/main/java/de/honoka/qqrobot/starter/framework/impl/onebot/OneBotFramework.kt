@@ -14,9 +14,9 @@ import de.honoka.qqrobot.framework.api.message.RobotMultipartMessage
 import de.honoka.qqrobot.starter.common.NoContactException
 import de.honoka.qqrobot.starter.common.RobotMutedException
 import de.honoka.qqrobot.starter.framework.TypedRobotFramework
-import de.honoka.qqrobot.starter.framework.config.OnebotProperties
+import de.honoka.qqrobot.starter.framework.config.OneBotProperties
 import de.honoka.qqrobot.starter.framework.impl.onebot.component.ContactManager
-import de.honoka.qqrobot.starter.framework.impl.onebot.model.OnebotMessage
+import de.honoka.qqrobot.starter.framework.impl.onebot.model.OneBotMessage
 import de.honoka.qqrobot.starter.util.GlobalThreadPools
 import de.honoka.sdk.util.kotlin.text.toJsonWrapper
 import de.honoka.sdk.util.kotlin.various.log
@@ -37,10 +37,10 @@ import kotlin.io.path.Path
  * starter仅对一个版本的OneBot标准进行实现
  */
 @Component
-class OnebotFramework(
-    private val onebotProperties: OnebotProperties,
+class OneBotFramework(
+    private val oneBotProperties: OneBotProperties,
     private val contactManager: ContactManager
-) : TypedRobotFramework<OnebotMessage>() {
+) : TypedRobotFramework<OneBotMessage>() {
 
     companion object {
 
@@ -84,7 +84,7 @@ class OnebotFramework(
             val robotMessage = json["message"].let {
                 when(it) {
                     is String -> RobotMultipartMessage.of(it)
-                    is JSONArray -> typedTransform(OnebotMessage(it))
+                    is JSONArray -> typedTransform(OneBotMessage(it))
                     else -> throw Exception("Unknown message type")
                 }
             }
@@ -170,7 +170,7 @@ class OnebotFramework(
     override fun boot() {
         started = true
         if(webSocketSession?.isOpen == true) return
-        val url = "${onebotProperties.websocketUrlPrefix}/event"
+        val url = "${oneBotProperties.websocketUrlPrefix}/event"
         webSocketSession = webSocketClient.execute(webSocketHandler, url).get()
     }
 
@@ -209,7 +209,7 @@ class OnebotFramework(
             }
             return
         }
-        val url = "${onebotProperties.urlPrefix}/get_status"
+        val url = "${oneBotProperties.urlPrefix}/get_status"
         online = try {
             HttpUtil.post(url, "{}", 3000).toJsonWrapper().run {
                 getBool("data.online")
@@ -234,9 +234,9 @@ class OnebotFramework(
     }
     
     //group与qq参数均未使用
-    override fun typedTransform(group: Long?, qq: Long, message: RobotMultipartMessage): OnebotMessage {
-        val onebotMessage = OnebotMessage()
-        val remoteMode = onebotProperties.fileReceiverPort != null
+    override fun typedTransform(group: Long?, qq: Long, message: RobotMultipartMessage): OneBotMessage {
+        val onebotMessage = OneBotMessage()
+        val remoteMode = oneBotProperties.fileReceiverPort != null
         message.messageList.forEach {
             when(val content = it.content) {
                 is String -> {
@@ -248,7 +248,7 @@ class OnebotFramework(
                     val path = if(remoteMode) {
                         uploadFileToReceiver(content.content, "uploadImage", fileName)
                     } else {
-                        Path(onebotProperties.imagePath, fileName).toString().run {
+                        Path(oneBotProperties.imagePath, fileName).toString().run {
                             writeResouceToFile(content.content, this)
                             this
                         }
@@ -261,7 +261,7 @@ class OnebotFramework(
                     val path = if(remoteMode) {
                         uploadFileToReceiver(content.content, "uploadFile", displayFileName)
                     } else {
-                        Path(onebotProperties.fileToUploadPath, fileName).toString().run {
+                        Path(oneBotProperties.fileToUploadPath, fileName).toString().run {
                             writeResouceToFile(content.content, this)
                             this
                         }
@@ -274,13 +274,12 @@ class OnebotFramework(
         return onebotMessage
     }
     
-    private fun typedTransform(message: RobotMultipartMessage): OnebotMessage = run {
+    private fun typedTransform(message: RobotMultipartMessage): OneBotMessage =
         typedTransform(null, 0, message)
-    }
 
-    override fun typedTransform(onebotMessage: OnebotMessage): RobotMultipartMessage {
+    override fun typedTransform(oneBotMessage: OneBotMessage): RobotMultipartMessage {
         val message = RobotMultipartMessage()
-        onebotMessage.parts.forEach {
+        oneBotMessage.parts.forEach {
             when(it.type) {
                 "text" -> message.add(it.data?.getStr("text"))
                 "at" -> message.add(RobotMessage.at(it.data!!.getLong("qq")))
@@ -304,7 +303,7 @@ class OnebotFramework(
     }
     
     private fun uploadFileToReceiver(`in`: InputStream, urlPath: String, fileName: String): String {
-        val url = "${onebotProperties.fileReceiverUrlPrefix}/$urlPath"
+        val url = "${oneBotProperties.fileReceiverUrlPrefix}/$urlPath"
         val content = IoUtil.readBytes(`in`)
         HttpUtil.createPost(url).run {
             form("file", content, fileName)
@@ -328,9 +327,9 @@ class OnebotFramework(
         sendMessage(group, null, typedTransform(message))
     }
     
-    private fun sendMessage(group: Long?, qq: Long?, message: OnebotMessage) {
+    private fun sendMessage(group: Long?, qq: Long?, message: OneBotMessage) {
         val apiName = if(qq == null) "send_group_msg" else "send_private_msg"
-        val url = "${onebotProperties.urlPrefix}/$apiName"
+        val url = "${oneBotProperties.urlPrefix}/$apiName"
         message.use { m ->
             var throwable: Throwable? = null
             for(i in 1..3) {

@@ -2,7 +2,7 @@ package de.honoka.qqrobot.starter.framework
 
 enum class FrameworkEnum {
     
-    TESTER,
-    
-    ONEBOT
+    ONEBOT,
+
+    TESTER
 }

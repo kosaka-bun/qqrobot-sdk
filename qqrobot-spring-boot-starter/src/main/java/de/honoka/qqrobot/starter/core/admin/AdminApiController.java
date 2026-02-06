@@ -2,8 +2,8 @@ package de.honoka.qqrobot.starter.core.admin;
 
 import cn.hutool.core.util.ObjectUtil;
 import de.honoka.qqrobot.framework.api.RobotFramework;
+import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.qqrobot.starter.config.AdminProperties;
-import de.honoka.qqrobot.starter.config.RobotBasicProperties;
 import de.honoka.qqrobot.starter.core.RobotConsoleWindow;
 import de.honoka.qqrobot.starter.core.logger.dao.ExceptionRecordDao;
 import de.honoka.qqrobot.starter.core.logger.dao.UsageLogDao;

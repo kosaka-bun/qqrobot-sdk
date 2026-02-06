@@ -3,13 +3,11 @@ package de.honoka.qqrobot.starter.config
 import de.honoka.qqrobot.starter.core.admin.AdminLoginInterceptor
 import de.honoka.sdk.spring.starter.core.springBean
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
-@EnableConfigurationProperties(AdminProperties::class)
 @Configuration
 class AdminConfig : WebMvcConfigurer {
     

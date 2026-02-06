@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.core;
 
 import de.honoka.qqrobot.framework.api.RobotFramework;
-import de.honoka.qqrobot.starter.config.RobotBasicProperties;
+import de.honoka.qqrobot.starter.RobotBasicProperties;
 import de.honoka.sdk.util.gui.ConsoleWindow;
 import de.honoka.sdk.util.text.TextUtils;
 import de.honoka.sdk.util.various.ThrowsRunnable;
@@ -80,7 +80,8 @@ public class RobotConsoleWindow {
     public void create() {
         //优先使用VM选项中的配置，其次使用代码中指定的配置
         String forceNoGuiInVmOptions = System.getProperty("honoka.gui.force-no-gui");
-        boolean forceNoGui = forceNoGuiInVmOptions == null ? this.forceNoGui : Boolean.parseBoolean(forceNoGuiInVmOptions);
+        boolean forceNoGui = forceNoGuiInVmOptions == null ? this.forceNoGui :
+            Boolean.parseBoolean(forceNoGuiInVmOptions);
         if(forceNoGui) {
             console = new RobotConsole();
             startApplication();

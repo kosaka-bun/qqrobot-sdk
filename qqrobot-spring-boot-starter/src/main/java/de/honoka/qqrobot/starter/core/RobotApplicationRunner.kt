@@ -1,7 +1,7 @@
 package de.honoka.qqrobot.starter.core
 
 import de.honoka.qqrobot.framework.api.RobotFramework
-import de.honoka.qqrobot.starter.config.RobotBasicProperties
+import de.honoka.qqrobot.starter.RobotBasicProperties
 import de.honoka.sdk.util.kotlin.various.log
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner

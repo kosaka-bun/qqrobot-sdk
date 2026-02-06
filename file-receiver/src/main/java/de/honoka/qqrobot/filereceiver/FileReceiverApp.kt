@@ -4,14 +4,14 @@ import de.honoka.sdk.util.file.FileUtils
 import de.honoka.sdk.util.gui.ConsoleWindow
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import org.springframework.scheduling.annotation.EnableScheduling
 import java.io.File
 import kotlin.io.path.Path
 
 @EnableScheduling
-@EnableConfigurationProperties(MainProperties::class)
+@ConfigurationPropertiesScan
 @SpringBootApplication
 class FileReceiverApp
 
